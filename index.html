@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orçamento Harmonia do Altar</title>
+    <title>Harmonia do Altar - Música para Cerimônias</title>
     <!-- Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts for elegant typography -->
@@ -14,7 +14,7 @@
         /* Custom styles to apply the selected fonts and colors */
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #f8f9fa; /* Light gray background */
+            background-color: #f8f9fa;
         }
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Playfair Display', serif;
@@ -33,6 +33,44 @@
             background-size: cover;
             background-position: center;
         }
+        /* Style for the instagram embeds to be responsive and clean */
+        .instagram-media {
+            margin: 1rem auto !important;
+            min-width: 320px !important;
+            width: calc(100% - 2px) !important;
+            border-radius: 8px !important;
+            border: none !important; /* Removes the border */
+            box-shadow: none !important; /* Removes the shadow */
+        }
+        
+        /* Animation styles */
+        .animated-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animated-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Staggered animation delay for grid items */
+        .animated-item.delay-1 { transition-delay: 0.1s; }
+        .animated-item.delay-2 { transition-delay: 0.2s; }
+        .animated-item.delay-3 { transition-delay: 0.3s; }
+        .animated-item.delay-4 { transition-delay: 0.4s; }
+
+
+        /* Smooth transition for revealing the pricing section */
+        #pricing-section {
+            transition: opacity 0.7s ease-in-out, max-height 0.7s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #pricing-section.visible {
+            max-height: 5000px; /* Adjust as needed, should be larger than the content height */
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -49,172 +87,222 @@
     <main class="container mx-auto px-6 py-12 md:py-20">
         
         <!-- Intro Section -->
-        <section class="text-center max-w-4xl mx-auto mb-16 md:mb-24">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Sobre Nós</h2>
+        <section class="text-center max-w-4xl mx-auto mb-16 md:mb-24 animated-item">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Música que Conta a Sua História</h2>
             <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
-            <p class="text-gray-600 leading-relaxed mb-6">
-                Que bom que vocês estão pensando na trilha sonora perfeita para o grande dia! Nós, do Harmonia do Altar, estamos prontos para fazer da sua cerimônia um momento inesquecível, com arranjos musicais personalizados que tocam o coração.
+            <p class="text-gray-600 leading-relaxed text-lg">
+                Para nós, cada casamento é a celebração de uma história de amor única. E toda grande história merece uma trilha sonora inesquecível. Somos o Harmonia do Altar, um grupo de músicos apaixonados por transformar cerimônias em eventos memoráveis. Nosso propósito é ir além da música: queremos tocar o coração de cada convidado e, principalmente, o de vocês, com arranjos que capturam a essência do seu amor e a solenidade do seu grande dia.
             </p>
-            <div class="bg-white border-l-4 border-gold p-6 rounded-r-lg inline-block shadow-md">
-                <p class="text-gray-700">Nossas <strong>três vozes principais</strong> (R$ 900,00) são a base de todas as configurações, garantindo um som completo e emocionante.</p>
-            </div>
         </section>
 
-        <!-- Pricing Packages Section -->
+        <!-- Instagram Videos Section -->
         <section class="mb-16 md:mb-24">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Nossas Configurações</h2>
-            <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
+            <div class="animated-item">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Sinta a Nossa Harmonia</h2>
+                <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Card Template -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="p-8 flex-grow">
-                        <h3 class="text-2xl font-bold text-gold mb-3">Essência Clássica e Sublime</h3>
-                        <p class="text-gray-600 mb-6">Ideal para casais que sonham com uma cerimônia tradicional e emocionante. Esta configuração destaca a majestade do piano.</p>
-                        <div class="mb-6">
-                            <h4 class="font-bold mb-2">Instrumentos:</h4>
-                            <ul class="list-disc list-inside text-gray-600">
-                                <li>Teclado/Piano (R$ 500,00)</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="p-8 border-t bg-gray-50">
-                        <div class="text-4xl font-bold text-right">R$ 1.400,00</div>
-                    </div>
-                </div>
+            <div class="text-center max-w-3xl mx-auto animated-item">
+                <h3 class="text-2xl font-bold text-gold mb-3">A Emoção em Cada Nota</h3>
+                <p class="text-gray-600 mb-8">A música tem o poder de evocar sentimentos profundos. Imagine a entrada da noiva ao som de um violino emocionante, ou a troca de alianças embalada por um piano suave e vozes que se entrelaçam. É essa atmosfera que criamos, cuidando de cada detalhe para que a melodia perfeita acompanhe cada passo seu até o altar.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Instagram Embed 1 -->
+                <blockquote class="instagram-media animated-item delay-1" data-instgrm-permalink="https://www.instagram.com/reel/C8YQSOEsv0-/" data-instgrm-version="14"></blockquote>
+                <!-- Instagram Embed 2 -->
+                <blockquote class="instagram-media animated-item delay-2" data-instgrm-permalink="https://www.instagram.com/reel/C8V3pPAsYSj/" data-instgrm-version="14"></blockquote>
+            </div>
 
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="p-8 flex-grow">
-                        <h3 class="text-2xl font-bold text-gold mb-3">Harmonia Delicada e Acústica</h3>
-                        <p class="text-gray-600 mb-6">Perfeita para cerimônias mais íntimas. O violão e o teclado criam uma base rica e suave, enquanto as vozes trazem a emoção.</p>
-                        <div class="mb-6">
-                            <h4 class="font-bold mb-2">Instrumentos:</h4>
-                            <ul class="list-disc list-inside text-gray-600">
-                                <li>Teclado/Piano (R$ 500,00)</li>
-                                <li>Violão (R$ 200,00)</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="p-8 border-t bg-gray-50">
-                        <div class="text-4xl font-bold text-right">R$ 1.600,00</div>
-                    </div>
-                </div>
+            <div class="text-center max-w-3xl mx-auto mt-20 animated-item">
+                <h3 class="text-2xl font-bold text-gold mb-3">Elegância e Profissionalismo</h3>
+                <p class="text-gray-600 mb-8">Acreditamos que a beleza está na harmonia, não só musical, mas também visual. Nossos músicos se apresentam com a sofisticação que a sua cerimônia merece, e nossas performances são um reflexo do nosso compromisso com a excelência. As imagens a seguir capturam não apenas nossa música, mas a energia e a dedicação que levamos a cada evento.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Instagram Embed 3 -->
+                <blockquote class="instagram-media animated-item delay-1" data-instgrm-permalink="https://www.instagram.com/p/C8VlkbksuVZ/" data-instgrm-version="14"></blockquote>
+                <!-- Instagram Embed 4 -->
+                <blockquote class="instagram-media animated-item delay-2" data-instgrm-permalink="https://www.instagram.com/p/CpBIkGaOdrZ/" data-instgrm-version="14"></blockquote>
+            </div>
 
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="p-8 flex-grow">
-                        <h3 class="text-2xl font-bold text-gold mb-3">Charme e Alma Brasileira</h3>
-                        <p class="text-gray-600 mb-6">Uma escolha encantadora para quem busca um som que remeta à tradição. O acordeon e o violão adicionam um sotaque marcante.</p>
-                        <div class="mb-6">
-                            <h4 class="font-bold mb-2">Instrumentos:</h4>
-                            <ul class="list-disc list-inside text-gray-600">
-                                <li>Violão (R$ 200,00)</li>
-                                <li>Acordeon (R$ 200,00)</li>
-                            </ul>
-                        </div>
-                    </div>
-                     <div class="p-8 border-t bg-gray-50">
-                        <div class="text-4xl font-bold text-right">R$ 1.300,00</div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="p-8 flex-grow">
-                        <h3 class="text-2xl font-bold text-gold mb-3">Sofisticação e Envolvimento</h3>
-                        <p class="text-gray-600 mb-6">Para noivos que desejam um som encorpado e com uma base harmônica robusta. O teclado e o contrabaixo adicionam profundidade.</p>
-                        <div class="mb-6">
-                            <h4 class="font-bold mb-2">Instrumentos:</h4>
-                            <ul class="list-disc list-inside text-gray-600">
-                                <li>Teclado/Piano (R$ 500,00)</li>
-                                <li>Contrabaixo (R$ 200,00)</li>
-                            </ul>
-                        </div>
-                    </div>
-                     <div class="p-8 border-t bg-gray-50">
-                        <div class="text-4xl font-bold text-right">R$ 1.600,00</div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="p-8 flex-grow">
-                        <h3 class="text-2xl font-bold text-gold mb-3">Versatilidade e Brilho Acústico</h3>
-                        <p class="text-gray-600 mb-6">Uma configuração versátil que permite explorar diferentes estilos, do clássico ao contemporâneo, com um toque de modernidade.</p>
-                        <div class="mb-6">
-                             <h4 class="font-bold mb-2">Instrumentos:</h4>
-                            <ul class="list-disc list-inside text-gray-600">
-                                <li>Violão (R$ 200,00)</li>
-                                <li>Guitarra (R$ 200,00)</li>
-                                <li>Contrabaixo (R$ 200,00)</li>
-                            </ul>
-                        </div>
-                    </div>
-                     <div class="p-8 border-t bg-gray-50">
-                        <div class="text-4xl font-bold text-right">R$ 1.500,00</div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
-                    <div class="p-8 flex-grow">
-                        <h3 class="text-2xl font-bold text-gold mb-3">Sonoridade Completa e Marcante</h3>
-                        <p class="text-gray-600 mb-6">Esta opção traz uma sonoridade grandiosa e cheia de nuances, criando uma textura rica e envolvente para sua cerimônia.</p>
-                        <div class="mb-6">
-                            <h4 class="font-bold mb-2">Instrumentos:</h4>
-                            <ul class="list-disc list-inside text-gray-600">
-                                <li>Teclado/Piano (R$ 500,00)</li>
-                                <li>Contrabaixo (R$ 200,00)</li>
-                                <li>Violão (R$ 200,00)</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="p-8 border-t bg-gray-50">
-                        <div class="text-4xl font-bold text-right">R$ 1.800,00</div>
-                    </div>
-                </div>
+            <div class="text-center max-w-3xl mx-auto mt-20 animated-item">
+                <h3 class="text-2xl font-bold text-gold mb-3">Alegria e Versatilidade</h3>
+                <p class="text-gray-600 mb-8">Seu casamento deve refletir sua personalidade. Do clássico ao popular, do sacro ao contemporâneo, nosso repertório é vasto e adaptável. Celebramos o amor em todos os ritmos, garantindo momentos de pura alegria e emoção que serão lembrados para sempre por vocês e seus convidados.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Instagram Embed 5 -->
+                <blockquote class="instagram-media animated-item delay-1" data-instgrm-permalink="https://www.instagram.com/reel/C8VkPNDsAit/" data-instgrm-version="14"></blockquote>
+                <!-- Instagram Embed 6 -->
+                <blockquote class="instagram-media animated-item delay-2" data-instgrm-permalink="https://www.instagram.com/p/DH8qHNpOF48/" data-instgrm-version="14"></blockquote>
             </div>
         </section>
 
-        <!-- Customization Section -->
-        <section class="bg-white rounded-lg shadow-lg p-8 md:p-12 text-center mb-16 md:mb-24">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Personalize Sua Configuração</h2>
-            <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
-            <p class="max-w-3xl mx-auto text-gray-600 mb-8">
-                Não encontrou a combinação perfeita? Monte o seu próprio quarteto! Escolha até quatro instrumentos da nossa lista para criar uma experiência sonora única e sob medida para o seu grande dia.
-            </p>
-            <div class="flex flex-wrap justify-center gap-4 mb-8">
-                <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Teclado/Piano: R$ 500,00</span>
-                <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Violão: R$ 200,00</span>
-                <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Acordeon: R$ 200,00</span>
-                <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Contrabaixo: R$ 200,00</span>
-                <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Guitarra: R$ 200,00</span>
-            </div>
-            <p class="font-semibold text-gold">Lembre-se: o valor das três vozes principais (R$ 900,00) será adicionado ao custo dos instrumentos.</p>
+        <!-- Call to Action to see prices -->
+        <section id="cta-section" class="text-center mb-16 md:mb-24 animated-item">
+             <button id="show-pricing-btn" class="bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">
+                Conheça Nossas Configurações
+            </button>
         </section>
 
-        <!-- Additional Musicians Section -->
-        <section class="bg-white rounded-lg shadow-lg p-8 md:p-12 text-center mb-16 md:mb-24">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Músicos Adicionais (Opcional)</h2>
-            <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
-            <p class="max-w-3xl mx-auto text-gray-600 mb-8">
-                Para um toque ainda mais especial e uma sonoridade diferenciada, vocês podem incluir músicos avulsos em sua formação, contratados para enriquecer ainda mais a performance.
-            </p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Saxofone: R$ 500,00</span>
-                <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Violino: R$ 500,00</span>
-            </div>
-        </section>
-        
-        <!-- Important Notes Section -->
-        <section>
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Informações Importantes</h2>
-            <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
-            <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-                <ul class="space-y-4 text-gray-700">
-                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3 mt-1">&#10003;</span><span><strong>Duração:</strong> A apresentação cobre os momentos chave da cerimônia (entradas, alianças, cumprimentos e saída).</span></li>
-                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3 mt-1">&#10003;</span><span><strong>Repertório:</strong> Totalmente adaptado ao gosto do casal, com sugestões e clássicos.</span></li>
-                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3 mt-1">&#10003;</span><span><strong>Equipamento de Som:</strong> O orçamento cobre apenas os instrumentos do grupo. A sonorização (microfones, caixas, etc.) é de responsabilidade do contratante.</span></li>
-                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3 mt-1">&#10003;</span><span><strong>Deslocamento:</strong> O custo de transporte será calculado à parte, com base na distância até o local da cerimônia.</span></li>
-                </ul>
-            </div>
-        </section>
+
+        <!-- HIDDEN PRICING SECTION -->
+        <div id="pricing-section" class="hidden">
+            <!-- Pricing Packages Section -->
+            <section class="mb-16 md:mb-24">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Nossas Configurações</h2>
+                <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                     <!-- Card Template -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <div class="p-8 flex-grow">
+                            <h3 class="text-2xl font-bold text-gold mb-3">Essência Clássica e Sublime</h3>
+                            <p class="text-gray-600 mb-6">Ideal para casais que sonham com uma cerimônia tradicional e emocionante. Esta configuração destaca a majestade do piano.</p>
+                            <div class="mb-6">
+                                <h4 class="font-bold mb-2">Instrumentos:</h4>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Teclado/Piano (R$ 500,00)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="p-8 border-t bg-gray-50">
+                            <div class="text-4xl font-bold text-right">R$ 1.400,00</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <div class="p-8 flex-grow">
+                            <h3 class="text-2xl font-bold text-gold mb-3">Harmonia Delicada e Acústica</h3>
+                            <p class="text-gray-600 mb-6">Perfeita para cerimônias mais íntimas. O violão e o teclado criam uma base rica e suave, enquanto as vozes trazem a emoção.</p>
+                            <div class="mb-6">
+                                <h4 class="font-bold mb-2">Instrumentos:</h4>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Teclado/Piano (R$ 500,00)</li>
+                                    <li>Violão (R$ 200,00)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="p-8 border-t bg-gray-50">
+                            <div class="text-4xl font-bold text-right">R$ 1.600,00</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <div class="p-8 flex-grow">
+                            <h3 class="text-2xl font-bold text-gold mb-3">Charme e Alma Brasileira</h3>
+                            <p class="text-gray-600 mb-6">Uma escolha encantadora para quem busca um som que remeta à tradição. O acordeon e o violão adicionam um sotaque marcante.</p>
+                            <div class="mb-6">
+                                <h4 class="font-bold mb-2">Instrumentos:</h4>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Violão (R$ 200,00)</li>
+                                    <li>Acordeon (R$ 200,00)</li>
+                                </ul>
+                            </div>
+                        </div>
+                         <div class="p-8 border-t bg-gray-50">
+                            <div class="text-4xl font-bold text-right">R$ 1.300,00</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <div class="p-8 flex-grow">
+                            <h3 class="text-2xl font-bold text-gold mb-3">Sofisticação e Envolvimento</h3>
+                            <p class="text-gray-600 mb-6">Para noivos que desejam um som encorpado e com uma base harmônica robusta. O teclado e o contrabaixo adicionam profundidade.</p>
+                            <div class="mb-6">
+                                <h4 class="font-bold mb-2">Instrumentos:</h4>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Teclado/Piano (R$ 500,00)</li>
+                                    <li>Contrabaixo (R$ 200,00)</li>
+                                </ul>
+                            </div>
+                        </div>
+                         <div class="p-8 border-t bg-gray-50">
+                            <div class="text-4xl font-bold text-right">R$ 1.600,00</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <div class="p-8 flex-grow">
+                            <h3 class="text-2xl font-bold text-gold mb-3">Versatilidade e Brilho Acústico</h3>
+                            <p class="text-gray-600 mb-6">Uma configuração versátil que permite explorar diferentes estilos, do clássico ao contemporâneo, com um toque de modernidade.</p>
+                            <div class="mb-6">
+                                 <h4 class="font-bold mb-2">Instrumentos:</h4>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Violão (R$ 200,00)</li>
+                                    <li>Guitarra (R$ 200,00)</li>
+                                    <li>Contrabaixo (R$ 200,00)</li>
+                                </ul>
+                            </div>
+                        </div>
+                         <div class="p-8 border-t bg-gray-50">
+                            <div class="text-4xl font-bold text-right">R$ 1.500,00</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col">
+                        <div class="p-8 flex-grow">
+                            <h3 class="text-2xl font-bold text-gold mb-3">Sonoridade Completa e Marcante</h3>
+                            <p class="text-gray-600 mb-6">Esta opção traz uma sonoridade grandiosa e cheia de nuances, criando uma textura rica e envolvente para sua cerimônia.</p>
+                            <div class="mb-6">
+                                <h4 class="font-bold mb-2">Instrumentos:</h4>
+                                <ul class="list-disc list-inside text-gray-600">
+                                    <li>Teclado/Piano (R$ 500,00)</li>
+                                    <li>Contrabaixo (R$ 200,00)</li>
+                                    <li>Violão (R$ 200,00)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="p-8 border-t bg-gray-50">
+                            <div class="text-4xl font-bold text-right">R$ 1.800,00</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Customization Section -->
+            <section class="bg-white rounded-lg shadow-lg p-8 md:p-12 text-center mb-16 md:mb-24">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Personalize Sua Configuração</h2>
+                <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
+                <p class="max-w-3xl mx-auto text-gray-600 mb-8">
+                    Não encontrou a combinação perfeita? Monte o seu próprio quarteto! Escolha até quatro instrumentos da nossa lista para criar uma experiência sonora única e sob medida para o seu grande dia.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Teclado/Piano: R$ 500,00</span>
+                    <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Violão: R$ 200,00</span>
+                    <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Acordeon: R$ 200,00</span>
+                    <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Contrabaixo: R$ 200,00</span>
+                    <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Guitarra: R$ 200,00</span>
+                </div>
+                <p class="font-semibold text-gold">Lembre-se: o valor das três vozes principais (R$ 900,00) será adicionado ao custo dos instrumentos.</p>
+            </section>
+
+            <!-- Additional Musicians Section -->
+            <section class="bg-white rounded-lg shadow-lg p-8 md:p-12 text-center mb-16 md:mb-24">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Músicos Adicionais (Opcional)</h2>
+                <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
+                <p class="max-w-3xl mx-auto text-gray-600 mb-8">
+                    Para um toque ainda mais especial e uma sonoridade diferenciada, vocês podem incluir músicos avulsos em sua formação, contratados para enriquecer ainda mais a performance.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Saxofone: R$ 500,00</span>
+                    <span class="bg-gray-200 rounded-full px-4 py-2 text-sm font-semibold">Violino: R$ 500,00</span>
+                </div>
+            </section>
+            
+            <!-- Important Notes Section -->
+            <section>
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Informações Importantes</h2>
+                <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
+                <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                    <ul class="space-y-4 text-gray-700">
+                        <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3 mt-1">&#10003;</span><span><strong>Duração:</strong> A apresentação cobre os momentos chave da cerimônia (entradas, alianças, cumprimentos e saída).</span></li>
+                        <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3 mt-1">&#10003;</span><span><strong>Repertório:</strong> Totalmente adaptado ao gosto do casal, com sugestões e clássicos.</span></li>
+                        <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3 mt-1">&#10003;</span><span><strong>Equipamento de Som:</strong> O orçamento cobre apenas os instrumentos do grupo. A sonorização (microfones, caixas, etc.) é de responsabilidade do contratante.</span></li>
+                        <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3 mt-1">&#10003;</span><span><strong>Deslocamento:</strong> O custo de transporte será calculado à parte, com base na distância até o local da cerimônia.</span></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        <!-- END HIDDEN PRICING SECTION -->
 
     </main>
 
@@ -243,5 +331,44 @@
         </div>
     </footer>
 
+    <!-- Instagram Embed Script -->
+    <script async src="//www.instagram.com/embed.js"></script>
+
+    <!-- Script to reveal pricing and animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pricing reveal script
+            const showBtn = document.getElementById('show-pricing-btn');
+            const ctaSection = document.getElementById('cta-section');
+            const pricingSection = document.getElementById('pricing-section');
+
+            if (showBtn) {
+                showBtn.addEventListener('click', () => {
+                    pricingSection.classList.add('visible');
+                    pricingSection.classList.remove('hidden');
+                    ctaSection.style.display = 'none';
+                });
+            }
+
+            // Animation on scroll script
+            const animatedItems = document.querySelectorAll('.animated-item');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // Optional: unobserve the element after it's visible so the animation doesn't re-trigger
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1 // Trigger animation when 10% of the element is visible
+            });
+
+            animatedItems.forEach(item => {
+                observer.observe(item);
+            });
+        });
+    </script>
 </body>
-</html>
+</ht
