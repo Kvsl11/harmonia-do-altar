@@ -377,21 +377,21 @@
                 </div>
             </section>
             
-            <!-- Important Notes Section -->
-            <section class="animated-item">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Informações Importantes</h2>
-                <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
-                <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-                    <ul class="space-y-4 text-gray-700">
-                        <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Duração:</strong> A apresentação cobre os momentos chave da cerimônia (entradas, alianças, cumprimentos e saída).</span></li>
-                        <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Repertório:</strong> Totalmente adaptado ao gosto do casal, com sugestões e clássicos.</span></li>
-                        <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Equipamento de Som:</strong> O orçamento cobre apenas os instrumentos do grupo. A sonorização (microfones, caixas, etc.) é de responsabilidade do contratante.</span></li>
-                        <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Deslocamento:</strong> O custo de transporte será calculado à parte, com base na distância até o local da cerimônia.</span></li>
-                    </ul>
-                </div>
-            </section>
+            
         </div>
         <!-- END HIDDEN PRICING SECTION -->
+        <section class="animated-item">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Informações Importantes</h2>
+            <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
+            <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+                <ul class="space-y-4 text-gray-700">
+                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Duração:</strong> A apresentação cobre os momentos chave da cerimônia (entradas, alianças, cumprimentos e saída).</span></li>
+                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Repertório:</strong> Totalmente adaptado ao gosto do casal, com sugestões e clássicos.</span></li>
+                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Equipamento de Som:</strong> O orçamento cobre apenas os instrumentos do grupo. A sonorização (microfones, caixas, etc.) é de responsabilidade do contratante.</span></li>
+                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Deslocamento:</strong> O custo de transporte será calculado à parte, com base na distância até o local da cerimônia.</span></li>
+                </ul>
+            </div>
+        </section>
 
     </main>
 
@@ -468,14 +468,12 @@
                 return placeholder;
             }
             
-            mediaLinks.forEach((item, index) => {
-                if (mediaGrid) {
+            if (mediaGrid) {
+                mediaLinks.forEach((item, index) => {
                     const placeholder = createPlaceholder(item, index);
                     mediaGrid.appendChild(placeholder);
-                }
-            });
+                });
             
-            if(mediaGrid){
                 mediaGrid.addEventListener('click', function(event) {
                     const clickedPlaceholder = event.target.closest('.media-cropper');
                     if (!clickedPlaceholder) return;
