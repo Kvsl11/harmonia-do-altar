@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harmonia do Altar - Música para Cerimônias</title>
+    <link rel="icon" href="H.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -154,26 +155,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
-            <script>
-            (function disableInspect() {
-            // Bloqueia clique direito
-            document.addEventListener('contextmenu', e => e.preventDefault());
-
-            // Bloqueia F12, Ctrl+Shift+I/J, Ctrl+U
-            document.addEventListener('keydown', e => {
-                const forbidden =
-                e.key === 'F12' ||
-                (e.ctrlKey && e.shiftKey && ['I', 'J'].includes(e.key)) ||
-                (e.ctrlKey && e.key === 'U');
-                if (forbidden) e.preventDefault();
-            });
-
-            // Impede abertura do console pelo DevTools
-            Object.defineProperty(window, 'console', {
-                get() { throw new Error('Acesso ao console bloqueado'); }
-            });
-            })();
-        </script>
 </head>
 <body class="text-gray-800">
 
@@ -469,11 +450,11 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoL-Za52C0cbwOen71nbKqDpLKgBufd0Y&libraries=geometry,places&callback=initMap"></script>
 
     <script>
-        let mapsInitialized = false; // Flag to check if Maps API is loaded
-        let autocomplete; // Google Places Autocomplete object
-        let currentPlanDetails = null; // To store details of the plan being contracted
+        let mapsInitialized = false; // Flag para verificar se a API do Google Maps foi carregada
+        let autocomplete; // Objeto Autocomplete do Google Places
+        let currentPlanDetails = null; // Para armazenar detalhes do plano sendo contratado
 
-        // Define instrument prices globally or in a scope accessible by sendWhatsAppMessage
+        // Define os preços dos instrumentos globalmente para fácil acesso na mensagem do WhatsApp
         const BASE_PLAN_PRICE = 1400;
         const INSTRUMENT_PRICES = {
             'Violão': 200,
@@ -481,24 +462,24 @@
             'Guitarra': 200,
             'Saxofone': 500,
             'Violino': 500,
-            '3 Vozes + Teclado/Piano': BASE_PLAN_PRICE // Explicitly define base price for clarity
+            '3 Vozes + Teclado/Piano': BASE_PLAN_PRICE // Preço base explícito para clareza
         };
 
         function initMap() {
             mapsInitialized = true;
-            console.log("Google Maps API loaded.");
+            console.log("Google Maps API carregada.");
 
-            // Initialize Autocomplete for the main freight input
+            // Inicializa o Autocomplete para o campo de endereço principal
             const destinationAddressInput = document.getElementById('destination-address');
             if (destinationAddressInput) {
                 autocomplete = new google.maps.places.Autocomplete(destinationAddressInput, { types: ['address'], componentRestrictions: { country: 'br' } });
                 autocomplete.addListener('place_changed', () => {
-                    // When a place is selected from suggestions, trigger freight calculation
+                    // Quando um local é selecionado das sugestões, aciona o cálculo do frete
                     document.getElementById('calculate-freight-btn').click();
                 });
             }
 
-            // Initialize Autocomplete for the modal input
+            // Inicializa o Autocomplete para o campo de endereço do modal
             const modalDestinationAddressInput = document.getElementById('modal-destination-address');
             if (modalDestinationAddressInput) {
                 new google.maps.places.Autocomplete(modalDestinationAddressInput, { types: ['address'], componentRestrictions: { country: 'br' } });
@@ -508,7 +489,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const whatsappNumber = '5567996884226';
 
-            // --- ANIMATION OBSERVER ---
+            // --- OBSERVER DE ANIMAÇÃO ---
             const animatedItems = document.querySelectorAll('.animated-item');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -519,7 +500,7 @@
             }, { threshold: 0.1 });
             animatedItems.forEach(item => observer.observe(item));
 
-            // --- NAVBAR & MOBILE MENU ---
+            // --- BARRA DE NAVEGAÇÃO E MENU MÓVEL ---
             const navbar = document.getElementById('navbar');
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -541,7 +522,7 @@
                 link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
             });
 
-            // --- CUSTOM PLAN BUILDER ---
+            // --- CONSTRUTOR DE PLANO PERSONALIZADO ---
             const bandInstruments = [
                 { name: 'Violão', price: 200 },
                 { name: 'Contrabaixo', price: 200 },
@@ -559,18 +540,18 @@
             const finalTotalPriceEl = document.getElementById('final-total-price');
             const contractBtnCustom = document.getElementById('contract-btn-custom');
             
-            let basePlanPrice = BASE_PLAN_PRICE; // Initial price for "Essência Clássica e Sublime"
+            let basePlanPrice = BASE_PLAN_PRICE; // Preço inicial para "Essência Clássica e Sublime"
             let currentFreightCost = 0;
-            const selectedInstruments = new Set(); // Stores names of selected instruments
+            const selectedInstruments = new Set(); // Armazena os nomes dos instrumentos selecionados
 
             function formatCurrency(value) {
                 return `R$ ${value.toFixed(2).replace('.', ',')}`;
             }
 
             function updatePrices() {
-                let calculatedPlanPrice = BASE_PLAN_PRICE; // Start with base plan price
+                let calculatedPlanPrice = BASE_PLAN_PRICE; // Começa com o preço base do plano
                 selectedInstruments.forEach(name => {
-                    // Find the instrument in either band or guest instruments
+                    // Encontra o instrumento tanto nos instrumentos da banda quanto nos convidados
                     const instrument = [...bandInstruments, ...guestInstruments].find(i => i.name === name);
                     if (instrument) {
                         calculatedPlanPrice += instrument.price;
@@ -611,10 +592,10 @@
             if(bandOptionsContainer && guestOptionsContainer){
                 bandInstruments.forEach(inst => createCheckbox(inst, bandOptionsContainer));
                 guestInstruments.forEach(inst => createCheckbox(inst, guestOptionsContainer));
-                updatePrices(); // Initial price update
+                updatePrices(); // Atualização inicial do preço
             }
 
-            // --- MODAL LOGIC ---
+            // --- LÓGICA DO MODAL ---
             const addressModal = document.getElementById('address-modal');
             const closeModalButton = document.getElementById('close-modal-button');
             const confirmAddressBtn = document.getElementById('confirm-address-btn');
@@ -622,10 +603,10 @@
             const modalFreightError = document.getElementById('modal-freight-error');
 
             function showAddressModal() {
-                addressModal.style.display = 'flex'; // Use flex to center
-                // Copy current address from main input to modal input
+                addressModal.style.display = 'flex'; // Usa flex para centralizar
+                // Copia o endereço atual do campo principal para o campo do modal
                 modalDestinationAddressInput.value = document.getElementById('destination-address').value;
-                modalFreightError.classList.add('hidden'); // Hide any previous errors
+                modalFreightError.classList.add('hidden'); // Oculta quaisquer erros anteriores
             }
 
             function hideAddressModal() {
@@ -651,50 +632,48 @@
                         return;
                     }
                     
-                    // Update the main address input with the modal's value
+                    // Atualiza o campo de endereço principal com o valor do modal
                     document.getElementById('destination-address').value = address;
                     
-                    // Trigger freight calculation from the main input
+                    // Aciona o cálculo do frete a partir do campo principal
                     calculateFreight(address, () => {
-                        // Callback after freight calculation
+                        // Callback após o cálculo do frete
                         if (currentPlanDetails) {
                             sendWhatsAppMessage(currentPlanDetails);
-                            currentPlanDetails = null; // Clear details after sending
+                            currentPlanDetails = null; // Limpa os detalhes após o envio
                         }
                         hideAddressModal();
                     });
                 });
             }
 
-            // Function to send WhatsApp message
+            // Função para enviar mensagem do WhatsApp
             function sendWhatsAppMessage(plan) {
                 const destinationAddress = document.getElementById('destination-address').value;
-                const distanceText = document.getElementById('distance-display').textContent; // Get the distance text
+                const distanceText = document.getElementById('distance-display').textContent; // Obtém o texto da distância
                 let message = `*Solicitação de Orçamento - ${plan.type}*\n\n`;
                 message += `Olá! Tenho interesse no plano *${plan.name}*.\n\n`;
                 
-                let totalPlanPriceCalculatedForMessage = BASE_PLAN_PRICE; // Start with base price for message calculation
+                let totalPlanPriceCalculatedForMessage = BASE_PLAN_PRICE; // Começa com o preço base para o cálculo da mensagem
 
                 message += '*Detalhes do Plano:*\n';
                 message += `• Formação Padrão (3 Vozes + Teclado/Piano): ${formatCurrency(INSTRUMENT_PRICES['3 Vozes + Teclado/Piano'])}\n`;
 
-                // Collect all instruments from the current plan, excluding the base if it's explicitly listed in `plan.instruments`
-                // This ensures we don't duplicate the base plan entry.
+                // Coleta todos os instrumentos do plano atual, excluindo a base se já estiver listada em `plan.instruments`
+                // Isso garante que não haja duplicação da entrada do plano base.
                 const instrumentsForMessage = plan.instruments.filter(
-                    inst => inst !== '3 Vozes + Teclado/Piano' && INSTRUMENT_PRICES[inst]
+                    inst => inst !== '3 Vozes + Teclado/Piano' && INSTRUMENT_PRICES[inst] !== undefined
                 );
 
                 instrumentsForMessage.forEach(instName => {
                     const price = INSTRUMENT_PRICES[instName];
-                    if (price !== undefined) {
-                        message += `• ${instName}: ${formatCurrency(price)}\n`;
-                        totalPlanPriceCalculatedForMessage += price;
-                    }
+                    message += `• ${instName}: ${formatCurrency(price)}\n`;
+                    totalPlanPriceCalculatedForMessage += price;
                 });
 
-                // If it's a pre-made plan and its stated price is different from the sum of its parts,
-                // we should use the pre-made plan's fixed price as the "Valor do Plano".
-                // Otherwise, use the calculated sum.
+                // Se for um plano pré-definido e seu preço declarado for diferente da soma de suas partes,
+                // devemos usar o preço fixo do plano pré-definido como "Valor do Plano".
+                // Caso contrário, usa a soma calculada.
                 const finalPlanPriceForMessage = (plan.type === 'Plano Pronto' && plan.price !== totalPlanPriceCalculatedForMessage)
                     ? plan.price
                     : totalPlanPriceCalculatedForMessage;
@@ -713,23 +692,23 @@
                 window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
             }
 
-            // Global function for pre-made plan buttons
+            // Função global para botões de plano pré-definidos
             window.handleContratar = function(planName, instruments, price) {
                 currentPlanDetails = {
                     type: 'Plano Pronto',
                     name: planName,
                     instruments: instruments,
-                    price: price // This is the fixed price for the pre-made plan
+                    price: price // Este é o preço fixo para o plano pré-definido
                 };
 
                 const destination = document.getElementById('destination-address').value.trim();
                 if (!destination) {
                     showAddressModal();
                 } else {
-                    // If address is already present, calculate freight and then send message
+                    // Se o endereço já estiver presente, calcula o frete e então envia a mensagem
                     calculateFreight(destination, () => {
                         sendWhatsAppMessage(currentPlanDetails);
-                        currentPlanDetails = null; // Clear details after sending
+                        currentPlanDetails = null; // Limpa os detalhes após o envio
                     });
                 }
             };
@@ -739,26 +718,26 @@
                     currentPlanDetails = {
                         type: 'Plano Personalizado',
                         name: 'Plano Personalizado',
-                        instruments: ['3 Vozes + Teclado/Piano', ...Array.from(selectedInstruments)], // Ensure base is always included for custom
-                        price: parseFloat(planPriceEl.textContent.replace('R$', '').replace(',', '.')) // Get the currently displayed plan price
+                        instruments: ['3 Vozes + Teclado/Piano', ...Array.from(selectedInstruments)], // Garante que a base esteja sempre incluída para personalizado
+                        price: parseFloat(planPriceEl.textContent.replace('R$', '').replace(',', '.')) // Obtém o preço do plano atualmente exibido
                     };
 
                     const destination = document.getElementById('destination-address').value.trim();
                     if (!destination) {
                         showAddressModal();
                     } else {
-                        // If address is already present, calculate freight and then send message
+                        // Se o endereço já estiver presente, calcula o frete e então envia a mensagem
                         calculateFreight(destination, () => {
                             sendWhatsAppMessage(currentPlanDetails);
-                            currentPlanDetails = null; // Clear details after sending
+                            currentPlanDetails = null; // Limpa os detalhes após o envio
                         });
                     }
                 });
             }
 
-            // --- FREIGHT CALCULATION ---
+            // --- CÁLCULO DE FRETE ---
             const originAddress = "Angélica, MS, Brazil";
-            const pricePerKm = 4.50; // R$ 4,50 per Km
+            const pricePerKm = 4.50; // R$ 4,50 por Km
 
             const destinationAddressInput = document.getElementById('destination-address');
             const calculateFreightBtn = document.getElementById('calculate-freight-btn');
@@ -769,10 +748,10 @@
 
             function calculateFreight(destination, callback = () => {}) {
                 if (!mapsInitialized) {
-                    console.error("Google Maps API not yet loaded.");
+                    console.error("Google Maps API ainda não carregada.");
                     freightError.textContent = "Erro ao carregar o serviço de mapas. Por favor, tente novamente em alguns segundos.";
                     freightError.classList.remove('hidden');
-                    callback(); // Call callback even on error
+                    callback(); // Chama o callback mesmo em caso de erro
                     return;
                 }
 
@@ -782,7 +761,7 @@
                     freightResultsDiv.classList.add('hidden');
                     currentFreightCost = 0;
                     updatePrices();
-                    callback(); // Call callback
+                    callback(); // Chama o callback
                     return;
                 }
 
@@ -798,10 +777,10 @@
                         if (status === 'OK') {
                             const element = response.rows[0].elements[0];
                             if (element.status === 'OK') {
-                                const distanceInMeters = element.distance.value; // distance in meters
-                                const destinationFormattedAddress = response.destinationAddresses[0]; // Get the formatted destination address
+                                const distanceInMeters = element.distance.value; // distância em metros
+                                const destinationFormattedAddress = response.destinationAddresses[0]; // Obtém o endereço de destino formatado
 
-                                // Check if the destination is Angélica, MS (case-insensitive, contains check)
+                                // Verifica se o destino é Angélica, MS (sem distinção de maiúsculas/minúsculas, verifica se contém)
                                 if (destinationFormattedAddress.toLowerCase().includes("angélica, ms")) {
                                     currentFreightCost = 0;
                                     distanceDisplay.textContent = "Local de partida (Frete Grátis)";
@@ -815,7 +794,7 @@
                                 
                                 freightResultsDiv.classList.remove('hidden');
                                 freightError.classList.add('hidden');
-                                updatePrices(); // Update total price with freight
+                                updatePrices(); // Atualiza o preço total com o frete
                             } else {
                                 freightError.textContent = "Não foi possível calcular o frete para o endereço fornecido. Por favor, tente novamente.";
                                 freightError.classList.remove('hidden');
@@ -830,7 +809,7 @@
                             currentFreightCost = 0;
                             updatePrices();
                         }
-                        callback(); // Ensure callback is called after calculation attempt
+                        callback(); // Garante que o callback seja chamado após a tentativa de cálculo
                     }
                 );
             }
@@ -840,6 +819,43 @@
                     calculateFreight(destinationAddressInput.value.trim());
                 });
             }
+
+            // --- BLOQUEIO DE FERRAMENTAS DE DESENVOLVIMENTO (F12 e Inspecionar Elemento) ---
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'F12') {
+                    event.preventDefault();
+                    console.log('F12 bloqueado.');
+                    // Opcional: exiba uma mensagem para o usuário
+                    // alert('Ferramentas de desenvolvedor desativadas para esta página.');
+                }
+            });
+
+            document.addEventListener('contextmenu', function(event) {
+                event.preventDefault();
+                console.log('Botão direito do mouse bloqueado.');
+                // Opcional: exiba uma mensagem para o usuário
+                // alert('O botão direito do mouse está desativado nesta página.');
+            });
+
+            // Tentativa de detecção de DevTools (não infalível)
+            // let devtoolsOpen = false;
+            // const threshold = 160; // Largura ou altura mínima para considerar DevTools abertas
+
+            // const checkDevTools = () => {
+            //     if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+            //         if (!devtoolsOpen) {
+            //             console.log('DevTools abertas!');
+            //             // Redirecionar ou exibir modal
+            //             // window.location.href = 'about:blank'; 
+            //             devtoolsOpen = true;
+            //         }
+            //     } else {
+            //         devtoolsOpen = false;
+            //     }
+            // };
+
+            // setInterval(checkDevTools, 1000); // Verifica a cada segundo
+            // checkDevTools(); // Verifica na carga inicial
         });
     </script>
 </body>
