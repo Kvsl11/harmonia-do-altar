@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harmonia do Altar - Música para Cerimônias</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         html {
@@ -111,11 +108,55 @@
         section[id] {
             scroll-margin-top: 80px;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Navigation -->
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <a href="#" class="text-white text-2xl font-bold font-playfair">Harmonia do Altar</a>
@@ -124,6 +165,7 @@
                 <a href="#sobre" class="nav-link">Sobre</a>
                 <a href="#galeria" class="nav-link">Galeria</a>
                 <a href="#planos" class="nav-link">Planos</a>
+                <a href="#frete" class="nav-link">Frete</a>
                 <a href="#contato" class="nav-link">Contato</a>
             </div>
 
@@ -137,11 +179,11 @@
             <a href="#sobre" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Sobre</a>
             <a href="#galeria" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Galeria</a>
             <a href="#planos" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Planos</a>
+            <a href="#frete" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Frete</a>
             <a href="#contato" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Contato</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <header class="hero-bg text-white shadow-lg h-screen flex items-center justify-center">
         <div class="text-center">
             <h1 class="text-5xl md:text-7xl font-bold mb-2 animated-item">Harmonia do Altar</h1>
@@ -149,10 +191,8 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="container mx-auto px-6 py-12 md:py-20">
         
-        <!-- Intro Section -->
         <section id="sobre" class="text-center max-w-4xl mx-auto mb-16 md:mb-24 animated-item">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Música que Conta a Sua História</h2>
             <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
@@ -161,14 +201,12 @@
             </p>
         </section>
         
-        <!-- Instagram Videos Section -->
         <section id="galeria" class="mb-16 md:mb-24">
             <div class="animated-item">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Sinta a Nossa Harmonia</h2>
                 <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
             </div>
             
-            <!-- First Row -->
             <div class="text-center max-w-3xl mx-auto animated-item">
                 <h3 class="text-2xl font-bold text-gold mb-3">A Emoção em Cada Nota</h3>
                 <p class="text-gray-600 mb-8">A música tem o poder de evocar sentimentos profundos. Imagine a entrada da noiva ao som de um violino emocionante, ou a troca de alianças embalada por um piano suave e vozes que se entrelaçam. É essa atmosfera que criamos.</p>
@@ -182,7 +220,6 @@
                 </div>
             </div>
 
-            <!-- Second Row -->
             <div class="text-center max-w-3xl mx-auto mt-20 animated-item">
                 <h3 class="text-2xl font-bold text-gold mb-3">Elegância e Profissionalismo</h3>
                 <p class="text-gray-600 mb-8">Acreditamos que a beleza está na harmonia, não só musical, mas também visual. Nossos músicos se apresentam com a sofisticação que a sua cerimônia merece, e nossas performances são um reflexo do nosso compromisso com a excelência.</p>
@@ -196,7 +233,6 @@
                 </div>
             </div>
 
-            <!-- Third Row -->
             <div class="text-center max-w-3xl mx-auto mt-20 animated-item">
                 <h3 class="text-2xl font-bold text-gold mb-3">Alegria e Versatilidade</h3>
                 <p class="text-gray-600 mb-8">Seu casamento deve refletir sua personalidade. Do clássico ao popular, do sacro ao contemporâneo, nosso repertório é vasto e adaptável. Celebramos o amor em todos os ritmos, garantindo momentos de pura alegria e emoção.</p>
@@ -211,7 +247,6 @@
             </div>
         </section>
 
-        <!-- Pricing Packages Section -->
         <section id="planos" class="py-16 md:py-24 bg-white rounded-2xl shadow-sm">
             <div class="text-center max-w-4xl mx-auto mb-12 md:mb-16 animated-item">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">Nossas Configurações Sugeridas</h2>
@@ -223,7 +258,6 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
                 
-                <!-- Card 1: Essência Clássica e Sublime -->
                 <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item">
                     <div class="p-8 flex-grow">
                         <i class="fas fa-music text-gold text-3xl mb-4"></i>
@@ -236,11 +270,10 @@
                     </div>
                     <div class="p-6 border-t bg-white flex justify-between items-center">
                         <div class="text-2xl font-bold">R$ 1.400</div>
-                        <button onclick="contratarPlanoPronto('Essência Clássica e Sublime', ['3 Vozes + Teclado/Piano'], 1400)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                        <button onclick="handleContratar('Essência Clássica e Sublime', ['3 Vozes + Teclado/Piano'], 1400)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
                     </div>
                 </div>
 
-                <!-- Card 2: Harmonia Delicada e Acústica -->
                 <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 flex flex-col animated-item delay-1 border-2 border-gold relative">
                     <div class="absolute top-0 right-0 bg-gold text-white text-xs font-bold px-3 py-1 rounded-bl-lg">MAIS POPULAR</div>
                     <div class="p-8 flex-grow">
@@ -250,16 +283,15 @@
                         <h4 class="font-bold mb-2 text-sm">Instrumentos:</h4>
                         <ul class="text-gray-700 text-sm space-y-2">
                              <li>• 3 Vozes + Teclado/Piano</li>
-                             <li>• Violão</li>
+                            <li>• Violão</li>
                         </ul>
                     </div>
                     <div class="p-6 border-t bg-white flex justify-between items-center">
                         <div class="text-2xl font-bold">R$ 1.600</div>
-                        <button onclick="contratarPlanoPronto('Harmonia Delicada e Acústica', ['3 Vozes + Teclado/Piano', 'Violão'], 1600)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                        <button onclick="handleContratar('Harmonia Delicada e Acústica', ['3 Vozes + Teclado/Piano', 'Violão'], 1600)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
                     </div>
                 </div>
                 
-                <!-- Card 3: Sofisticação e Envolvimento -->
                 <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item delay-2">
                     <div class="p-8 flex-grow">
                         <i class="fas fa-layer-group text-gold text-3xl mb-4"></i>
@@ -273,11 +305,10 @@
                     </div>
                     <div class="p-6 border-t bg-white flex justify-between items-center">
                         <div class="text-2xl font-bold">R$ 1.600</div>
-                        <button onclick="contratarPlanoPronto('Sofisticação e Envolvimento', ['3 Vozes + Teclado/Piano', 'Contrabaixo'], 1600)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                        <button onclick="handleContratar('Sofisticação e Envolvimento', ['3 Vozes + Teclado/Piano', 'Contrabaixo'], 1600)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
                     </div>
                 </div>
 
-                <!-- Card 4: Sonoridade Completa e Marcante -->
                 <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item">
                     <div class="p-8 flex-grow">
                         <i class="fas fa-sliders-h text-gold text-3xl mb-4"></i>
@@ -292,11 +323,10 @@
                     </div>
                     <div class="p-6 border-t bg-white flex justify-between items-center">
                         <div class="text-2xl font-bold">R$ 1.800</div>
-                        <button onclick="contratarPlanoPronto('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Contrabaixo', 'Violão'], 1800)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                        <button onclick="handleContratar('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Contrabaixo', 'Violão'], 1800)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
                     </div>
                 </div>
 
-                <!-- Card 5: Versatilidade e Brilho Acústico -->
                 <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item delay-1">
                     <div class="p-8 flex-grow">
                         <i class="fas fa-star text-gold text-3xl mb-4"></i>
@@ -312,13 +342,12 @@
                     </div>
                     <div class="p-6 border-t bg-white flex justify-between items-center">
                         <div class="text-2xl font-bold">R$ 2.000</div>
-                        <button onclick="contratarPlanoPronto('Versatilidade e Brilho Acústico', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'], 2000)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                        <button onclick="handleContratar('Versatilidade e Brilho Acústico', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'], 2000)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Custom Plan Builder Section -->
         <section id="custom-plan-builder" class="bg-white rounded-2xl shadow-sm p-8 md:p-12 text-center mt-16 md:mt-24 animated-item">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Crie o Seu Plano Personalizado</h2>
             <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
@@ -338,16 +367,34 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="guest-instrument-options"></div>
             </div>
 
-            <!-- Total Calculation -->
             <div class="mt-8 max-w-2xl mx-auto border-t pt-6">
-                 <div class="text-right space-y-2 text-lg">
-                    <p class="text-2xl md:text-3xl font-bold">Valor Total: <span id="total-price" class="text-gold">R$ 1.400,00</span></p>
-                 </div>
+                <div class="text-right space-y-2 text-lg">
+                    <p class="text-2xl md:text-3xl font-bold">Valor do Plano: <span id="plan-price" class="text-gold">R$ 1.400,00</span></p>
+                    <p class="text-xl md:text-2xl font-bold">Valor do Frete: <span id="freight-price" class="text-gold">R$ 0,00</span></p>
+                    <p class="text-2xl md:text-3xl font-bold">Valor Total: <span id="final-total-price" class="text-gold">R$ 1.400,00</span></p>
+                </div>
                 <button id="contract-btn-custom" class="mt-6 w-full bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Contratar Plano Personalizado</button>
             </div>
         </section>
 
-        <!-- Important Info Section -->
+        <section id="frete" class="bg-white rounded-2xl shadow-sm p-8 md:p-12 text-center mt-16 md:mt-24 animated-item">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Cálculo de Frete</h2>
+            <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
+            <p class="max-w-3xl mx-auto text-gray-600 mb-8">
+                Informe o endereço do local da cerimônia para calcular o custo do frete, considerando a saída de **Angélica, MS**.
+            </p>
+            <div class="max-w-2xl mx-auto text-left">
+                <label for="destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço do Local:</label>
+                <input type="text" id="destination-address" placeholder="Rua, Número, Cidade, Estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold mb-4">
+                <button id="calculate-freight-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Calcular Frete</button>
+                <div id="freight-results" class="mt-6 p-4 bg-gray-100 rounded-lg hidden">
+                    <p class="text-gray-700">Distância: <span id="distance-display" class="font-bold"></span></p>
+                    <p class="text-gray-700">Valor do Frete: <span id="calculated-freight-display" class="font-bold text-gold"></span></p>
+                </div>
+                <p id="freight-error" class="text-red-500 mt-2 hidden">Não foi possível calcular o frete para o endereço fornecido. Por favor, tente novamente.</p>
+            </div>
+        </section>
+
         <section id="info" class="mt-16 md:mt-24 animated-item">
             <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Informações Importantes</h2>
             <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
@@ -363,7 +410,6 @@
 
     </main>
 
-    <!-- Footer -->
     <footer id="contato" class="bg-gray-800 text-white mt-12 md:mt-20">
         <div class="container mx-auto px-6 py-12 text-center animated-item">
             <h2 class="text-3xl font-bold mb-4">Vamos Conversar?</h2>
@@ -384,11 +430,61 @@
         </div>
     </footer>
 
-    <!-- Instagram Embed Script -->
+    <!-- Address Input Modal -->
+    <div id="address-modal" class="modal fixed inset-0 flex items-center justify-center">
+        <div class="modal-content">
+            <span class="close-button" id="close-modal-button">&times;</span>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Por favor, informe o endereço do evento</h3>
+            <p class="text-gray-600 mb-4">Precisamos do endereço para calcular o frete e finalizar seu orçamento.</p>
+            <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço:</label>
+            <input type="text" id="modal-destination-address" placeholder="Rua, Número, Cidade, Estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold mb-4">
+            <p id="modal-freight-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
+            <button id="confirm-address-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 w-full">Confirmar Endereço</button>
+        </div>
+    </div>
+
     <script async src="//www.instagram.com/embed.js"></script>
     
-    <!-- Main Script -->
+    <!-- Google Maps API with Places library -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoL-Za52C0cbwOen71nbKqDpLKgBufd0Y&libraries=geometry,places&callback=initMap"></script>
+
     <script>
+        let mapsInitialized = false; // Flag to check if Maps API is loaded
+        let autocomplete; // Google Places Autocomplete object
+        let currentPlanDetails = null; // To store details of the plan being contracted
+
+        // Define instrument prices globally or in a scope accessible by sendWhatsAppMessage
+        const BASE_PLAN_PRICE = 1400;
+        const INSTRUMENT_PRICES = {
+            'Violão': 200,
+            'Contrabaixo': 200,
+            'Guitarra': 200,
+            'Saxofone': 500,
+            'Violino': 500,
+            '3 Vozes + Teclado/Piano': BASE_PLAN_PRICE // Explicitly define base price for clarity
+        };
+
+        function initMap() {
+            mapsInitialized = true;
+            console.log("Google Maps API loaded.");
+
+            // Initialize Autocomplete for the main freight input
+            const destinationAddressInput = document.getElementById('destination-address');
+            if (destinationAddressInput) {
+                autocomplete = new google.maps.places.Autocomplete(destinationAddressInput, { types: ['address'], componentRestrictions: { country: 'br' } });
+                autocomplete.addListener('place_changed', () => {
+                    // When a place is selected from suggestions, trigger freight calculation
+                    document.getElementById('calculate-freight-btn').click();
+                });
+            }
+
+            // Initialize Autocomplete for the modal input
+            const modalDestinationAddressInput = document.getElementById('modal-destination-address');
+            if (modalDestinationAddressInput) {
+                new google.maps.places.Autocomplete(modalDestinationAddressInput, { types: ['address'], componentRestrictions: { country: 'br' } });
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const whatsappNumber = '5567996884226';
 
@@ -438,18 +534,32 @@
 
             const bandOptionsContainer = document.getElementById('band-instrument-options');
             const guestOptionsContainer = document.getElementById('guest-instrument-options');
-            const totalPriceEl = document.getElementById('total-price');
+            const planPriceEl = document.getElementById('plan-price');
+            const freightPriceEl = document.getElementById('freight-price');
+            const finalTotalPriceEl = document.getElementById('final-total-price');
             const contractBtnCustom = document.getElementById('contract-btn-custom');
             
-            let totalPrice = 1400;
-            const selectedInstruments = new Set();
+            let basePlanPrice = BASE_PLAN_PRICE; // Initial price for "Essência Clássica e Sublime"
+            let currentFreightCost = 0;
+            const selectedInstruments = new Set(); // Stores names of selected instruments
 
             function formatCurrency(value) {
                 return `R$ ${value.toFixed(2).replace('.', ',')}`;
             }
 
-            function updateFinalTotal() {
-                totalPriceEl.textContent = formatCurrency(totalPrice);
+            function updatePrices() {
+                let calculatedPlanPrice = BASE_PLAN_PRICE; // Start with base plan price
+                selectedInstruments.forEach(name => {
+                    // Find the instrument in either band or guest instruments
+                    const instrument = [...bandInstruments, ...guestInstruments].find(i => i.name === name);
+                    if (instrument) {
+                        calculatedPlanPrice += instrument.price;
+                    }
+                });
+                
+                planPriceEl.textContent = formatCurrency(calculatedPlanPrice);
+                freightPriceEl.textContent = formatCurrency(currentFreightCost);
+                finalTotalPriceEl.textContent = formatCurrency(calculatedPlanPrice + currentFreightCost);
             }
 
             function createCheckbox(instrument, container) {
@@ -468,59 +578,249 @@
                 container.appendChild(label);
 
                 checkbox.addEventListener('change', (e) => {
-                    const price = parseFloat(e.target.dataset.price);
                     const name = e.target.dataset.name;
                     if (e.target.checked) {
-                        totalPrice += price;
                         selectedInstruments.add(name);
                     } else {
-                        totalPrice -= price;
                         selectedInstruments.delete(name);
                     }
-                    updateFinalTotal();
+                    updatePrices();
                 });
             }
 
             if(bandOptionsContainer && guestOptionsContainer){
                 bandInstruments.forEach(inst => createCheckbox(inst, bandOptionsContainer));
                 guestInstruments.forEach(inst => createCheckbox(inst, guestOptionsContainer));
+                updatePrices(); // Initial price update
             }
+
+            // --- MODAL LOGIC ---
+            const addressModal = document.getElementById('address-modal');
+            const closeModalButton = document.getElementById('close-modal-button');
+            const confirmAddressBtn = document.getElementById('confirm-address-btn');
+            const modalDestinationAddressInput = document.getElementById('modal-destination-address');
+            const modalFreightError = document.getElementById('modal-freight-error');
+
+            function showAddressModal() {
+                addressModal.style.display = 'flex'; // Use flex to center
+                // Copy current address from main input to modal input
+                modalDestinationAddressInput.value = document.getElementById('destination-address').value;
+                modalFreightError.classList.add('hidden'); // Hide any previous errors
+            }
+
+            function hideAddressModal() {
+                addressModal.style.display = 'none';
+            }
+
+            if (closeModalButton) {
+                closeModalButton.addEventListener('click', hideAddressModal);
+            }
+
+            window.addEventListener('click', (event) => {
+                if (event.target == addressModal) {
+                    hideAddressModal();
+                }
+            });
+
+            if (confirmAddressBtn) {
+                confirmAddressBtn.addEventListener('click', () => {
+                    const address = modalDestinationAddressInput.value.trim();
+                    if (address === "") {
+                        modalFreightError.textContent = "Por favor, digite o endereço de destino.";
+                        modalFreightError.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    // Update the main address input with the modal's value
+                    document.getElementById('destination-address').value = address;
+                    
+                    // Trigger freight calculation from the main input
+                    calculateFreight(address, () => {
+                        // Callback after freight calculation
+                        if (currentPlanDetails) {
+                            sendWhatsAppMessage(currentPlanDetails);
+                            currentPlanDetails = null; // Clear details after sending
+                        }
+                        hideAddressModal();
+                    });
+                });
+            }
+
+            // Function to send WhatsApp message
+            function sendWhatsAppMessage(plan) {
+                const destinationAddress = document.getElementById('destination-address').value;
+                const distanceText = document.getElementById('distance-display').textContent; // Get the distance text
+                let message = `*Solicitação de Orçamento - ${plan.type}*\n\n`;
+                message += `Olá! Tenho interesse no plano *${plan.name}*.\n\n`;
+                
+                let totalPlanPriceCalculatedForMessage = BASE_PLAN_PRICE; // Start with base price for message calculation
+
+                message += '*Detalhes do Plano:*\n';
+                message += `• Formação Padrão (3 Vozes + Teclado/Piano): ${formatCurrency(INSTRUMENT_PRICES['3 Vozes + Teclado/Piano'])}\n`;
+
+                // Collect all instruments from the current plan, excluding the base if it's explicitly listed in `plan.instruments`
+                // This ensures we don't duplicate the base plan entry.
+                const instrumentsForMessage = plan.instruments.filter(
+                    inst => inst !== '3 Vozes + Teclado/Piano' && INSTRUMENT_PRICES[inst]
+                );
+
+                instrumentsForMessage.forEach(instName => {
+                    const price = INSTRUMENT_PRICES[instName];
+                    if (price !== undefined) {
+                        message += `• ${instName}: ${formatCurrency(price)}\n`;
+                        totalPlanPriceCalculatedForMessage += price;
+                    }
+                });
+
+                // If it's a pre-made plan and its stated price is different from the sum of its parts,
+                // we should use the pre-made plan's fixed price as the "Valor do Plano".
+                // Otherwise, use the calculated sum.
+                const finalPlanPriceForMessage = (plan.type === 'Plano Pronto' && plan.price !== totalPlanPriceCalculatedForMessage)
+                    ? plan.price
+                    : totalPlanPriceCalculatedForMessage;
+
+                message += `\n*Valor do Plano: ${formatCurrency(finalPlanPriceForMessage)}*\n`;
+                
+                if (currentFreightCost > 0 || destinationAddress.toLowerCase().includes("angélica, ms")) {
+                    message += `*Frete Estimado:* ${formatCurrency(currentFreightCost)} para ${destinationAddress} (Distância: ${distanceText})\n`;
+                    message += `*Valor Total (com frete):* ${formatCurrency(finalPlanPriceForMessage + currentFreightCost)}\n\n`;
+                } else {
+                    message += `\n*Valor Total: ${formatCurrency(finalPlanPriceForMessage)}*\n\n`;
+                }
+                message += 'Gostaria de verificar a disponibilidade e mais detalhes. Obrigado!';
+
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+            }
+
+            // Global function for pre-made plan buttons
+            window.handleContratar = function(planName, instruments, price) {
+                currentPlanDetails = {
+                    type: 'Plano Pronto',
+                    name: planName,
+                    instruments: instruments,
+                    price: price // This is the fixed price for the pre-made plan
+                };
+
+                const destination = document.getElementById('destination-address').value.trim();
+                if (!destination) {
+                    showAddressModal();
+                } else {
+                    // If address is already present, calculate freight and then send message
+                    calculateFreight(destination, () => {
+                        sendWhatsAppMessage(currentPlanDetails);
+                        currentPlanDetails = null; // Clear details after sending
+                    });
+                }
+            };
 
             if(contractBtnCustom){
                 contractBtnCustom.addEventListener('click', () => {
-                    let message = `*Solicitação de Orçamento - Plano Personalizado*\n\n`;
-                    message += 'Olá! Gostaria de um orçamento para a seguinte configuração:\n\n';
-                    message += '• *Formação Padrão:* 3 Vozes + Teclado\n';
-                    if (selectedInstruments.size > 0) {
-                        message += '\n*Instrumentos Adicionais:*\n';
-                        selectedInstruments.forEach(name => {
-                            message += `• ${name}\n`;
+                    currentPlanDetails = {
+                        type: 'Plano Personalizado',
+                        name: 'Plano Personalizado',
+                        instruments: ['3 Vozes + Teclado/Piano', ...Array.from(selectedInstruments)], // Ensure base is always included for custom
+                        price: parseFloat(planPriceEl.textContent.replace('R$', '').replace(',', '.')) // Get the currently displayed plan price
+                    };
+
+                    const destination = document.getElementById('destination-address').value.trim();
+                    if (!destination) {
+                        showAddressModal();
+                    } else {
+                        // If address is already present, calculate freight and then send message
+                        calculateFreight(destination, () => {
+                            sendWhatsAppMessage(currentPlanDetails);
+                            currentPlanDetails = null; // Clear details after sending
                         });
                     }
-                    message += `\n*Valor Total (prévia): ${formatCurrency(totalPrice)}*\n\n`;
-                    message += 'Fico no aguardo do contato. Obrigado!';
-                    
-                    const encodedMessage = encodeURIComponent(message);
-                    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+                });
+            }
+
+            // --- FREIGHT CALCULATION ---
+            const originAddress = "Angélica, MS, Brazil";
+            const pricePerKm = 4.50; // R$ 4,50 per Km
+
+            const destinationAddressInput = document.getElementById('destination-address');
+            const calculateFreightBtn = document.getElementById('calculate-freight-btn');
+            const freightResultsDiv = document.getElementById('freight-results');
+            const distanceDisplay = document.getElementById('distance-display');
+            const calculatedFreightDisplay = document.getElementById('calculated-freight-display');
+            const freightError = document.getElementById('freight-error');
+
+            function calculateFreight(destination, callback = () => {}) {
+                if (!mapsInitialized) {
+                    console.error("Google Maps API not yet loaded.");
+                    freightError.textContent = "Erro ao carregar o serviço de mapas. Por favor, tente novamente em alguns segundos.";
+                    freightError.classList.remove('hidden');
+                    callback(); // Call callback even on error
+                    return;
+                }
+
+                if (!destination) {
+                    freightError.textContent = "Por favor, digite o endereço de destino.";
+                    freightError.classList.remove('hidden');
+                    freightResultsDiv.classList.add('hidden');
+                    currentFreightCost = 0;
+                    updatePrices();
+                    callback(); // Call callback
+                    return;
+                }
+
+                const service = new google.maps.DistanceMatrixService();
+                service.getDistanceMatrix(
+                    {
+                        origins: [originAddress],
+                        destinations: [destination],
+                        travelMode: google.maps.TravelMode.DRIVING,
+                        unitSystem: google.maps.UnitSystem.METRIC,
+                    },
+                    (response, status) => {
+                        if (status === 'OK') {
+                            const element = response.rows[0].elements[0];
+                            if (element.status === 'OK') {
+                                const distanceInMeters = element.distance.value; // distance in meters
+                                const destinationFormattedAddress = response.destinationAddresses[0]; // Get the formatted destination address
+
+                                // Check if the destination is Angélica, MS (case-insensitive, contains check)
+                                if (destinationFormattedAddress.toLowerCase().includes("angélica, ms")) {
+                                    currentFreightCost = 0;
+                                    distanceDisplay.textContent = "Local de partida (Frete Grátis)";
+                                } else {
+                                    const distanceInKm = distanceInMeters / 1000;
+                                    currentFreightCost = distanceInKm * pricePerKm;
+                                    distanceDisplay.textContent = `${distanceInKm.toFixed(2)} km`;
+                                }
+
+                                calculatedFreightDisplay.textContent = formatCurrency(currentFreightCost);
+                                
+                                freightResultsDiv.classList.remove('hidden');
+                                freightError.classList.add('hidden');
+                                updatePrices(); // Update total price with freight
+                            } else {
+                                freightError.textContent = "Não foi possível calcular o frete para o endereço fornecido. Por favor, tente novamente.";
+                                freightError.classList.remove('hidden');
+                                freightResultsDiv.classList.add('hidden');
+                                currentFreightCost = 0;
+                                updatePrices();
+                            }
+                        } else {
+                            freightError.textContent = "Erro ao calcular o frete. Verifique o endereço e sua conexão com a internet.";
+                            freightError.classList.remove('hidden');
+                            freightResultsDiv.classList.add('hidden');
+                            currentFreightCost = 0;
+                            updatePrices();
+                        }
+                        callback(); // Ensure callback is called after calculation attempt
+                    }
+                );
+            }
+
+            if (calculateFreightBtn) {
+                calculateFreightBtn.addEventListener('click', () => {
+                    calculateFreight(destinationAddressInput.value.trim());
                 });
             }
         });
-
-        // Global function for pre-made plan buttons
-        function contratarPlanoPronto(planName, instruments, price) {
-            const whatsappNumber = '5567996884226';
-            let message = `*Solicitação de Orçamento - Plano Pronto*\n\n`;
-            message += `Olá! Tenho interesse no plano *${planName}*.\n\n`;
-            message += '*Instrumentos Inclusos:*\n';
-            instruments.forEach(inst => {
-                message += `• ${inst}\n`;
-            });
-            message += `\n*Valor: R$ ${price.toFixed(2).replace('.', ',')}*\n\n`;
-            message += 'Gostaria de verificar a disponibilidade e mais detalhes. Obrigado!';
-
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
-        }
     </script>
 </body>
 </html>
