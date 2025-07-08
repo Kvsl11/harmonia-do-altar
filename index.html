@@ -154,6 +154,26 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
+            <script>
+            (function disableInspect() {
+            // Bloqueia clique direito
+            document.addEventListener('contextmenu', e => e.preventDefault());
+
+            // Bloqueia F12, Ctrl+Shift+I/J, Ctrl+U
+            document.addEventListener('keydown', e => {
+                const forbidden =
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && ['I', 'J'].includes(e.key)) ||
+                (e.ctrlKey && e.key === 'U');
+                if (forbidden) e.preventDefault();
+            });
+
+            // Impede abertura do console pelo DevTools
+            Object.defineProperty(window, 'console', {
+                get() { throw new Error('Acesso ao console bloqueado'); }
+            });
+            })();
+        </script>
 </head>
 <body class="text-gray-800">
 
