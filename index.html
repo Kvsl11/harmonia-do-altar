@@ -154,6 +154,25 @@
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Custom Scrollbar for Webkit browsers (Chrome, Safari) */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; /* Light background for the track */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #C9A959; /* Gold color for the scrollbar thumb */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b3944d; /* Darker gold on hover */
+        }
     </style>
 </head>
 <body class="text-gray-800">
@@ -166,7 +185,7 @@
                 <a href="#sobre" class="nav-link">Sobre</a>
                 <a href="#galeria" class="nav-link">Galeria</a>
                 <a href="#planos" class="nav-link">Planos</a>
-                <a href="#frete" class="nav-link">Frete</a>
+                <a href="#deslocamento" class="nav-link">Deslocamento</a>
                 <a href="#contato" class="nav-link">Contato</a>
             </div>
 
@@ -180,7 +199,7 @@
             <a href="#sobre" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Sobre</a>
             <a href="#galeria" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Galeria</a>
             <a href="#planos" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Planos</a>
-            <a href="#frete" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Frete</a>
+            <a href="#deslocamento" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Deslocamento</a>
             <a href="#contato" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Contato</a>
         </div>
     </nav>
@@ -261,6 +280,7 @@
                 
                 <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item">
                     <div class="p-8 flex-grow">
+                        <!-- Font Awesome Music Icon -->
                         <i class="fas fa-music text-gold text-3xl mb-4"></i>
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Essência Clássica e Sublime</h3>
                         <p class="text-gray-600 mb-6 text-sm">A nossa formação padrão, com as <strong>3 vozes e o teclado</strong>. Perfeita para quem busca a elegância atemporal e a emoção pura.</p>
@@ -371,41 +391,28 @@
             <div class="mt-8 max-w-2xl mx-auto border-t pt-6">
                 <div class="text-right space-y-2 text-lg">
                     <p class="text-2xl md:text-3xl font-bold">Valor do Plano: <span id="plan-price" class="text-gold">R$ 1.400,00</span></p>
-                    <p class="text-xl md:text-2xl font-bold">Valor do Frete: <span id="freight-price" class="text-gold">R$ 0,00</span></p>
+                    <p class="text-xl md:text-2xl font-bold">Valor do Deslocamento: <span id="freight-price" class="text-gold">R$ 0,00</span></p>
                     <p class="text-2xl md:text-3xl font-bold">Valor Total: <span id="final-total-price" class="text-gold">R$ 1.400,00</span></p>
                 </div>
                 <button id="contract-btn-custom" class="mt-6 w-full bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Contratar Plano Personalizado</button>
             </div>
         </section>
 
-        <section id="frete" class="bg-white rounded-2xl shadow-sm p-8 md:p-12 text-center mt-16 md:mt-24 animated-item">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Cálculo de Frete</h2>
+        <section id="deslocamento" class="bg-white rounded-2xl shadow-sm p-8 md:p-12 text-center mt-16 md:mt-24 animated-item">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Cálculo de Deslocamento</h2>
             <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
             <p class="max-w-3xl mx-auto text-gray-600 mb-8">
-                Informe o endereço do local da cerimônia para calcular o custo do frete, considerando a saída de **Angélica, MS**.
+                Informe o endereço do local da cerimônia para calcular o custo do deslocamento. *Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.*
             </p>
             <div class="max-w-2xl mx-auto text-left">
                 <label for="destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço do Local:</label>
                 <input type="text" id="destination-address" placeholder="Rua, Número, Cidade, Estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold mb-4">
-                <button id="calculate-freight-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Calcular Frete</button>
+                <button id="calculate-freight-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Calcular Deslocamento</button>
                 <div id="freight-results" class="mt-6 p-4 bg-gray-100 rounded-lg hidden">
                     <p class="text-gray-700">Distância: <span id="distance-display" class="font-bold"></span></p>
-                    <p class="text-gray-700">Valor do Frete: <span id="calculated-freight-display" class="font-bold text-gold"></span></p>
+                    <p class="text-gray-700">Valor do Deslocamento: <span id="calculated-freight-display" class="font-bold text-gold"></span></p>
                 </div>
-                <p id="freight-error" class="text-red-500 mt-2 hidden">Não foi possível calcular o frete para o endereço fornecido. Por favor, tente novamente.</p>
-            </div>
-        </section>
-
-        <section id="info" class="mt-16 md:mt-24 animated-item">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Informações Importantes</h2>
-            <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
-            <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm p-8">
-                <ul class="space-y-4 text-gray-700">
-                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Duração:</strong> A apresentação cobre todos os momentos chave da cerimônia.</span></li>
-                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Repertório:</strong> Totalmente personalizado ao gosto do casal.</span></li>
-                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Equipamentos:</strong> A sonorização completa do evento (P.A., microfones, etc.) é de responsabilidade do contratante.</span></li>
-                    <li class="flex items-start"><span class="text-gold font-bold text-xl mr-3">&#10003;</span><span><strong>Deslocamento:</strong> Custos de transporte para fora da cidade de Angélica, MS, serão combinados à parte.</span></li>
-                </ul>
+                <p id="freight-error" class="text-red-500 mt-2 hidden">Não foi possível calcular o deslocamento para o endereço fornecido. Por favor, tente novamente.</p>
             </div>
         </section>
 
@@ -436,11 +443,57 @@
         <div class="modal-content">
             <span class="close-button" id="close-modal-button">&times;</span>
             <h3 class="text-2xl font-bold text-gray-800 mb-4">Por favor, informe o endereço do evento</h3>
-            <p class="text-gray-600 mb-4">Precisamos do endereço para calcular o frete e finalizar seu orçamento.</p>
+            <p class="text-gray-600 mb-4">Precisamos do endereço para calcular o deslocamento e finalizar seu orçamento.</p>
             <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço:</label>
             <input type="text" id="modal-destination-address" placeholder="Rua, Número, Cidade, Estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold mb-4">
             <p id="modal-freight-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
             <button id="confirm-address-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 w-full">Confirmar Endereço</button>
+        </div>
+    </div>
+
+    <!-- Payment Simulation Modal -->
+    <div id="payment-modal" class="modal fixed inset-0 flex items-center justify-center">
+        <div class="modal-content">
+            <span class="close-button" id="close-payment-modal-button">&times;</span>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Simulação de Pagamento</h3>
+            <p class="text-gray-600 mb-2">Valor do Plano: <span id="modal-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
+            <p class="text-gray-600 mb-4">Valor do Deslocamento: <span id="modal-freight-price" class="font-bold text-gold">R$ 0,00</span></p>
+            <p class="text-gray-600 mb-4">Valor Total (Plano + Deslocamento): <span id="modal-total-price" class="font-bold text-gold">R$ 0,00</span></p>
+            <p class="text-gray-600 mb-4" id="total-with-fees-label-container">Valor Total a Pagar<span id="fees-suffix"> (com taxas)</span>: <span id="modal-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
+
+
+            <div class="mb-6">
+                <h4 class="text-lg font-bold text-gray-800 mb-2">Forma de Pagamento:</h4>
+                <div class="space-y-2">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="radio" name="payment-method" value="pix" class="form-radio h-4 w-4 text-gold" checked>
+                        <span>Pix</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="radio" name="payment-method" value="dinheiro" class="form-radio h-4 w-4 text-gold">
+                        <span>Dinheiro (a verificar com o contratado)</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="radio" name="payment-method" value="boleto" class="form-radio h-4 w-4 text-gold">
+                        <span>Boleto (parcelamento em até 5x)</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="radio" name="payment-method" value="cartao" class="form-radio h-4 w-4 text-gold">
+                        <span>Cartão de Crédito (parcelamento em até 12x)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="installment-options" class="mb-6 hidden">
+                <label for="installments" class="block text-gray-700 text-sm font-bold mb-2">Número de Parcelas:</label>
+                <select id="installments" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                    <option value="1">1x</option>
+                    <!-- Options will be dynamically populated by JavaScript -->
+                </select>
+                <p class="mt-2 text-gray-700">Valor por parcela: <span id="installment-value" class="font-bold text-gold">R$ 0,00</span></p>
+            </div>
+
+            <button id="confirm-payment-and-contract-btn" class="mt-6 w-full bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Confirmar Pagamento e Contratar</button>
         </div>
     </div>
 
@@ -453,9 +506,16 @@
         let mapsInitialized = false; // Flag para verificar se a API do Google Maps foi carregada
         let autocomplete; // Objeto Autocomplete do Google Places
         let currentPlanDetails = null; // Para armazenar detalhes do plano sendo contratado
+        let currentFinalTotalPrice = 0; // Armazena o valor total final (plano + deslocamento, antes das taxas de pagamento)
+        let currentPlanOnlyPrice = 0; // Armazena o preço do plano (sem deslocamento)
 
         // Define os preços dos instrumentos globalmente para fácil acesso na mensagem do WhatsApp
         const BASE_PLAN_PRICE = 1400;
+        const BOLETO_PER_INSTALLMENT_FEE = 18; // R$18 fixo POR PARCELA para boleto
+        const FIXED_DESLOCAMENTO_CITIES = ['angélica, ms', 'ivinhema, ms']; // Cidades com deslocamento fixo
+        const FIXED_DESLOCAMENTO_AMOUNT = 50; // Valor fixo do deslocamento para as cidades específicas
+        const PER_KM_DESLOCAMENTO_RATE = 1.80; // R$1,80 por Km para outras cidades, além do base
+
         const INSTRUMENT_PRICES = {
             'Violão': 200,
             'Contrabaixo': 200,
@@ -465,19 +525,40 @@
             '3 Vozes + Teclado/Piano': BASE_PLAN_PRICE // Preço base explícito para clareza
         };
 
+        // Taxas de juros totais para cartão de crédito, conforme a nova tabela fornecida (juros da maquininha + juros de liberação)
+        const CREDIT_CARD_TOTAL_PERCENTAGES = {
+            1: 0.04980, // 4.980% (maquininha)
+            2: 0.04590 + 0.0531, // 4.590% (maquininha) + 5.31% (liberação)
+            3: 0.05970 + 0.0531, // 5.970% (maquininha) + 5.31% (liberação)
+            4: 0.07330 + 0.0531, // 7.330% (maquininha) + 5.31% (liberação)
+            5: 0.08660 + 0.0531, // 8.660% (maquininha) + 5.31% (liberação)
+            6: 0.09980 + 0.0531, // 9.980% (maquininha) + 5.31% (liberação)
+            7: 0.11240 + 0.0531, // 11.240% (maquininha) + 5.31% (liberação)
+            8: 0.12500 + 0.0531, // 12.500% (maquininha) + 5.31% (liberação)
+            9: 0.13730 + 0.0531, // 13.730% (maquininha) + 5.31% (liberação)
+            10: 0.14930 + 0.0531, // 14.930% (maquininha) + 5.31% (liberação)
+            11: 0.16100 + 0.0531, // 16.100% (maquininha) + 5.31% (liberação)
+            12: 0.17280 + 0.0531  // 17.280% (maquininha) + 5.31% (liberação)
+        };
+
+
         function initMap() {
             mapsInitialized = true;
             console.log("Google Maps API carregada.");
 
             // Inicializa o Autocomplete para o campo de endereço principal
             const destinationAddressInput = document.getElementById('destination-address');
-            if (destinationAddressInput) {
+            const calculateDeslocamentoBtn = document.getElementById('calculate-freight-btn'); // Get the button reference here
+            if (destinationAddressInput && calculateDeslocamentoBtn) {
                 autocomplete = new google.maps.places.Autocomplete(destinationAddressInput, { types: ['address'], componentRestrictions: { country: 'br' } });
                 autocomplete.addListener('place_changed', () => {
-                    // Quando um local é selecionado das sugestões, aciona o cálculo do frete
-                    document.getElementById('calculate-freight-btn').click();
+                    // When a place is selected from suggestions, trigger deslocamento calculation
+                    calculateDeslocamentoBtn.click(); // Now calculateDeslocamentoBtn is defined
                 });
+            } else {
+                console.error("Elementos de input ou botão de deslocamento não encontrados para autocomplete.");
             }
+
 
             // Inicializa o Autocomplete para o campo de endereço do modal
             const modalDestinationAddressInput = document.getElementById('modal-destination-address');
@@ -488,6 +569,10 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const whatsappNumber = '5567996884226';
+
+            // --- GARANTE QUE OS MODAIS ESTÃO OCULTOS AO CARREGAR A PÁGINA ---
+            document.getElementById('address-modal').style.display = 'none';
+            document.getElementById('payment-modal').style.display = 'none';
 
             // --- OBSERVER DE ANIMAÇÃO ---
             const animatedItems = document.querySelectorAll('.animated-item');
@@ -536,15 +621,19 @@
             const bandOptionsContainer = document.getElementById('band-instrument-options');
             const guestOptionsContainer = document.getElementById('guest-instrument-options');
             const planPriceEl = document.getElementById('plan-price');
-            const freightPriceEl = document.getElementById('freight-price');
+            const freightPriceEl = document.getElementById('freight-price'); // Renomeado para deslocamento
             const finalTotalPriceEl = document.getElementById('final-total-price');
             const contractBtnCustom = document.getElementById('contract-btn-custom');
             
             let basePlanPrice = BASE_PLAN_PRICE; // Preço inicial para "Essência Clássica e Sublime"
-            let currentFreightCost = 0;
+            let currentDeslocamentoCost = 0; // Renomeado para deslocamento
             const selectedInstruments = new Set(); // Armazena os nomes dos instrumentos selecionados
 
             function formatCurrency(value) {
+                // Adicionado uma verificação para garantir que o valor é um número válido
+                if (typeof value !== 'number' || isNaN(value)) {
+                    return 'R$ 0,00'; // Retorna um valor padrão formatado
+                }
                 return `R$ ${value.toFixed(2).replace('.', ',')}`;
             }
 
@@ -559,8 +648,10 @@
                 });
                 
                 planPriceEl.textContent = formatCurrency(calculatedPlanPrice);
-                freightPriceEl.textContent = formatCurrency(currentFreightCost);
-                finalTotalPriceEl.textContent = formatCurrency(calculatedPlanPrice + currentFreightCost);
+                freightPriceEl.textContent = formatCurrency(currentDeslocamentoCost); // Renomeado para deslocamento
+                finalTotalPriceEl.textContent = formatCurrency(calculatedPlanPrice + currentDeslocamentoCost); // Renomeado para deslocamento
+                currentFinalTotalPrice = calculatedPlanPrice + currentDeslocamentoCost; // Renomeado para deslocamento
+                currentPlanOnlyPrice = calculatedPlanPrice; // Atualiza o preço do plano sem deslocamento
             }
 
             function createCheckbox(instrument, container) {
@@ -595,18 +686,18 @@
                 updatePrices(); // Atualização inicial do preço
             }
 
-            // --- LÓGICA DO MODAL ---
+            // --- LÓGICA DO MODAL DE ENDEREÇO ---
             const addressModal = document.getElementById('address-modal');
             const closeModalButton = document.getElementById('close-modal-button');
             const confirmAddressBtn = document.getElementById('confirm-address-btn');
             const modalDestinationAddressInput = document.getElementById('modal-destination-address');
-            const modalFreightError = document.getElementById('modal-freight-error');
+            const modalFreightError = document.getElementById('freight-error'); // Mantém o ID, mas o texto será "Deslocamento"
 
             function showAddressModal() {
                 addressModal.style.display = 'flex'; // Usa flex para centralizar
                 // Copia o endereço atual do campo principal para o campo do modal
                 modalDestinationAddressInput.value = document.getElementById('destination-address').value;
-                modalFreightError.classList.add('hidden'); // Oculta quaisquer erros anteriores
+                modalFreightError.classList.add('hidden'); // Oculta quaisquer erros anteriores // Renomeado para deslocamento
             }
 
             function hideAddressModal() {
@@ -627,40 +718,172 @@
                 confirmAddressBtn.addEventListener('click', () => {
                     const address = modalDestinationAddressInput.value.trim();
                     if (address === "") {
-                        modalFreightError.textContent = "Por favor, digite o endereço de destino.";
-                        modalFreightError.classList.remove('hidden');
+                        modalFreightError.textContent = "Por favor, digite o endereço de destino."; // Renomeado para deslocamento
+                        modalFreightError.classList.remove('hidden'); // Renomeado para deslocamento
                         return;
                     }
                     
                     // Atualiza o campo de endereço principal com o valor do modal
                     document.getElementById('destination-address').value = address;
                     
-                    // Aciona o cálculo do frete a partir do campo principal
-                    calculateFreight(address, () => {
-                        // Callback após o cálculo do frete
+                    // Aciona o cálculo do deslocamento a partir do campo principal
+                    calculateDeslocamento(address, () => { // Renomeado para deslocamento
+                        // Callback após o cálculo do deslocamento, então mostra o modal de pagamento
                         if (currentPlanDetails) {
-                            sendWhatsAppMessage(currentPlanDetails);
-                            currentPlanDetails = null; // Limpa os detalhes após o envio
+                            hideAddressModal();
+                            showPaymentModal(currentPlanOnlyPrice, currentDeslocamentoCost, currentFinalTotalPrice, currentPlanDetails); // Renomeado para deslocamento
                         }
-                        hideAddressModal();
                     });
                 });
             }
 
+            // --- LÓGICA DO MODAL DE PAGAMENTO ---
+            const paymentModal = document.getElementById('payment-modal');
+            const closePaymentModalButton = document.getElementById('close-payment-modal-button');
+            const modalPlanPriceEl = document.getElementById('modal-plan-price'); // Novo elemento
+            const modalFreightPriceEl = document.getElementById('modal-freight-price'); // Renomeado para deslocamento
+            const modalTotalPriceEl = document.getElementById('modal-total-price');
+            const modalTotalPriceWithFeesEl = document.getElementById('modal-total-price-with-fees'); // Novo elemento para o total com taxas
+            const feesSuffixSpan = document.getElementById('fees-suffix'); // Referência ao span "(com taxas)"
+            const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
+            const installmentOptionsDiv = document.getElementById('installment-options');
+            const installmentsSelect = document.getElementById('installments');
+            const installmentValueEl = document.getElementById('installment-value');
+            const confirmPaymentAndContractBtn = document.getElementById('confirm-payment-and-contract-btn');
+
+            let selectedPaymentMethod = 'pix'; // Default
+            let selectedInstallments = 1;
+
+            function updateInstallmentOptions() {
+                installmentsSelect.innerHTML = ''; // Limpa opções existentes
+                let maxInstallments = 1;
+
+                if (selectedPaymentMethod === 'boleto') {
+                    maxInstallments = 5;
+                } else if (selectedPaymentMethod === 'cartao') {
+                    maxInstallments = 12;
+                }
+
+                for (let i = 1; i <= maxInstallments; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `${i}x`;
+                    installmentsSelect.appendChild(option);
+                }
+                // Garante que a parcela selecionada não exceda o novo máximo
+                selectedInstallments = Math.min(selectedInstallments, maxInstallments);
+                installmentsSelect.value = selectedInstallments;
+            }
+
+            function updatePaymentDetailsDisplay() {
+                console.log('updatePaymentDetailsDisplay called. selectedPaymentMethod:', selectedPaymentMethod); // Log de depuração
+                let calculatedTotalForPayment = currentFinalTotalPrice; // Base total (plano + deslocamento)
+                let finalInstallmentValue = 0;
+
+                console.log('Initial calculatedTotalForPayment (currentFinalTotalPrice):', calculatedTotalForPayment); // Log de depuração
+
+                if (selectedPaymentMethod === 'boleto') {
+                    calculatedTotalForPayment += (BOLETO_PER_INSTALLMENT_FEE * selectedInstallments); // Adiciona a taxa fixa do boleto por parcela
+                    feesSuffixSpan.style.display = 'inline'; // Mostra "(com taxas)"
+                    console.log('Setting display for feesSuffixSpan (Boleto):', feesSuffixSpan.style.display); // Log de depuração
+                    updateInstallmentOptions(); // Atualiza as opções de parcela para boleto
+                } else if (selectedPaymentMethod === 'cartao') {
+                    updateInstallmentOptions(); // Atualiza as opções de parcela para cartão
+                    const percentageFee = CREDIT_CARD_TOTAL_PERCENTAGES[selectedInstallments];
+                    if (percentageFee !== undefined) {
+                        calculatedTotalForPayment *= (1 + percentageFee);
+                    } else {
+                        console.warn("Percentage fee not found for selected installments:", selectedInstallments);
+                    }
+                    feesSuffixSpan.style.display = 'inline'; // Mostra "(com taxas)"
+                    console.log('Setting display for feesSuffixSpan (Cartao):', feesSuffixSpan.style.display); // Log de depuração
+                } else { // Pix or Dinheiro
+                    calculatedTotalForPayment = currentFinalTotalPrice; // Sem taxas adicionais
+                    feesSuffixSpan.style.display = 'none'; // Oculta "(com taxas)"
+                    console.log('Setting display for feesSuffixSpan (Pix/Dinheiro):', feesSuffixSpan.style.display); // Log de depuração
+                    updateInstallmentOptions(); // Reseta para 1x
+                }
+
+                finalInstallmentValue = calculatedTotalForPayment / selectedInstallments;
+
+                modalPlanPriceEl.textContent = formatCurrency(currentPlanOnlyPrice); // Exibe o preço do plano
+                modalFreightPriceEl.textContent = formatCurrency(currentDeslocamentoCost); // Exibe o preço do deslocamento
+                modalTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice); // Mostra o total sem taxas de pagamento (plano + deslocamento)
+                modalTotalPriceWithFeesEl.textContent = formatCurrency(calculatedTotalForPayment); // Usa textContent
+                console.log('Final value assigned to modalTotalPriceWithFeesEl (textContent):', formatCurrency(calculatedTotalForPayment)); // Log de depuração
+                installmentValueEl.textContent = formatCurrency(finalInstallmentValue);
+
+                if (selectedPaymentMethod === 'boleto' || selectedPaymentMethod === 'cartao') {
+                    installmentOptionsDiv.classList.remove('hidden');
+                } else {
+                    installmentOptionsDiv.classList.add('hidden');
+                }
+            }
+
+            function showPaymentModal(planPrice, deslocamentoPrice, totalPrice, planDetails) { // Renomeado para deslocamento
+                modalPlanPriceEl.textContent = formatCurrency(planPrice); // Define o preço do plano
+                modalFreightPriceEl.textContent = formatCurrency(deslocamentoPrice); // Define o preço do deslocamento
+                modalTotalPriceEl.textContent = formatCurrency(totalPrice);
+                paymentModal.style.display = 'flex';
+                currentPlanDetails = planDetails; // Store plan details for WhatsApp message
+                currentFinalTotalPrice = totalPrice; // Store total price for calculations
+                currentPlanOnlyPrice = planPrice; // Store plan price without deslocamento
+
+                // Reset payment method to default (Pix) and update display
+                document.querySelector('input[name="payment-method"][value="pix"]').checked = true;
+                selectedPaymentMethod = 'pix';
+                selectedInstallments = 1; // Reset to 1 installment
+                updatePaymentDetailsDisplay(); // Call to update all values and options
+            }
+
+            function hidePaymentModal() {
+                paymentModal.style.display = 'none';
+            }
+
+            if (closePaymentModalButton) {
+                closePaymentModalButton.addEventListener('click', hidePaymentModal);
+            }
+
+            window.addEventListener('click', (event) => {
+                if (event.target == paymentModal) {
+                    hidePaymentModal();
+                }
+            });
+
+            paymentMethodRadios.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    selectedPaymentMethod = radio.value;
+                    console.log('Payment method changed to:', selectedPaymentMethod); // Log de depuração
+                    updatePaymentDetailsDisplay(); // Recalcula e atualiza a exibição
+                });
+            });
+
+            if (installmentsSelect) {
+                installmentsSelect.addEventListener('change', (e) => {
+                    selectedInstallments = parseInt(e.target.value);
+                    updatePaymentDetailsDisplay(); // Recalcula e atualiza a exibição
+                });
+            }
+
+            if (confirmPaymentAndContractBtn) {
+                confirmPaymentAndContractBtn.addEventListener('click', () => {
+                    const totalAmountWithFees = parseFloat(modalTotalPriceWithFeesEl.textContent.replace('R$', '').replace(',', '.'));
+                    const installmentValuePerInstallment = parseFloat(installmentValueEl.textContent.replace('R$', '').replace(',', '.'));
+                    sendWhatsAppMessage(currentPlanDetails, selectedPaymentMethod, selectedInstallments, totalAmountWithFees, installmentValuePerInstallment);
+                    hidePaymentModal();
+                });
+            }
+
             // Função para enviar mensagem do WhatsApp
-            function sendWhatsAppMessage(plan) {
+            function sendWhatsAppMessage(plan, paymentMethod, installments, totalAmountWithFees, installmentValuePerInstallment) {
                 const destinationAddress = document.getElementById('destination-address').value;
-                const distanceText = document.getElementById('distance-display').textContent; // Obtém o texto da distância
+                const distanceText = document.getElementById('distance-display').textContent;
                 let message = `*Solicitação de Orçamento - ${plan.type}*\n\n`;
                 message += `Olá! Tenho interesse no plano *${plan.name}*.\n\n`;
                 
-                let totalPlanPriceCalculatedForMessage = BASE_PLAN_PRICE; // Começa com o preço base para o cálculo da mensagem
-
                 message += '*Detalhes do Plano:*\n';
                 message += `• Formação Padrão (3 Vozes + Teclado/Piano): ${formatCurrency(INSTRUMENT_PRICES['3 Vozes + Teclado/Piano'])}\n`;
 
-                // Coleta todos os instrumentos do plano atual, excluindo a base se já estiver listada em `plan.instruments`
-                // Isso garante que não haja duplicação da entrada do plano base.
                 const instrumentsForMessage = plan.instruments.filter(
                     inst => inst !== '3 Vozes + Teclado/Piano' && INSTRUMENT_PRICES[inst] !== undefined
                 );
@@ -668,31 +891,35 @@
                 instrumentsForMessage.forEach(instName => {
                     const price = INSTRUMENT_PRICES[instName];
                     message += `• ${instName}: ${formatCurrency(price)}\n`;
-                    totalPlanPriceCalculatedForMessage += price;
                 });
 
-                // Se for um plano pré-definido e seu preço declarado for diferente da soma de suas partes,
-                // devemos usar o preço fixo do plano pré-definido como "Valor do Plano".
-                // Caso contrário, usa a soma calculada.
-                const finalPlanPriceForMessage = (plan.type === 'Plano Pronto' && plan.price !== totalPlanPriceCalculatedForMessage)
-                    ? plan.price
-                    : totalPlanPriceCalculatedForMessage;
+                message += `\n*Resumo do Orçamento:*\n`;
+                message += `*Valor do Contrato (Plano):* ${formatCurrency(plan.price)}\n`;
 
-                message += `\n*Valor do Plano: ${formatCurrency(finalPlanPriceForMessage)}*\n`;
-                
-                if (currentFreightCost > 0 || destinationAddress.toLowerCase().includes("angélica, ms")) {
-                    message += `*Frete Estimado:* ${formatCurrency(currentFreightCost)} para ${destinationAddress} (Distância: ${distanceText})\n`;
-                    message += `*Valor Total (com frete):* ${formatCurrency(finalPlanPriceForMessage + currentFreightCost)}\n\n`;
-                } else {
-                    message += `\n*Valor Total: ${formatCurrency(finalPlanPriceForMessage)}*\n\n`;
+                if (currentDeslocamentoCost > 0 || FIXED_DESLOCAMENTO_CITIES.some(city => destinationAddress.toLowerCase().includes(city))) {
+                    message += `*Valor do Deslocamento:* ${formatCurrency(currentDeslocamentoCost)} para ${destinationAddress} (Distância: ${distanceText})\n`;
                 }
-                message += 'Gostaria de verificar a disponibilidade e mais detalhes. Obrigado!';
+                
+                if (paymentMethod === 'pix' || paymentMethod === 'dinheiro') {
+                    message += `*Valor Total a Pagar:* ${formatCurrency(totalAmountWithFees)}\n`;
+                } else {
+                    message += `*Valor Total a Pagar (com taxas):* ${formatCurrency(totalAmountWithFees)}\n`;
+                }
+                
+                message += `*Forma de Pagamento Selecionada:* ${paymentMethod.toUpperCase()}\n`;
+                if (installments > 1) {
+                    message += `*Parcelamento:* ${installments}x de ${formatCurrency(installmentValuePerInstallment)}\n`;
+                } else if (paymentMethod === 'dinheiro') {
+                    message += `*(Pagamento em dinheiro a ser verificado com o contratado)*\n`;
+                }
+
+                message += '\nGostaria de verificar a disponibilidade e mais detalhes. Obrigado!';
 
                 const encodedMessage = encodeURIComponent(message);
                 window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
             }
 
-            // Função global para botões de plano pré-definidos
+            // Global function for pre-made plan buttons
             window.handleContratar = function(planName, instruments, price) {
                 currentPlanDetails = {
                     type: 'Plano Pronto',
@@ -705,10 +932,9 @@
                 if (!destination) {
                     showAddressModal();
                 } else {
-                    // Se o endereço já estiver presente, calcula o frete e então envia a mensagem
-                    calculateFreight(destination, () => {
-                        sendWhatsAppMessage(currentPlanDetails);
-                        currentPlanDetails = null; // Limpa os detalhes após o envio
+                    // Se o endereço já estiver presente, calcula o deslocamento e então mostra o modal de pagamento
+                    calculateDeslocamento(destination, () => {
+                        showPaymentModal(currentPlanDetails.price, currentDeslocamentoCost, currentFinalTotalPrice, currentPlanDetails);
                     });
                 }
             };
@@ -726,40 +952,39 @@
                     if (!destination) {
                         showAddressModal();
                     } else {
-                        // Se o endereço já estiver presente, calcula o frete e então envia a mensagem
-                        calculateFreight(destination, () => {
-                            sendWhatsAppMessage(currentPlanDetails);
-                            currentPlanDetails = null; // Limpa os detalhes após o envio
+                        // Se o endereço já estiver presente, calcula o deslocamento e então mostra o modal de pagamento
+                        calculateDeslocamento(destination, () => {
+                            showPaymentModal(currentPlanDetails.price, currentDeslocamentoCost, currentFinalTotalPrice, currentPlanDetails);
                         });
                     }
                 });
             }
 
-            // --- CÁLCULO DE FRETE ---
+            // --- CÁLCULO DE DESLOCAMENTO ---
             const originAddress = "Angélica, MS, Brazil";
-            const pricePerKm = 4.50; // R$ 4,50 por Km
+            // const pricePerKm = 4.50; // REMOVIDO: Agora é PER_KM_DESLOCAMENTO_RATE
 
             const destinationAddressInput = document.getElementById('destination-address');
-            const calculateFreightBtn = document.getElementById('calculate-freight-btn');
-            const freightResultsDiv = document.getElementById('freight-results');
+            const calculateDeslocamentoBtn = document.getElementById('calculate-freight-btn'); // Mantém o ID do botão, mas o texto será "Calcular Deslocamento"
+            const deslocamentoResultsDiv = document.getElementById('freight-results'); // Mantém o ID, mas o texto será "Deslocamento"
             const distanceDisplay = document.getElementById('distance-display');
-            const calculatedFreightDisplay = document.getElementById('calculated-freight-display');
-            const freightError = document.getElementById('freight-error');
+            const calculatedDeslocamentoDisplay = document.getElementById('calculated-freight-display'); // Mantém o ID, mas o texto será "Deslocamento"
+            const deslocamentoError = document.getElementById('freight-error'); // Mantém o ID, mas o texto será "Deslocamento"
 
-            function calculateFreight(destination, callback = () => {}) {
+            function calculateDeslocamento(destination, callback = () => {}) {
                 if (!mapsInitialized) {
                     console.error("Google Maps API ainda não carregada.");
-                    freightError.textContent = "Erro ao carregar o serviço de mapas. Por favor, tente novamente em alguns segundos.";
-                    freightError.classList.remove('hidden');
+                    deslocamentoError.textContent = "Erro ao carregar o serviço de mapas. Por favor, tente novamente em alguns segundos.";
+                    deslocamentoError.classList.remove('hidden');
                     callback(); // Chama o callback mesmo em caso de erro
                     return;
                 }
 
                 if (!destination) {
-                    freightError.textContent = "Por favor, digite o endereço de destino.";
-                    freightError.classList.remove('hidden');
-                    freightResultsDiv.classList.add('hidden');
-                    currentFreightCost = 0;
+                    deslocamentoError.textContent = "Por favor, digite o endereço de destino.";
+                    deslocamentoError.classList.remove('hidden');
+                    deslocamentoResultsDiv.classList.add('hidden');
+                    currentDeslocamentoCost = 0;
                     updatePrices();
                     callback(); // Chama o callback
                     return;
@@ -779,34 +1004,35 @@
                             if (element.status === 'OK') {
                                 const distanceInMeters = element.distance.value; // distância em metros
                                 const destinationFormattedAddress = response.destinationAddresses[0]; // Obtém o endereço de destino formatado
+                                const lowerCaseDestination = destinationFormattedAddress.toLowerCase();
 
-                                // Verifica se o destino é Angélica, MS (sem distinção de maiúsculas/minúsculas, verifica se contém)
-                                if (destinationFormattedAddress.toLowerCase().includes("angélica, ms")) {
-                                    currentFreightCost = 0;
-                                    distanceDisplay.textContent = "Local de partida (Frete Grátis)";
+                                // Verifica se o destino é Angélica, MS ou Ivinhema, MS
+                                if (FIXED_DESLOCAMENTO_CITIES.some(city => lowerCaseDestination.includes(city))) {
+                                    currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT;
+                                    distanceDisplay.textContent = `Deslocamento Fixo: ${formatCurrency(FIXED_DESLOCAMENTO_AMOUNT)}`;
                                 } else {
                                     const distanceInKm = distanceInMeters / 1000;
-                                    currentFreightCost = distanceInKm * pricePerKm;
+                                    currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT + (distanceInKm * PER_KM_DESLOCAMENTO_RATE); // 50 + 1.80 por km
                                     distanceDisplay.textContent = `${distanceInKm.toFixed(2)} km`;
                                 }
 
-                                calculatedFreightDisplay.textContent = formatCurrency(currentFreightCost);
+                                calculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
                                 
-                                freightResultsDiv.classList.remove('hidden');
-                                freightError.classList.add('hidden');
-                                updatePrices(); // Atualiza o preço total com o frete
+                                deslocamentoResultsDiv.classList.remove('hidden');
+                                deslocamentoError.classList.add('hidden');
+                                updatePrices(); // Atualiza o preço total com o deslocamento
                             } else {
-                                freightError.textContent = "Não foi possível calcular o frete para o endereço fornecido. Por favor, tente novamente.";
-                                freightError.classList.remove('hidden');
-                                freightResultsDiv.classList.add('hidden');
-                                currentFreightCost = 0;
+                                deslocamentoError.textContent = "Não foi possível calcular o deslocamento para o endereço fornecido. Por favor, tente novamente.";
+                                deslocamentoError.classList.remove('hidden');
+                                deslocamentoResultsDiv.classList.add('hidden');
+                                currentDeslocamentoCost = 0;
                                 updatePrices();
                             }
                         } else {
-                            freightError.textContent = "Erro ao calcular o frete. Verifique o endereço e sua conexão com a internet.";
-                            freightError.classList.remove('hidden');
-                            freightResultsDiv.classList.add('hidden');
-                            currentFreightCost = 0;
+                            deslocamentoError.textContent = "Erro ao calcular o deslocamento. Verifique o endereço e sua conexão com a internet.";
+                            deslocamentoError.classList.remove('hidden');
+                            deslocamentoResultsDiv.classList.add('hidden');
+                            currentDeslocamentoCost = 0;
                             updatePrices();
                         }
                         callback(); // Garante que o callback seja chamado após a tentativa de cálculo
@@ -814,9 +1040,9 @@
                 );
             }
 
-            if (calculateFreightBtn) {
-                calculateFreightBtn.addEventListener('click', () => {
-                    calculateFreight(destinationAddressInput.value.trim());
+            if (calculateDeslocamentoBtn) {
+                calculateDeslocamentoBtn.addEventListener('click', () => {
+                    calculateDeslocamento(destinationAddressInput.value.trim());
                 });
             }
 
