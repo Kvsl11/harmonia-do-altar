@@ -173,13 +173,42 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #b3944d; /* Darker gold on hover */
         }
+
+        /* Tab styles */
+        .tab-header {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-weight: 600;
+            color: #888;
+            transition: color 0.3s, border-bottom 0.3s;
+        }
+        .tab-button.active {
+            color: #C9A959;
+            border-bottom: 2px solid #C9A959;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body class="text-gray-800">
 
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2">
         <div class="container mx-auto px-6 flex justify-between items-center">
-            <a href="#" class="text-white text-2xl font-bold font-playfair">Harmonia do Altar</a>
+            <a href="#" class="text-white text-2xl font-bold font-playfair flex items-center">
+                <img src="H.png" alt="Logo Harmonia do Altar" class="h-8 mr-2 inline-block">armonia do Altar
+            </a>
             
             <div class="hidden md:flex space-x-8">
                 <a href="#sobre" class="nav-link">Sobre</a>
@@ -206,7 +235,9 @@
 
     <header class="hero-bg text-white shadow-lg h-screen flex items-center justify-center">
         <div class="text-center">
-            <h1 class="text-5xl md:text-7xl font-bold mb-2 animated-item">Harmonia do Altar</h1>
+            <h1 class="text-5xl md:text-7xl font-bold mb-2 animated-item">
+                <img src="H.png" alt="Logo Harmonia do Altar" class="h-16 md:h-24 inline-block align-middle mr-4">armonia do Altar
+            </h1>
             <p class="text-xl md:text-2xl font-light animated-item delay-1">A Trilha Sonora Perfeita para o Seu Grande Dia</p>
         </div>
     </header>
@@ -303,7 +334,7 @@
                         <p class="text-gray-600 mb-6 text-sm">A formação padrão com o acréscimo do <strong>violão</strong>. O som quente e dedilhado cria uma atmosfera romântica e acolhedora.</p>
                         <h4 class="font-bold mb-2 text-sm">Instrumentos:</h4>
                         <ul class="text-gray-700 text-sm space-y-2">
-                             <li>• 3 Vozes + Teclado/Piano</li>
+                            <li>• 3 Vozes + Teclado/Piano</li>
                             <li>• Violão</li>
                         </ul>
                     </div>
@@ -389,30 +420,14 @@
             </div>
 
             <div class="mt-8 max-w-2xl mx-auto border-t pt-6">
+                <!-- REMOVED: Original price display elements
                 <div class="text-right space-y-2 text-lg">
                     <p class="text-2xl md:text-3xl font-bold">Valor do Plano: <span id="plan-price" class="text-gold">R$ 1.400,00</span></p>
                     <p class="text-xl md:text-2xl font-bold">Valor do Deslocamento: <span id="freight-price" class="text-gold">R$ 0,00</span></p>
                     <p class="text-2xl md:text-3xl font-bold">Valor Total: <span id="final-total-price" class="text-gold">R$ 1.400,00</span></p>
                 </div>
+                -->
                 <button id="contract-btn-custom" class="mt-6 w-full bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Contratar Plano Personalizado</button>
-            </div>
-        </section>
-
-        <section id="deslocamento" class="bg-white rounded-2xl shadow-sm p-8 md:p-12 text-center mt-16 md:mt-24 animated-item">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Cálculo de Deslocamento</h2>
-            <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
-            <p class="max-w-3xl mx-auto text-gray-600 mb-8">
-                Informe o endereço do local da cerimônia para calcular o custo do deslocamento. *Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.*
-            </p>
-            <div class="max-w-2xl mx-auto text-left">
-                <label for="destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço do Local:</label>
-                <input type="text" id="destination-address" placeholder="Rua, Número, Cidade, Estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold mb-4">
-                <button id="calculate-freight-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Calcular Deslocamento</button>
-                <div id="freight-results" class="mt-6 p-4 bg-gray-100 rounded-lg hidden">
-                    <p class="text-gray-700">Distância: <span id="distance-display" class="font-bold"></span></p>
-                    <p class="text-gray-700">Valor do Deslocamento: <span id="calculated-freight-display" class="font-bold text-gold"></span></p>
-                </div>
-                <p id="freight-error" class="text-red-500 mt-2 hidden">Não foi possível calcular o deslocamento para o endereço fornecido. Por favor, tente novamente.</p>
             </div>
         </section>
 
@@ -438,62 +453,95 @@
         </div>
     </footer>
 
-    <!-- Address Input Modal -->
-    <div id="address-modal" class="modal fixed inset-0 flex items-center justify-center">
-        <div class="modal-content">
-            <span class="close-button" id="close-modal-button">&times;</span>
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Por favor, informe o endereço do evento</h3>
-            <p class="text-gray-600 mb-4">Precisamos do endereço para calcular o deslocamento e finalizar seu orçamento.</p>
-            <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço:</label>
-            <input type="text" id="modal-destination-address" placeholder="Rua, Número, Cidade, Estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold mb-4">
-            <p id="modal-freight-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
-            <button id="confirm-address-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 w-full">Confirmar Endereço</button>
-        </div>
-    </div>
+    <!-- Main Contract Modal (Unified with Tabs) -->
+    <div id="main-contract-modal" class="modal fixed inset-0 flex items-center justify-center">
+        <div class="modal-content w-full max-w-2xl">
+            <span class="close-button" id="close-main-modal-button">&times;</span>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Contratação do Plano</h3>
 
-    <!-- Payment Simulation Modal -->
-    <div id="payment-modal" class="modal fixed inset-0 flex items-center justify-center">
-        <div class="modal-content">
-            <span class="close-button" id="close-payment-modal-button">&times;</span>
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Simulação de Pagamento</h3>
-            <p class="text-gray-600 mb-2">Valor do Plano: <span id="modal-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
-            <p class="text-gray-600 mb-4">Valor do Deslocamento: <span id="modal-freight-price" class="font-bold text-gold">R$ 0,00</span></p>
-            <p class="text-gray-600 mb-4">Valor Total (Plano + Deslocamento): <span id="modal-total-price" class="font-bold text-gold">R$ 0,00</span></p>
-            <p class="text-gray-600 mb-4" id="total-with-fees-label-container">Valor Total a Pagar<span id="fees-suffix"> (com taxas)</span>: <span id="modal-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
+            <div class="tab-header" role="tablist">
+                <button class="tab-button active" data-tab="deslocamento-tab" role="tab">Deslocamento</button>
+                <button class="tab-button" data-tab="payment-method-tab" role="tab">Forma de Pagamento</button>
+                <button class="tab-button" data-tab="summary-tab" role="tab">Resumo e Contratar</button>
+            </div>
 
-
-            <div class="mb-6">
-                <h4 class="text-lg font-bold text-gray-800 mb-2">Forma de Pagamento:</h4>
-                <div class="space-y-2">
-                    <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="radio" name="payment-method" value="pix" class="form-radio h-4 w-4 text-gold" checked>
-                        <span>Pix</span>
-                    </label>
-                    <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="radio" name="payment-method" value="dinheiro" class="form-radio h-4 w-4 text-gold">
-                        <span>Dinheiro (a verificar com o contratado)</span>
-                    </label>
-                    <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="radio" name="payment-method" value="boleto" class="form-radio h-4 w-4 text-gold">
-                        <span>Boleto (parcelamento em até 5x)</span>
-                    </label>
-                    <label class="flex items-center space-x-2 cursor-pointer">
-                        <input type="radio" name="payment-method" value="cartao" class="form-radio h-4 w-4 text-gold">
-                        <span>Cartão de Crédito (parcelamento em até 12x)</span>
-                    </label>
+            <div id="deslocamento-tab" class="tab-content active">
+                <h4 class="text-xl font-bold text-gray-800 mb-4">Cálculo de Deslocamento</h4>
+                <p class="text-gray-600 mb-4">Informe o endereço do local da cerimônia para calcular o custo do deslocamento. *Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.*</p>
+                <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço:</label>
+                <input type="text" id="modal-destination-address" placeholder="Rua, Número, Cidade, Estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold mb-4">
+                <p id="modal-deslocamento-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
+                <div id="modal-deslocamento-results" class="mt-6 p-4 bg-gray-100 rounded-lg hidden">
+                    <p class="text-gray-700">Distância: <span id="modal-distance-display" class="font-bold"></span></p>
+                    <p class="text-gray-700">Valor do Deslocamento: <span id="modal-calculated-deslocamento-display" class="font-bold text-gold"></span></p>
+                </div>
+                <div class="flex justify-end mt-6">
+                    <button id="next-to-payment-method-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Próximo</button>
                 </div>
             </div>
 
-            <div id="installment-options" class="mb-6 hidden">
-                <label for="installments" class="block text-gray-700 text-sm font-bold mb-2">Número de Parcelas:</label>
-                <select id="installments" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
-                    <option value="1">1x</option>
-                    <!-- Options will be dynamically populated by JavaScript -->
-                </select>
-                <p class="mt-2 text-gray-700">Valor por parcela: <span id="installment-value" class="font-bold text-gold">R$ 0,00</span></p>
+            <div id="payment-method-tab" class="tab-content">
+                <h4 class="text-xl font-bold text-gray-800 mb-4">Forma de Pagamento</h4>
+                <!-- Display elements for prices in the payment method tab -->
+                <div class="mb-4 text-gray-700">
+                    <p>Valor do Plano: <span id="modal-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p>Valor do Deslocamento: <span id="modal-freight-price" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p>Valor Total (Plano + Deslocamento): <span id="modal-total-price" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="mt-2 text-lg font-bold">Valor Total a Pagar<span id="fees-suffix" class="text-sm font-normal text-gray-600"> (com taxas)</span>: <span id="modal-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
+                </div>
+                <div class="mb-6">
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="payment-method" value="pix" class="form-radio h-4 w-4 text-gold" checked>
+                            <span>Pix</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="payment-method" value="dinheiro" class="form-radio h-4 w-4 text-gold">
+                            <span>Dinheiro (a verificar com o contratado)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="payment-method" value="boleto" class="form-radio h-4 w-4 text-gold">
+                            <span>Boleto (parcelamento em até 5x)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="radio" name="payment-method" value="cartao" class="form-radio h-4 w-4 text-gold">
+                            <span>Cartão de Crédito (parcelamento em até 12x)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="installment-options" class="mb-6 hidden">
+                    <label for="installments" class="block text-gray-700 text-sm font-bold mb-2">Número de Parcelas:</label>
+                    <select id="installments" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                        <!-- Options will be dynamically populated by JavaScript -->
+                    </select>
+                    <p class="mt-2 text-gray-700">Valor por parcela: <span id="installment-value" class="font-bold text-gold">R$ 0,00</span></p>
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-300" data-navigate-tab="deslocamento-tab">Voltar</button>
+                    <button id="next-to-summary-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Próximo</button>
+                </div>
             </div>
 
-            <button id="confirm-payment-and-contract-btn" class="mt-6 w-full bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Confirmar Pagamento e Contratar</button>
+            <div id="summary-tab" class="tab-content">
+                <h4 class="text-xl font-bold text-gray-800 mb-4">Resumo do Orçamento</h4>
+                <p class="text-gray-600 mb-2">Valor do Plano: <span id="summary-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
+                <p class="text-gray-600 mb-4">Valor do Deslocamento: <span id="summary-deslocamento-price" class="font-bold text-gold">R$ 0,00</span></p>
+                <p class="text-gray-600 mb-4">Valor Total (Plano + Deslocamento): <span id="summary-total-price" class="font-bold text-gold">R$ 0,00</span></p>
+                <p class="text-gray-600 mb-4" id="summary-total-with-fees-label-container">Valor Total a Pagar<span id="summary-fees-suffix"> (com taxas)</span>: <span id="summary-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
+                <p class="text-gray-600 mb-4">Forma de Pagamento: <span id="summary-payment-method" class="font-bold text-gold"></span></p>
+                <p class="text-gray-600 mb-4" id="summary-installment-details">Parcelamento: <span id="summary-installments" class="font-bold text-gold"></span></p>
+                
+                <div id="fees-explanation" class="bg-gray-100 p-4 rounded-lg text-sm text-gray-700 mt-6 hidden">
+                    <p class="font-semibold mb-2">Informações sobre Taxas:</p>
+                    <p>As taxas aplicadas em pagamentos via Boleto e Cartão de Crédito são referentes aos custos de processamento das operadoras financeiras e bancos. A Harmonia do Altar não retém qualquer valor sobre estas taxas, que são integralmente destinadas à viabilização do parcelamento e segurança da transação. Para pagamentos via Pix ou Dinheiro, não há incidência de taxas adicionais.</p>
+                </div>
+
+                <div class="flex justify-between mt-6">
+                    <button class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-300" data-navigate-tab="payment-method-tab">Voltar</button>
+                    <button id="confirm-contract-btn" class="bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Confirmar Contratação</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -508,13 +556,16 @@
         let currentPlanDetails = null; // Para armazenar detalhes do plano sendo contratado
         let currentFinalTotalPrice = 0; // Armazena o valor total final (plano + deslocamento, antes das taxas de pagamento)
         let currentPlanOnlyPrice = 0; // Armazena o preço do plano (sem deslocamento)
+        let currentDeslocamentoCost = 0; // Armazena o custo do deslocamento
+
+        // Variáveis globais para a forma de pagamento e parcelas
+        let selectedPaymentMethod = 'pix';
+        let selectedInstallments = 1;
 
         // Define os preços dos instrumentos globalmente para fácil acesso na mensagem do WhatsApp
         const BASE_PLAN_PRICE = 1400;
         const BOLETO_PER_INSTALLMENT_FEE = 18; // R$18 fixo POR PARCELA para boleto
-        const FIXED_DESLOCAMENTO_CITIES = ['angélica, ms', 'ivinhema, ms']; // Cidades com deslocamento fixo
-        const FIXED_DESLOCAMENTO_AMOUNT = 50; // Valor fixo do deslocamento para as cidades específicas
-        const PER_KM_DESLOCAMENTO_RATE = 1.80; // R$1,80 por Km para outras cidades, além do base
+        const PER_KM_DESLOCAMENTO_RATE = 1.80; // R$1,80 por Km para outras cidades
 
         const INSTRUMENT_PRICES = {
             'Violão': 200,
@@ -546,20 +597,6 @@
             mapsInitialized = true;
             console.log("Google Maps API carregada.");
 
-            // Inicializa o Autocomplete para o campo de endereço principal
-            const destinationAddressInput = document.getElementById('destination-address');
-            const calculateDeslocamentoBtn = document.getElementById('calculate-freight-btn'); // Get the button reference here
-            if (destinationAddressInput && calculateDeslocamentoBtn) {
-                autocomplete = new google.maps.places.Autocomplete(destinationAddressInput, { types: ['address'], componentRestrictions: { country: 'br' } });
-                autocomplete.addListener('place_changed', () => {
-                    // When a place is selected from suggestions, trigger deslocamento calculation
-                    calculateDeslocamentoBtn.click(); // Now calculateDeslocamentoBtn is defined
-                });
-            } else {
-                console.error("Elementos de input ou botão de deslocamento não encontrados para autocomplete.");
-            }
-
-
             // Inicializa o Autocomplete para o campo de endereço do modal
             const modalDestinationAddressInput = document.getElementById('modal-destination-address');
             if (modalDestinationAddressInput) {
@@ -568,520 +605,587 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const whatsappNumber = '5567996884226';
+            try {
+                const whatsappNumber = '5567996884226';
 
-            // --- GARANTE QUE OS MODAIS ESTÃO OCULTOS AO CARREGAR A PÁGINA ---
-            document.getElementById('address-modal').style.display = 'none';
-            document.getElementById('payment-modal').style.display = 'none';
+                // --- GARANTE QUE OS MODAIS ESTÃO OCULTOS AO CARREGAR A PÁGINA ---
+                document.getElementById('main-contract-modal').style.display = 'none';
 
-            // --- OBSERVER DE ANIMAÇÃO ---
-            const animatedItems = document.querySelectorAll('.animated-item');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-            animatedItems.forEach(item => observer.observe(item));
+                // --- OBSERVER DE ANIMAÇÃO ---
+                const animatedItems = document.querySelectorAll('.animated-item');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, { threshold: 0.1 });
+                animatedItems.forEach(item => observer.observe(item));
 
-            // --- BARRA DE NAVEGAÇÃO E MENU MÓVEL ---
-            const navbar = document.getElementById('navbar');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+                // --- BARRA DE NAVEGAÇÃO E MENU MÓVEL ---
+                const navbar = document.getElementById('navbar');
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                const mobileMenu = document.getElementById('mobile-menu');
 
-            if (navbar && mobileMenuButton && mobileMenu) {
-                window.onscroll = () => {
-                    if (window.scrollY > 50) {
-                        navbar.classList.add('bg-gray-900', 'shadow-lg');
-                    } else {
-                        navbar.classList.remove('bg-gray-900', 'shadow-lg');
-                    }
-                };
-                mobileMenuButton.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                });
-            }
-            
-            document.querySelectorAll('.nav-link-mobile').forEach(link => {
-                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-            });
-
-            // --- CONSTRUTOR DE PLANO PERSONALIZADO ---
-            const bandInstruments = [
-                { name: 'Violão', price: 200 },
-                { name: 'Contrabaixo', price: 200 },
-                { name: 'Guitarra', price: 200 },
-            ];
-            const guestInstruments = [
-                { name: 'Saxofone', price: 500 },
-                { name: 'Violino', price: 500 }
-            ];
-
-            const bandOptionsContainer = document.getElementById('band-instrument-options');
-            const guestOptionsContainer = document.getElementById('guest-instrument-options');
-            const planPriceEl = document.getElementById('plan-price');
-            const freightPriceEl = document.getElementById('freight-price'); // Renomeado para deslocamento
-            const finalTotalPriceEl = document.getElementById('final-total-price');
-            const contractBtnCustom = document.getElementById('contract-btn-custom');
-            
-            let basePlanPrice = BASE_PLAN_PRICE; // Preço inicial para "Essência Clássica e Sublime"
-            let currentDeslocamentoCost = 0; // Renomeado para deslocamento
-            const selectedInstruments = new Set(); // Armazena os nomes dos instrumentos selecionados
-
-            function formatCurrency(value) {
-                // Adicionado uma verificação para garantir que o valor é um número válido
-                if (typeof value !== 'number' || isNaN(value)) {
-                    return 'R$ 0,00'; // Retorna um valor padrão formatado
+                if (navbar && mobileMenuButton && mobileMenu) {
+                    window.onscroll = () => {
+                        if (window.scrollY > 50) {
+                            navbar.classList.add('bg-gray-900', 'shadow-lg');
+                        } else {
+                            navbar.classList.remove('bg-gray-900', 'shadow-lg');
+                        }
+                    };
+                    mobileMenuButton.addEventListener('click', () => {
+                        mobileMenu.classList.toggle('hidden');
+                    });
                 }
-                return `R$ ${value.toFixed(2).replace('.', ',')}`;
-            }
-
-            function updatePrices() {
-                let calculatedPlanPrice = BASE_PLAN_PRICE; // Começa com o preço base do plano
-                selectedInstruments.forEach(name => {
-                    // Encontra o instrumento tanto nos instrumentos da banda quanto nos convidados
-                    const instrument = [...bandInstruments, ...guestInstruments].find(i => i.name === name);
-                    if (instrument) {
-                        calculatedPlanPrice += instrument.price;
-                    }
-                });
                 
-                planPriceEl.textContent = formatCurrency(calculatedPlanPrice);
-                freightPriceEl.textContent = formatCurrency(currentDeslocamentoCost); // Renomeado para deslocamento
-                finalTotalPriceEl.textContent = formatCurrency(calculatedPlanPrice + currentDeslocamentoCost); // Renomeado para deslocamento
-                currentFinalTotalPrice = calculatedPlanPrice + currentDeslocamentoCost; // Renomeado para deslocamento
-                currentPlanOnlyPrice = calculatedPlanPrice; // Atualiza o preço do plano sem deslocamento
-            }
-
-            function createCheckbox(instrument, container) {
-                const label = document.createElement('label');
-                label.className = 'flex items-center space-x-3 cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition';
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.dataset.price = instrument.price;
-                checkbox.dataset.name = instrument.name;
-                checkbox.className = 'form-checkbox h-5 w-5 rounded custom-checkbox focus:ring-gold';
-                const span = document.createElement('span');
-                span.className = 'text-gray-700 transition-colors duration-200';
-                span.textContent = `${instrument.name} (+ ${formatCurrency(instrument.price)})`;
-                label.appendChild(checkbox);
-                label.appendChild(span);
-                container.appendChild(label);
-
-                checkbox.addEventListener('change', (e) => {
-                    const name = e.target.dataset.name;
-                    if (e.target.checked) {
-                        selectedInstruments.add(name);
-                    } else {
-                        selectedInstruments.delete(name);
-                    }
-                    updatePrices();
+                document.querySelectorAll('.nav-link-mobile').forEach(link => {
+                    link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
                 });
-            }
 
-            if(bandOptionsContainer && guestOptionsContainer){
-                bandInstruments.forEach(inst => createCheckbox(inst, bandOptionsContainer));
-                guestInstruments.forEach(inst => createCheckbox(inst, guestOptionsContainer));
-                updatePrices(); // Atualização inicial do preço
-            }
+                // --- CONSTRUTOR DE PLANO PERSONALIZADO ---
+                const bandInstruments = [
+                    { name: 'Violão', price: 200 },
+                    { name: 'Contrabaixo', price: 200 },
+                    { name: 'Guitarra', price: 200 },
+                ];
+                const guestInstruments = [
+                    { name: 'Saxofone', price: 500 },
+                    { name: 'Violino', price: 500 }
+                ];
 
-            // --- LÓGICA DO MODAL DE ENDEREÇO ---
-            const addressModal = document.getElementById('address-modal');
-            const closeModalButton = document.getElementById('close-modal-button');
-            const confirmAddressBtn = document.getElementById('confirm-address-btn');
-            const modalDestinationAddressInput = document.getElementById('modal-destination-address');
-            const modalFreightError = document.getElementById('freight-error'); // Mantém o ID, mas o texto será "Deslocamento"
+                const bandOptionsContainer = document.getElementById('band-instrument-options');
+                const guestOptionsContainer = document.getElementById('guest-instrument-options');
+                const contractBtnCustom = document.getElementById('contract-btn-custom');
+                
+                let basePlanPrice = BASE_PLAN_PRICE;
+                const selectedInstruments = new Set();
 
-            function showAddressModal() {
-                addressModal.style.display = 'flex'; // Usa flex para centralizar
-                // Copia o endereço atual do campo principal para o campo do modal
-                modalDestinationAddressInput.value = document.getElementById('destination-address').value;
-                modalFreightError.classList.add('hidden'); // Oculta quaisquer erros anteriores // Renomeado para deslocamento
-            }
-
-            function hideAddressModal() {
-                addressModal.style.display = 'none';
-            }
-
-            if (closeModalButton) {
-                closeModalButton.addEventListener('click', hideAddressModal);
-            }
-
-            window.addEventListener('click', (event) => {
-                if (event.target == addressModal) {
-                    hideAddressModal();
-                }
-            });
-
-            if (confirmAddressBtn) {
-                confirmAddressBtn.addEventListener('click', () => {
-                    const address = modalDestinationAddressInput.value.trim();
-                    if (address === "") {
-                        modalFreightError.textContent = "Por favor, digite o endereço de destino."; // Renomeado para deslocamento
-                        modalFreightError.classList.remove('hidden'); // Renomeado para deslocamento
-                        return;
+                function formatCurrency(value) {
+                    if (typeof value !== 'number' || isNaN(value)) {
+                        return 'R$ 0,00';
                     }
-                    
-                    // Atualiza o campo de endereço principal com o valor do modal
-                    document.getElementById('destination-address').value = address;
-                    
-                    // Aciona o cálculo do deslocamento a partir do campo principal
-                    calculateDeslocamento(address, () => { // Renomeado para deslocamento
-                        // Callback após o cálculo do deslocamento, então mostra o modal de pagamento
-                        if (currentPlanDetails) {
-                            hideAddressModal();
-                            showPaymentModal(currentPlanOnlyPrice, currentDeslocamentoCost, currentFinalTotalPrice, currentPlanDetails); // Renomeado para deslocamento
+                    return `R$ ${value.toFixed(2).replace('.', ',')}`;
+                }
+
+                function calculateCustomPlanPrice() {
+                    let calculatedPlanPrice = BASE_PLAN_PRICE;
+                    selectedInstruments.forEach(name => {
+                        const instrument = [...bandInstruments, ...guestInstruments].find(i => i.name === name);
+                        if (instrument) {
+                            calculatedPlanPrice += instrument.price;
+                        }
+                    });
+                    return calculatedPlanPrice;
+                }
+
+                function createCheckbox(instrument, container) {
+                    const label = document.createElement('label');
+                    label.className = 'flex items-center space-x-3 cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition';
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.dataset.price = instrument.price;
+                    checkbox.dataset.name = instrument.name;
+                    checkbox.className = 'form-checkbox h-5 w-5 rounded custom-checkbox focus:ring-gold';
+                    const span = document.createElement('span');
+                    span.className = 'text-gray-700 transition-colors duration-200';
+                    span.textContent = `${instrument.name} (+ ${formatCurrency(instrument.price)})`;
+                    label.appendChild(checkbox);
+                    label.appendChild(span);
+                    container.appendChild(label);
+
+                    checkbox.addEventListener('change', (e) => {
+                        const name = e.target.dataset.name;
+                        if (e.target.checked) {
+                            selectedInstruments.add(name);
+                        } else {
+                            selectedInstruments.delete(name);
+                        }
+                    });
+                }
+
+                if(bandOptionsContainer && guestOptionsContainer){
+                    bandInstruments.forEach(inst => createCheckbox(inst, bandOptionsContainer));
+                    guestInstruments.forEach(inst => createCheckbox(inst, guestOptionsContainer));
+                }
+
+                // --- LÓGICA DO MODAL PRINCIPAL COM ABAS ---
+                const mainContractModal = document.getElementById('main-contract-modal');
+                const closeMainModalButton = document.getElementById('close-main-modal-button');
+                const tabButtons = document.querySelectorAll('.tab-button');
+                const tabContents = document.querySelectorAll('.tab-content');
+
+                const modalDestinationAddressInput = document.getElementById('modal-destination-address');
+                const modalDeslocamentoError = document.getElementById('modal-deslocamento-error');
+                const modalDeslocamentoResultsDiv = document.getElementById('modal-deslocamento-results');
+                const modalDistanceDisplay = document.getElementById('modal-distance-display');
+                const modalCalculatedDeslocamentoDisplay = document.getElementById('modal-calculated-deslocamento-display');
+                const nextToPaymentMethodBtn = document.getElementById('next-to-payment-method-btn');
+                const nextToSummaryBtn = document.getElementById('next-to-summary-btn');
+                const confirmContractBtn = document.getElementById('confirm-contract-btn');
+
+                const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
+                const installmentOptionsDiv = document.getElementById('installment-options');
+                const installmentsSelect = document.getElementById('installments');
+                const installmentValueEl = document.getElementById('installment-value');
+                const feesSuffixSpan = document.getElementById('fees-suffix');
+
+                const modalPlanPriceEl = document.getElementById('modal-plan-price');
+                const modalFreightPriceEl = document.getElementById('modal-freight-price');
+                const modalTotalPriceEl = document.getElementById('modal-total-price');
+                const modalTotalPriceWithFeesEl = document.getElementById('modal-total-price-with-fees');
+
+                const summaryPlanPriceEl = document.getElementById('summary-plan-price');
+                const summaryDeslocamentoPriceEl = document.getElementById('summary-deslocamento-price');
+                const summaryTotalPriceEl = document.getElementById('summary-total-price');
+                const summaryTotalWithFeesLabelContainer = document.getElementById('summary-total-with-fees-label-container');
+                const summaryFeesSuffixSpan = document.getElementById('summary-fees-suffix');
+                const summaryTotalWithFeesEl = document.getElementById('summary-total-price-with-fees');
+                const summaryPaymentMethodEl = document.getElementById('summary-payment-method');
+                const summaryInstallmentDetailsDiv = document.getElementById('summary-installment-details');
+                const summaryInstallmentsEl = document.getElementById('summary-installments');
+                const feesExplanationDiv = document.getElementById('fees-explanation');
+
+                let unlockedTabs = ['deslocamento-tab'];
+
+
+                function showTab(tabId) {
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        content.style.display = 'none';
+                    });
+                    tabButtons.forEach(button => {
+                        button.classList.remove('active');
+                    });
+
+                    document.getElementById(tabId).classList.add('active');
+                    document.getElementById(tabId).style.display = 'block';
+                    document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+
+                    if (tabId === 'payment-method-tab') {
+                        document.querySelector('input[name="payment-method"][value="pix"]').checked = true;
+                        selectedPaymentMethod = 'pix';
+                        selectedInstallments = 1;
+                        updateInstallmentOptions();
+                        updatePaymentDetailsDisplay();
+                    } else if (tabId === 'summary-tab') {
+                        updateSummaryDisplay();
+                    }
+                }
+
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const targetTab = e.target.dataset.tab;
+                        const currentActiveTab = document.querySelector('.tab-button.active').dataset.tab;
+
+                        if (unlockedTabs.includes(targetTab)) {
+                            showTab(targetTab);
+                        } else {
+                            if (currentActiveTab === 'deslocamento-tab') {
+                                const address = modalDestinationAddressInput.value.trim();
+                                if (!address || modalDeslocamentoResultsDiv.classList.contains('hidden')) {
+                                    modalDeslocamentoError.textContent = "Por favor, preencha o endereço e calcule o deslocamento para prosseguir.";
+                                    modalDeslocamentoError.classList.remove('hidden');
+                                    return;
+                                }
+                            } else if (currentActiveTab === 'payment-method-tab') {
+                                // Payment method tab doesn't have a direct "invalid" state,
+                                // as radio buttons are always selected.
+                            }
+                            if (!unlockedTabs.includes(targetTab)) {
+                                unlockedTabs.push(targetTab);
+                            }
+                            showTab(targetTab);
                         }
                     });
                 });
-            }
 
-            // --- LÓGICA DO MODAL DE PAGAMENTO ---
-            const paymentModal = document.getElementById('payment-modal');
-            const closePaymentModalButton = document.getElementById('close-payment-modal-button');
-            const modalPlanPriceEl = document.getElementById('modal-plan-price'); // Novo elemento
-            const modalFreightPriceEl = document.getElementById('modal-freight-price'); // Renomeado para deslocamento
-            const modalTotalPriceEl = document.getElementById('modal-total-price');
-            const modalTotalPriceWithFeesEl = document.getElementById('modal-total-price-with-fees'); // Novo elemento para o total com taxas
-            const feesSuffixSpan = document.getElementById('fees-suffix'); // Referência ao span "(com taxas)"
-            const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
-            const installmentOptionsDiv = document.getElementById('installment-options');
-            const installmentsSelect = document.getElementById('installments');
-            const installmentValueEl = document.getElementById('installment-value');
-            const confirmPaymentAndContractBtn = document.getElementById('confirm-payment-and-contract-btn');
-
-            let selectedPaymentMethod = 'pix'; // Default
-            let selectedInstallments = 1;
-
-            function updateInstallmentOptions() {
-                installmentsSelect.innerHTML = ''; // Limpa opções existentes
-                let maxInstallments = 1;
-
-                if (selectedPaymentMethod === 'boleto') {
-                    maxInstallments = 5;
-                } else if (selectedPaymentMethod === 'cartao') {
-                    maxInstallments = 12;
-                }
-
-                for (let i = 1; i <= maxInstallments; i++) {
-                    const option = document.createElement('option');
-                    option.value = i;
-                    option.textContent = `${i}x`;
-                    installmentsSelect.appendChild(option);
-                }
-                // Garante que a parcela selecionada não exceda o novo máximo
-                selectedInstallments = Math.min(selectedInstallments, maxInstallments);
-                installmentsSelect.value = selectedInstallments;
-            }
-
-            function updatePaymentDetailsDisplay() {
-                console.log('updatePaymentDetailsDisplay called. selectedPaymentMethod:', selectedPaymentMethod); // Log de depuração
-                let calculatedTotalForPayment = currentFinalTotalPrice; // Base total (plano + deslocamento)
-                let finalInstallmentValue = 0;
-
-                console.log('Initial calculatedTotalForPayment (currentFinalTotalPrice):', calculatedTotalForPayment); // Log de depuração
-
-                if (selectedPaymentMethod === 'boleto') {
-                    calculatedTotalForPayment += (BOLETO_PER_INSTALLMENT_FEE * selectedInstallments); // Adiciona a taxa fixa do boleto por parcela
-                    feesSuffixSpan.style.display = 'inline'; // Mostra "(com taxas)"
-                    console.log('Setting display for feesSuffixSpan (Boleto):', feesSuffixSpan.style.display); // Log de depuração
-                    updateInstallmentOptions(); // Atualiza as opções de parcela para boleto
-                } else if (selectedPaymentMethod === 'cartao') {
-                    updateInstallmentOptions(); // Atualiza as opções de parcela para cartão
-                    const percentageFee = CREDIT_CARD_TOTAL_PERCENTAGES[selectedInstallments];
-                    if (percentageFee !== undefined) {
-                        calculatedTotalForPayment *= (1 + percentageFee);
-                    } else {
-                        console.warn("Percentage fee not found for selected installments:", selectedInstallments);
-                    }
-                    feesSuffixSpan.style.display = 'inline'; // Mostra "(com taxas)"
-                    console.log('Setting display for feesSuffixSpan (Cartao):', feesSuffixSpan.style.display); // Log de depuração
-                } else { // Pix or Dinheiro
-                    calculatedTotalForPayment = currentFinalTotalPrice; // Sem taxas adicionais
-                    feesSuffixSpan.style.display = 'none'; // Oculta "(com taxas)"
-                    console.log('Setting display for feesSuffixSpan (Pix/Dinheiro):', feesSuffixSpan.style.display); // Log de depuração
-                    updateInstallmentOptions(); // Reseta para 1x
-                }
-
-                finalInstallmentValue = calculatedTotalForPayment / selectedInstallments;
-
-                modalPlanPriceEl.textContent = formatCurrency(currentPlanOnlyPrice); // Exibe o preço do plano
-                modalFreightPriceEl.textContent = formatCurrency(currentDeslocamentoCost); // Exibe o preço do deslocamento
-                modalTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice); // Mostra o total sem taxas de pagamento (plano + deslocamento)
-                modalTotalPriceWithFeesEl.textContent = formatCurrency(calculatedTotalForPayment); // Usa textContent
-                console.log('Final value assigned to modalTotalPriceWithFeesEl (textContent):', formatCurrency(calculatedTotalForPayment)); // Log de depuração
-                installmentValueEl.textContent = formatCurrency(finalInstallmentValue);
-
-                if (selectedPaymentMethod === 'boleto' || selectedPaymentMethod === 'cartao') {
-                    installmentOptionsDiv.classList.remove('hidden');
-                } else {
-                    installmentOptionsDiv.classList.add('hidden');
-                }
-            }
-
-            function showPaymentModal(planPrice, deslocamentoPrice, totalPrice, planDetails) { // Renomeado para deslocamento
-                modalPlanPriceEl.textContent = formatCurrency(planPrice); // Define o preço do plano
-                modalFreightPriceEl.textContent = formatCurrency(deslocamentoPrice); // Define o preço do deslocamento
-                modalTotalPriceEl.textContent = formatCurrency(totalPrice);
-                paymentModal.style.display = 'flex';
-                currentPlanDetails = planDetails; // Store plan details for WhatsApp message
-                currentFinalTotalPrice = totalPrice; // Store total price for calculations
-                currentPlanOnlyPrice = planPrice; // Store plan price without deslocamento
-
-                // Reset payment method to default (Pix) and update display
-                document.querySelector('input[name="payment-method"][value="pix"]').checked = true;
-                selectedPaymentMethod = 'pix';
-                selectedInstallments = 1; // Reset to 1 installment
-                updatePaymentDetailsDisplay(); // Call to update all values and options
-            }
-
-            function hidePaymentModal() {
-                paymentModal.style.display = 'none';
-            }
-
-            if (closePaymentModalButton) {
-                closePaymentModalButton.addEventListener('click', hidePaymentModal);
-            }
-
-            window.addEventListener('click', (event) => {
-                if (event.target == paymentModal) {
-                    hidePaymentModal();
-                }
-            });
-
-            paymentMethodRadios.forEach(radio => {
-                radio.addEventListener('change', () => {
-                    selectedPaymentMethod = radio.value;
-                    console.log('Payment method changed to:', selectedPaymentMethod); // Log de depuração
-                    updatePaymentDetailsDisplay(); // Recalcula e atualiza a exibição
-                });
-            });
-
-            if (installmentsSelect) {
-                installmentsSelect.addEventListener('change', (e) => {
-                    selectedInstallments = parseInt(e.target.value);
-                    updatePaymentDetailsDisplay(); // Recalcula e atualiza a exibição
-                });
-            }
-
-            if (confirmPaymentAndContractBtn) {
-                confirmPaymentAndContractBtn.addEventListener('click', () => {
-                    const totalAmountWithFees = parseFloat(modalTotalPriceWithFeesEl.textContent.replace('R$', '').replace(',', '.'));
-                    const installmentValuePerInstallment = parseFloat(installmentValueEl.textContent.replace('R$', '').replace(',', '.'));
-                    sendWhatsAppMessage(currentPlanDetails, selectedPaymentMethod, selectedInstallments, totalAmountWithFees, installmentValuePerInstallment);
-                    hidePaymentModal();
-                });
-            }
-
-            // Função para enviar mensagem do WhatsApp
-            function sendWhatsAppMessage(plan, paymentMethod, installments, totalAmountWithFees, installmentValuePerInstallment) {
-                const destinationAddress = document.getElementById('destination-address').value;
-                const distanceText = document.getElementById('distance-display').textContent;
-                let message = `*Solicitação de Orçamento - ${plan.type}*\n\n`;
-                message += `Olá! Tenho interesse no plano *${plan.name}*.\n\n`;
-                
-                message += '*Detalhes do Plano:*\n';
-                message += `• Formação Padrão (3 Vozes + Teclado/Piano): ${formatCurrency(INSTRUMENT_PRICES['3 Vozes + Teclado/Piano'])}\n`;
-
-                const instrumentsForMessage = plan.instruments.filter(
-                    inst => inst !== '3 Vozes + Teclado/Piano' && INSTRUMENT_PRICES[inst] !== undefined
-                );
-
-                instrumentsForMessage.forEach(instName => {
-                    const price = INSTRUMENT_PRICES[instName];
-                    message += `• ${instName}: ${formatCurrency(price)}\n`;
-                });
-
-                message += `\n*Resumo do Orçamento:*\n`;
-                message += `*Valor do Contrato (Plano):* ${formatCurrency(plan.price)}\n`;
-
-                if (currentDeslocamentoCost > 0 || FIXED_DESLOCAMENTO_CITIES.some(city => destinationAddress.toLowerCase().includes(city))) {
-                    message += `*Valor do Deslocamento:* ${formatCurrency(currentDeslocamentoCost)} para ${destinationAddress} (Distância: ${distanceText})\n`;
-                }
-                
-                if (paymentMethod === 'pix' || paymentMethod === 'dinheiro') {
-                    message += `*Valor Total a Pagar:* ${formatCurrency(totalAmountWithFees)}\n`;
-                } else {
-                    message += `*Valor Total a Pagar (com taxas):* ${formatCurrency(totalAmountWithFees)}\n`;
-                }
-                
-                message += `*Forma de Pagamento Selecionada:* ${paymentMethod.toUpperCase()}\n`;
-                if (installments > 1) {
-                    message += `*Parcelamento:* ${installments}x de ${formatCurrency(installmentValuePerInstallment)}\n`;
-                } else if (paymentMethod === 'dinheiro') {
-                    message += `*(Pagamento em dinheiro a ser verificado com o contratado)*\n`;
-                }
-
-                message += '\nGostaria de verificar a disponibilidade e mais detalhes. Obrigado!';
-
-                const encodedMessage = encodeURIComponent(message);
-                window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
-            }
-
-            // Global function for pre-made plan buttons
-            window.handleContratar = function(planName, instruments, price) {
-                currentPlanDetails = {
-                    type: 'Plano Pronto',
-                    name: planName,
-                    instruments: instruments,
-                    price: price // Este é o preço fixo para o plano pré-definido
-                };
-
-                const destination = document.getElementById('destination-address').value.trim();
-                if (!destination) {
-                    showAddressModal();
-                } else {
-                    // Se o endereço já estiver presente, calcula o deslocamento e então mostra o modal de pagamento
-                    calculateDeslocamento(destination, () => {
-                        showPaymentModal(currentPlanDetails.price, currentDeslocamentoCost, currentFinalTotalPrice, currentPlanDetails);
+                if (nextToPaymentMethodBtn) {
+                    nextToPaymentMethodBtn.addEventListener('click', () => {
+                        const address = modalDestinationAddressInput.value.trim();
+                        if (!address) {
+                            modalDeslocamentoError.textContent = "Por favor, digite o endereço de destino.";
+                            modalDeslocamentoError.classList.remove('hidden');
+                            return;
+                        }
+                        calculateDeslocamentoInModal(address, () => {
+                            if (!modalDeslocamentoResultsDiv.classList.contains('hidden')) {
+                                if (!unlockedTabs.includes('payment-method-tab')) {
+                                    unlockedTabs.push('payment-method-tab');
+                                }
+                                showTab('payment-method-tab');
+                            } else {
+                                modalDeslocamentoError.textContent = "Não foi possível calcular o deslocamento. Verifique o endereço.";
+                                modalDeslocamentoError.classList.remove('hidden');
+                            }
+                        });
                     });
                 }
-            };
 
-            if(contractBtnCustom){
-                contractBtnCustom.addEventListener('click', () => {
+                if (nextToSummaryBtn) {
+                    nextToSummaryBtn.addEventListener('click', () => {
+                        if (!unlockedTabs.includes('summary-tab')) {
+                            unlockedTabs.push('summary-tab');
+                        }
+                        showTab('summary-tab');
+                    });
+                }
+
+                document.querySelectorAll('[data-navigate-tab]').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        showTab(e.target.dataset.navigateTab);
+                    });
+                });
+
+                function showMainContractModal(planPrice, deslocamentoPrice, totalPrice, planDetails) {
+                    mainContractModal.style.display = 'flex';
+                    currentPlanDetails = planDetails;
+                    currentFinalTotalPrice = totalPrice; // This will be updated in calculateDeslocamentoInModal
+                    currentPlanOnlyPrice = planPrice;
+                    currentDeslocamentoCost = deslocamentoPrice; // This will be updated in calculateDeslocamentoInModal
+
+                    modalDeslocamentoError.classList.add('hidden');
+                    modalDeslocamentoResultsDiv.classList.add('hidden');
+                    modalDestinationAddressInput.value = '';
+
+                    unlockedTabs = ['deslocamento-tab']; 
+
+                    showTab('deslocamento-tab');
+                }
+
+                if (closeMainModalButton) {
+                    closeMainModalButton.addEventListener('click', () => {
+                        mainContractModal.style.display = 'none';
+                    });
+                }
+
+                window.addEventListener('click', (event) => {
+                    if (event.target == mainContractModal) {
+                        mainContractModal.style.display = 'none';
+                    }
+                });
+
+                paymentMethodRadios.forEach(radio => {
+                    radio.addEventListener('change', () => {
+                        selectedPaymentMethod = radio.value;
+                        selectedInstallments = 1;
+                        updateInstallmentOptions();
+                        updatePaymentDetailsDisplay();
+                    });
+                });
+
+                if (installmentsSelect) {
+                    installmentsSelect.addEventListener('change', (e) => {
+                        selectedInstallments = parseInt(e.target.value);
+                        updatePaymentDetailsDisplay();
+                    });
+                }
+
+                function updateInstallmentOptions() {
+                    installmentsSelect.innerHTML = '';
+                    let maxInstallments = 1;
+
+                    if (selectedPaymentMethod === 'boleto') {
+                        maxInstallments = 5;
+                    } else if (selectedPaymentMethod === 'cartao') {
+                        maxInstallments = 12;
+                    }
+
+                    for (let i = 1; i <= maxInstallments; i++) {
+                        const option = document.createElement('option');
+                        option.value = i;
+                        option.textContent = `${i}x`;
+                        installmentsSelect.appendChild(option);
+                    }
+                    selectedInstallments = Math.min(selectedInstallments, maxInstallments);
+                    installmentsSelect.value = selectedInstallments;
+                    console.log('updateInstallmentOptions: selectedInstallments set to', selectedInstallments);
+                }
+
+
+                function updatePaymentDetailsDisplay() {
+                    let calculatedTotalForPayment = currentFinalTotalPrice;
+                    let finalInstallmentValue = 0;
+
+                    console.log('updatePaymentDetailsDisplay called. selectedPaymentMethod:', selectedPaymentMethod);
+                    console.log('Initial currentFinalTotalPrice (Plano + Deslocamento):', currentFinalTotalPrice);
+
+                    if (selectedPaymentMethod === 'boleto') {
+                        calculatedTotalForPayment += (BOLETO_PER_INSTALLMENT_FEE * selectedInstallments);
+                        feesSuffixSpan.style.display = 'inline';
+                        console.log('Setting display for feesSuffixSpan (Boleto):', feesSuffixSpan.style.display);
+                    } else if (selectedPaymentMethod === 'cartao') {
+                        const percentageFee = CREDIT_CARD_TOTAL_PERCENTAGES[selectedInstallments];
+                        if (percentageFee !== undefined) {
+                            calculatedTotalForPayment *= (1 + percentageFee);
+                        } else {
+                            console.warn("Percentage fee not found for selected installments:", selectedInstallments);
+                        }
+                        feesSuffixSpan.style.display = 'inline';
+                        console.log('Setting display for feesSuffixSpan (Cartao):', feesSuffixSpan.style.display);
+                    } else {
+                        calculatedTotalForPayment = currentFinalTotalPrice;
+                        feesSuffixSpan.style.display = 'none';
+                        console.log('Setting display for feesSuffixSpan (Pix/Dinheiro):', feesSuffixSpan.style.display);
+                    }
+
+                    finalInstallmentValue = calculatedTotalForPayment / selectedInstallments;
+
+                    modalPlanPriceEl.textContent = formatCurrency(currentPlanOnlyPrice);
+                    modalFreightPriceEl.textContent = formatCurrency(currentDeslocamentoCost);
+                    modalTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice);
+                    modalTotalPriceWithFeesEl.textContent = formatCurrency(calculatedTotalForPayment);
+                    console.log('Final value assigned to modalTotalPriceWithFeesEl (textContent):', formatCurrency(calculatedTotalForPayment));
+                    installmentValueEl.textContent = formatCurrency(finalInstallmentValue);
+
+                    if (selectedPaymentMethod === 'boleto' || selectedPaymentMethod === 'cartao') {
+                        installmentOptionsDiv.style.display = 'block';
+                    } else {
+                        installmentOptionsDiv.style.display = 'none';
+                    }
+                }
+
+                function updateSummaryDisplay() {
+                    let calculatedTotalForSummary = currentFinalTotalPrice;
+                    let finalInstallmentValueForSummary = 0;
+                    let paymentMethodText = '';
+                    let installmentText = '';
+
+                    if (selectedPaymentMethod === 'boleto') {
+                        calculatedTotalForSummary += (BOLETO_PER_INSTALLMENT_FEE * selectedInstallments);
+                        paymentMethodText = 'Boleto';
+                        feesExplanationDiv.classList.remove('hidden');
+                    } else if (selectedPaymentMethod === 'cartao') {
+                        const percentageFee = CREDIT_CARD_TOTAL_PERCENTAGES[selectedInstallments];
+                        if (percentageFee !== undefined) {
+                            calculatedTotalForSummary *= (1 + percentageFee);
+                        }
+                        paymentMethodText = 'Cartão de Crédito';
+                        feesExplanationDiv.classList.remove('hidden');
+                    } else if (selectedPaymentMethod === 'pix') {
+                        paymentMethodText = 'Pix';
+                        feesExplanationDiv.classList.add('hidden');
+                    } else if (selectedPaymentMethod === 'dinheiro') {
+                        paymentMethodText = 'Dinheiro (a verificar com o contratado)';
+                        feesExplanationDiv.classList.add('hidden');
+                    }
+
+                    finalInstallmentValueForSummary = calculatedTotalForSummary / selectedInstallments;
+
+                    summaryPlanPriceEl.textContent = formatCurrency(currentPlanOnlyPrice);
+                    summaryDeslocamentoPriceEl.textContent = formatCurrency(currentDeslocamentoCost);
+                    summaryTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice);
+                    summaryTotalWithFeesEl.textContent = formatCurrency(calculatedTotalForSummary);
+                    summaryPaymentMethodEl.textContent = paymentMethodText;
+
+                    if (selectedInstallments > 1) {
+                        installmentText = `${selectedInstallments}x de ${formatCurrency(finalInstallmentValueForSummary)}`;
+                        summaryInstallmentDetailsDiv.style.display = 'block';
+                    } else {
+                        installmentText = 'Pagamento único';
+                        summaryInstallmentDetailsDiv.style.display = 'none';
+                    }
+                    summaryInstallmentsEl.textContent = installmentText;
+
+                    if (selectedPaymentMethod === 'pix' || selectedPaymentMethod === 'dinheiro') {
+                        summaryFeesSuffixSpan.style.display = 'none';
+                    } else {
+                        summaryFeesSuffixSpan.style.display = 'inline';
+                    }
+                }
+
+
+                if (confirmContractBtn) {
+                    confirmContractBtn.addEventListener('click', () => {
+                        const totalAmountWithFees = parseFloat(summaryTotalWithFeesEl.textContent.replace('R$', '').replace(',', '.'));
+                        const installmentValuePerInstallment = parseFloat(summaryInstallmentsEl.textContent.split('de ')[1]?.replace('R$', '').replace(',', '.') || totalAmountWithFees);
+                        sendWhatsAppMessage(currentPlanDetails, selectedPaymentMethod, selectedInstallments, totalAmountWithFees, installmentValuePerInstallment);
+                        mainContractModal.style.display = 'none';
+                    });
+                }
+
+                function sendWhatsAppMessage(plan, paymentMethod, installments, totalAmountWithFees, installmentValuePerInstallment) {
+                    const destinationAddress = modalDestinationAddressInput.value;
+                    const distanceText = modalDistanceDisplay.textContent;
+                    let message = `*Solicitação de Orçamento - ${plan.type}*\n\n`;
+                    message += `Olá! Tenho interesse no plano *${plan.name}*.\n\n`;
+                    
+                    message += '*Detalhes do Plano:*\n';
+                    message += `• Formação Padrão (3 Vozes + Teclado/Piano): ${formatCurrency(INSTRUMENT_PRICES['3 Vozes + Teclado/Piano'])}\n`;
+
+                    const instrumentsForMessage = plan.instruments.filter(
+                        inst => inst !== '3 Vozes + Teclado/Piano' && INSTRUMENT_PRICES[inst] !== undefined
+                    );
+
+                    instrumentsForMessage.forEach(instName => {
+                        const price = INSTRUMENT_PRICES[instName];
+                        message += `• ${instName}: ${formatCurrency(price)}\n`;
+                    });
+
+                    message += `\n*Resumo do Orçamento:*\n`;
+                    message += `*Valor do Contrato (Plano):* ${formatCurrency(plan.price)}\n`;
+
+                    if (currentDeslocamentoCost > 0) {
+                        message += `*Valor do Deslocamento:* ${formatCurrency(currentDeslocamentoCost)} para ${destinationAddress} (Distância: ${distanceText})\n`;
+                    }
+                    
+                    if (paymentMethod === 'pix' || paymentMethod === 'dinheiro') {
+                        message += `*Valor Total a Pagar:* ${formatCurrency(totalAmountWithFees)}\n`;
+                    } else {
+                        message += `*Valor Total a Pagar (com taxas):* ${formatCurrency(totalAmountWithFees)}\n`;
+                    }
+                    
+                    message += `*Forma de Pagamento Selecionada:* ${paymentMethod.toUpperCase()}\n`;
+                    if (installments > 1) {
+                        message += `*Parcelamento:* ${installments}x de ${formatCurrency(installmentValuePerInstallment)}\n`;
+                    } else if (paymentMethod === 'dinheiro') {
+                        message += `*(Pagamento em dinheiro a ser verificado com o contratado)*\n`;
+                    }
+
+                    message += '\nGostaria de verificar a disponibilidade e mais detalhes. Obrigado!';
+
+                    const encodedMessage = encodeURIComponent(message);
+                    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+                }
+
+                window.handleContratar = function(planName, instruments, price) {
                     currentPlanDetails = {
-                        type: 'Plano Personalizado',
-                        name: 'Plano Personalizado',
-                        instruments: ['3 Vozes + Teclado/Piano', ...Array.from(selectedInstruments)], // Garante que a base esteja sempre incluída para personalizado
-                        price: parseFloat(planPriceEl.textContent.replace('R$', '').replace(',', '.')) // Obtém o preço do plano atualmente exibido
+                        type: 'Plano Pronto',
+                        name: planName,
+                        instruments: instruments,
+                        price: price
                     };
 
-                    const destination = document.getElementById('destination-address').value.trim();
+                    showMainContractModal(currentPlanDetails.price, 0, currentPlanDetails.price, currentPlanDetails);
+                };
+
+                if(contractBtnCustom){
+                    contractBtnCustom.addEventListener('click', () => {
+                        currentPlanDetails = {
+                            type: 'Plano Personalizado',
+                            name: 'Plano Personalizado',
+                            instruments: ['3 Vozes + Teclado/Piano', ...Array.from(selectedInstruments)],
+                            price: calculateCustomPlanPrice()
+                        };
+
+                        showMainContractModal(currentPlanDetails.price, 0, currentPlanDetails.price, currentPlanDetails);
+                    });
+                }
+
+                const originAddress = "Angélica, MS, Brazil";
+
+                function calculateDeslocamentoInModal(destination, callback = () => {}) {
+                    if (!mapsInitialized) {
+                        console.error("Google Maps API ainda não carregada.");
+                        modalDeslocamentoError.textContent = "Erro ao carregar o serviço de mapas. Por favor, tente novamente em alguns segundos.";
+                        modalDeslocamentoError.classList.remove('hidden');
+                        modalDeslocamentoResultsDiv.classList.add('hidden');
+                        currentDeslocamentoCost = 0;
+                        currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Ensure total is updated even on error
+                        callback();
+                        return;
+                    }
+
                     if (!destination) {
-                        showAddressModal();
-                    } else {
-                        // Se o endereço já estiver presente, calcula o deslocamento e então mostra o modal de pagamento
-                        calculateDeslocamento(destination, () => {
-                            showPaymentModal(currentPlanDetails.price, currentDeslocamentoCost, currentFinalTotalPrice, currentPlanDetails);
-                        });
+                        modalDeslocamentoError.textContent = "Por favor, digite o endereço de destino.";
+                        modalDeslocamentoError.classList.remove('hidden');
+                        modalDeslocamentoResultsDiv.classList.add('hidden');
+                        currentDeslocamentoCost = 0;
+                        currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Ensure total is updated
+                        callback();
+                        return;
                     }
-                });
-            }
 
-            // --- CÁLCULO DE DESLOCAMENTO ---
-            const originAddress = "Angélica, MS, Brazil";
-            // const pricePerKm = 4.50; // REMOVIDO: Agora é PER_KM_DESLOCAMENTO_RATE
+                    const service = new google.maps.DistanceMatrixService();
+                    service.getDistanceMatrix(
+                        {
+                            origins: [originAddress],
+                            destinations: [destination],
+                            travelMode: google.maps.TravelMode.DRIVING,
+                            unitSystem: google.maps.UnitSystem.METRIC,
+                        },
+                        (response, status) => {
+                            if (status === 'OK') {
+                                const element = response.rows[0].elements[0];
+                                if (element.status === 'OK') {
+                                    const distanceInMeters = element.distance.value;
+                                    const destinationFormattedAddress = response.destinationAddresses[0];
+                                    const lowerCaseDestination = destinationFormattedAddress.toLowerCase();
 
-            const destinationAddressInput = document.getElementById('destination-address');
-            const calculateDeslocamentoBtn = document.getElementById('calculate-freight-btn'); // Mantém o ID do botão, mas o texto será "Calcular Deslocamento"
-            const deslocamentoResultsDiv = document.getElementById('freight-results'); // Mantém o ID, mas o texto será "Deslocamento"
-            const distanceDisplay = document.getElementById('distance-display');
-            const calculatedDeslocamentoDisplay = document.getElementById('calculated-freight-display'); // Mantém o ID, mas o texto será "Deslocamento"
-            const deslocamentoError = document.getElementById('freight-error'); // Mantém o ID, mas o texto será "Deslocamento"
+                                    let isFixedCity = false;
+                                    // Check for "angelica" AND "ms" or "ivinhema" AND "ms"
+                                    if ((lowerCaseDestination.includes('angelica') && lowerCaseDestination.includes('ms')) ||
+                                        (lowerCaseDestination.includes('ivinhema') && lowerCaseDestination.includes('ms'))) {
+                                        isFixedCity = true;
+                                    }
 
-            function calculateDeslocamento(destination, callback = () => {}) {
-                if (!mapsInitialized) {
-                    console.error("Google Maps API ainda não carregada.");
-                    deslocamentoError.textContent = "Erro ao carregar o serviço de mapas. Por favor, tente novamente em alguns segundos.";
-                    deslocamentoError.classList.remove('hidden');
-                    callback(); // Chama o callback mesmo em caso de erro
-                    return;
-                }
+                                    if (isFixedCity) {
+                                        currentDeslocamentoCost = 50; // Fixed R$ 50 for Angélica and Ivinhema
+                                        modalDistanceDisplay.textContent = `Deslocamento Fixo: ${formatCurrency(currentDeslocamentoCost)}`;
+                                    } else {
+                                        const distanceInKm = distanceInMeters / 1000;
+                                        currentDeslocamentoCost = (distanceInKm * PER_KM_DESLOCAMENTO_RATE); // R$1,80 per km for others
+                                        modalDistanceDisplay.textContent = `${distanceInKm.toFixed(2)} km`;
+                                    }
 
-                if (!destination) {
-                    deslocamentoError.textContent = "Por favor, digite o endereço de destino.";
-                    deslocamentoError.classList.remove('hidden');
-                    deslocamentoResultsDiv.classList.add('hidden');
-                    currentDeslocamentoCost = 0;
-                    updatePrices();
-                    callback(); // Chama o callback
-                    return;
-                }
+                                    // Update the currentFinalTotalPrice after calculating displacement
+                                    currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost;
 
-                const service = new google.maps.DistanceMatrixService();
-                service.getDistanceMatrix(
-                    {
-                        origins: [originAddress],
-                        destinations: [destination],
-                        travelMode: google.maps.TravelMode.DRIVING,
-                        unitSystem: google.maps.UnitSystem.METRIC,
-                    },
-                    (response, status) => {
-                        if (status === 'OK') {
-                            const element = response.rows[0].elements[0];
-                            if (element.status === 'OK') {
-                                const distanceInMeters = element.distance.value; // distância em metros
-                                const destinationFormattedAddress = response.destinationAddresses[0]; // Obtém o endereço de destino formatado
-                                const lowerCaseDestination = destinationFormattedAddress.toLowerCase();
-
-                                // Verifica se o destino é Angélica, MS ou Ivinhema, MS
-                                if (FIXED_DESLOCAMENTO_CITIES.some(city => lowerCaseDestination.includes(city))) {
-                                    currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT;
-                                    distanceDisplay.textContent = `Deslocamento Fixo: ${formatCurrency(FIXED_DESLOCAMENTO_AMOUNT)}`;
+                                    modalCalculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
+                                    
+                                    modalDeslocamentoResultsDiv.classList.remove('hidden');
+                                    modalDeslocamentoError.classList.add('hidden');
                                 } else {
-                                    const distanceInKm = distanceInMeters / 1000;
-                                    currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT + (distanceInKm * PER_KM_DESLOCAMENTO_RATE); // 50 + 1.80 por km
-                                    distanceDisplay.textContent = `${distanceInKm.toFixed(2)} km`;
+                                    modalDeslocamentoError.textContent = "Não foi possível calcular o deslocamento para o endereço fornecido. Por favor, tente novamente.";
+                                    modalDeslocamentoError.classList.remove('hidden');
+                                    modalDeslocamentoResultsDiv.classList.add('hidden');
+                                    currentDeslocamentoCost = 0;
+                                    currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Ensure total is updated
                                 }
-
-                                calculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
-                                
-                                deslocamentoResultsDiv.classList.remove('hidden');
-                                deslocamentoError.classList.add('hidden');
-                                updatePrices(); // Atualiza o preço total com o deslocamento
                             } else {
-                                deslocamentoError.textContent = "Não foi possível calcular o deslocamento para o endereço fornecido. Por favor, tente novamente.";
-                                deslocamentoError.classList.remove('hidden');
-                                deslocamentoResultsDiv.classList.add('hidden');
+                                modalDeslocamentoError.textContent = "Erro ao calcular o deslocamento. Verifique o endereço e sua conexão com a internet.";
+                                modalDeslocamentoError.classList.remove('hidden');
+                                modalDeslocamentoResultsDiv.classList.add('hidden');
                                 currentDeslocamentoCost = 0;
-                                updatePrices();
+                                currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Ensure total is updated
                             }
-                        } else {
-                            deslocamentoError.textContent = "Erro ao calcular o deslocamento. Verifique o endereço e sua conexão com a internet.";
-                            deslocamentoError.classList.remove('hidden');
-                            deslocamentoResultsDiv.classList.add('hidden');
-                            currentDeslocamentoCost = 0;
-                            updatePrices();
+                            callback();
                         }
-                        callback(); // Garante que o callback seja chamado após a tentativa de cálculo
-                    }
-                );
-            }
-
-            if (calculateDeslocamentoBtn) {
-                calculateDeslocamentoBtn.addEventListener('click', () => {
-                    calculateDeslocamento(destinationAddressInput.value.trim());
-                });
-            }
-
-            // --- BLOQUEIO DE FERRAMENTAS DE DESENVOLVIMENTO (F12 e Inspecionar Elemento) ---
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'F12') {
-                    event.preventDefault();
-                    console.log('F12 bloqueado.');
-                    // Opcional: exiba uma mensagem para o usuário
-                    // alert('Ferramentas de desenvolvedor desativadas para esta página.');
+                    );
                 }
-            });
 
-            document.addEventListener('contextmenu', function(event) {
-                event.preventDefault();
-                console.log('Botão direito do mouse bloqueado.');
-                // Opcional: exiba uma mensagem para o usuário
-                // alert('O botão direito do mouse está desativado nesta página.');
-            });
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'F12') {
+                        event.preventDefault();
+                        console.log('F12 bloqueado.');
+                    }
+                });
 
-            // Tentativa de detecção de DevTools (não infalível)
-            // let devtoolsOpen = false;
-            // const threshold = 160; // Largura ou altura mínima para considerar DevTools abertas
+                document.addEventListener('contextmenu', function(event) {
+                    event.preventDefault();
+                    console.log('Botão direito do mouse bloqueado.');
+                });
 
-            // const checkDevTools = () => {
-            //     if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
-            //         if (!devtoolsOpen) {
-            //             console.log('DevTools abertas!');
-            //             // Redirecionar ou exibir modal
-            //             // window.location.href = 'about:blank'; 
-            //             devtoolsOpen = true;
-            //         }
-            //     } else {
-            //         devtoolsOpen = false;
-            //     }
-            // };
+                let devtoolsOpen = false;
+                const threshold = 160;
 
-            // setInterval(checkDevTools, 1000); // Verifica a cada segundo
-            // checkDevTools(); // Verifica na carga inicial
+                const checkDevTools = () => {
+                    if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+                        if (!devtoolsOpen) {
+                            console.log('DevTools abertas! Tentando fechar ou redirecionar...');
+                            devtoolsOpen = true;
+                        }
+                    } else {
+                        devtoolsOpen = false;
+                    }
+                };
+
+                setInterval(checkDevTools, 1000);
+                checkDevTools();
+            } catch (error) {
+                console.error("Erro durante o carregamento do script:", error);
+            }
         });
     </script>
 </body>
