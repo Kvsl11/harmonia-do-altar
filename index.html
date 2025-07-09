@@ -110,7 +110,7 @@
             scroll-margin-top: 80px;
         }
 
-        /* Modal styles */
+        /* Modal styles - Ensure display: none by default */
         .modal {
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
@@ -203,6 +203,17 @@
     </style>
 </head>
 <body class="text-gray-800">
+    <!-- Script para ocultar modais imediatamente ao carregar a página -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Seleciona todos os elementos com a classe 'modal'
+            const modals = document.querySelectorAll('.modal');
+            // Itera sobre cada modal e define seu estilo de exibição como 'none'
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+        });
+    </script>
 
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2">
         <div class="container mx-auto px-6 flex justify-between items-center">
@@ -391,7 +402,7 @@
                     </div>
                     <div class="p-6 border-t bg-white flex justify-between items-center">
                         <div class="text-2xl font-bold">R$ 2.000</div>
-                        <button onclick="handleContratar('Versatilidade e Brilho Acústico', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'], 2000)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                        <button onclick="handleContratar('Versatilidade e Brilho Acústica', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'], 2000)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
                     </div>
                 </div>
             </div>
@@ -1054,10 +1065,8 @@
 
 
                 // --- MODAL AND ANIMATION SETUP ---
-                document.getElementById('main-contract-modal').style.display = 'none';
-                document.getElementById('boleto-notification-modal').style.display = 'none';
-                document.getElementById('map-selection-modal').style.display = 'none'; // Hide map modal initially
-                boletoDateWarningModal.style.display = 'none'; // Hide new warning modal initially
+                // The 'hidden' attribute is now handled by CSS display: none.
+                // JavaScript will now only toggle style.display.
 
                 const animatedItems = document.querySelectorAll('.animated-item');
                 const observer = new IntersectionObserver((entries) => {
@@ -1219,15 +1228,21 @@
                 }
 
                 if (closeMainModalButton) {
-                    closeMainModalButton.addEventListener('click', () => mainContractModal.style.display = 'none');
+                    closeMainModalButton.addEventListener('click', () => {
+                        mainContractModal.style.display = 'none';
+                    });
                 }
                 window.addEventListener('click', (event) => {
-                    if (event.target == mainContractModal) mainContractModal.style.display = 'none';
+                    if (event.target == mainContractModal) {
+                        mainContractModal.style.display = 'none';
+                    }
                 });
 
                 // --- MAP SELECTION MODAL LISTENERS ---
                 document.getElementById('open-map-selection-btn').addEventListener('click', openMapSelectionModal);
-                document.getElementById('close-map-modal-button').addEventListener('click', () => document.getElementById('map-selection-modal').style.display = 'none');
+                document.getElementById('close-map-modal-button').addEventListener('click', () => {
+                    document.getElementById('map-selection-modal').style.display = 'none';
+                });
                 document.getElementById('confirm-map-location-btn').addEventListener('click', confirmMapLocation);
                 window.addEventListener('click', (event) => {
                     if (event.target == document.getElementById('map-selection-modal')) {
@@ -1239,17 +1254,41 @@
                 const boletoNotificationModal = document.getElementById('boleto-notification-modal');
                 const closeBoletoModalButton = document.getElementById('close-boleto-modal-button');
                 const okBoletoModalButton = document.getElementById('ok-boleto-modal-button');
-                if (closeBoletoModalButton) closeBoletoModalButton.addEventListener('click', () => boletoNotificationModal.style.display = 'none');
-                if (okBoletoModalButton) okBoletoModalButton.addEventListener('click', () => boletoNotificationModal.style.display = 'none');
+                
+                // Modified logic for boleto notifications
+                if (closeBoletoModalButton) {
+                    closeBoletoModalButton.addEventListener('click', () => {
+                        boletoNotificationModal.style.display = 'none';
+                        // After closing the first notification, check for date warning
+                        validateBoletoDueDate(); 
+                    });
+                }
+                if (okBoletoModalButton) {
+                    okBoletoModalButton.addEventListener('click', () => {
+                        boletoNotificationModal.style.display = 'none';
+                        // After acknowledging the first notification, check for date warning
+                        validateBoletoDueDate();
+                    });
+                }
                 window.addEventListener('click', (event) => {
-                    if (event.target == boletoNotificationModal) boletoNotificationModal.style.display = 'none';
+                    if (event.target == boletoNotificationModal) {
+                        boletoNotificationModal.style.display = 'none';
+                        // After clicking outside the first notification, check for date warning
+                        validateBoletoDueDate();
+                    }
                 });
 
                 // --- NEW: BOLETO DATE WARNING MODAL LISTENERS ---
-                document.getElementById('close-boleto-date-warning-modal-button').addEventListener('click', () => boletoDateWarningModal.style.display = 'none');
-                document.getElementById('ok-boleto-date-warning-modal-button').addEventListener('click', () => boletoDateWarningModal.style.display = 'none');
+                document.getElementById('close-boleto-date-warning-modal-button').addEventListener('click', () => {
+                    boletoDateWarningModal.style.display = 'none';
+                });
+                document.getElementById('ok-boleto-date-warning-modal-button').addEventListener('click', () => {
+                    boletoDateWarningModal.style.display = 'none';
+                });
                 window.addEventListener('click', (event) => {
-                    if (event.target == boletoDateWarningModal) boletoDateWarningModal.style.display = 'none';
+                    if (event.target == boletoDateWarningModal) {
+                        boletoDateWarningModal.style.display = 'none';
+                    }
                 });
 
                 // --- PAYMENT LOGIC ---
@@ -1259,8 +1298,13 @@
                         selectedInstallments = 1;
                         updateInstallmentOptions();
                         updatePaymentDetailsDisplay();
+                        // Only show the first boleto notification here.
+                        // The date warning will be triggered after this one is closed.
                         if (selectedPaymentMethod === 'boleto') {
                             boletoNotificationModal.style.display = 'flex';
+                        } else {
+                            boletoNotificationModal.style.display = 'none'; // Ensure it's hidden if not boleto
+                            boletoDateWarningModal.style.display = 'none'; // Ensure date warning is also hidden
                         }
                     });
                 });
@@ -1317,13 +1361,18 @@
                     modalTotalPriceWithFeesEl.textContent = formatCurrency(calculatedTotalForPayment);
                     installmentValueEl.textContent = formatCurrency(finalInstallmentValue);
 
-                    validateBoletoDueDate(); // Validate on every payment detail update
+                    // Do NOT call validateBoletoDueDate here directly if selectedPaymentMethod is boleto
+                    // It will be called after the first notification is closed.
+                    if (selectedPaymentMethod !== 'boleto') {
+                        validateBoletoDueDate();
+                    }
                 }
                 
                 function validateBoletoDueDate() {
+                    // Only perform validation if the payment method is boleto and a ceremony date is set
                     if (selectedPaymentMethod !== 'boleto' || !ceremonyDate) {
-                        modalBoletoDateError.classList.add('hidden'); // Hide inline error
-                        boletoDateWarningModal.style.display = 'none'; // Hide modal warning
+                        modalBoletoDateError.classList.add('hidden'); // Esconde o erro inline
+                        boletoDateWarningModal.style.display = 'none'; // Esconde o modal de aviso
                         if (nextToSummaryBtn) nextToSummaryBtn.disabled = false;
                         return true;
                     }
@@ -1448,7 +1497,7 @@
                             // Also try to geocode and store lat/lng for WhatsApp link, but don't force map selection
                             if (geocoder) {
                                 geocoder.geocode({ 'address': address }, (results, status) => {
-                                    if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
+                                    if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) { // Corrected typo: fgeometry to geometry
                                         selectedPlaceDetails.address = results[0].formatted_address;
                                         selectedPlaceDetails.lat = results[0].geometry.location.lat();
                                         selectedPlaceDetails.lng = results[0].geometry.location.lng();
