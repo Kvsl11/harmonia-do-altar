@@ -998,12 +998,15 @@
             }
             if (paymentMethod === 'pix' || paymentMethod === 'dinheiro') {
                 message += `• *Valor Total a Pagar:* ${formatCurrency(totalAmountWithFees)}\n`;
+                message += `• *Pagamento:* À vista\n`; // Changed for Pix/Dinheiro
             } else {
                 message += `• *Valor Total a Pagar (com taxas):* ${formatCurrency(totalAmountWithFees)}\n`;
+                message += `• *Parcelamento:* ${installments}x de ${formatCurrency(installmentValue)}\n`; // Retained for Boleto/Cartão
             }
             
             message += `• *Forma de Pagamento:* ${paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}\n`;
-            message += `• *Parcelamento:* ${installments}x de ${formatCurrency(installmentValue)}\n`;
+            // The installment line is now conditional above, so remove the generic one here
+            // message += `• *Parcelamento:* ${installments}x de ${formatCurrency(installmentValue)}\n`;
             if (paymentMethod === 'boleto') {
                 message += `• *Vencimento do Boleto:* Todo dia ${selectedBoletoDueDate}\n`;
             }
@@ -1460,7 +1463,12 @@
                     summaryTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice);
                     summaryTotalWithFeesEl.textContent = formatCurrency(calculatedTotalForSummary);
                     summaryPaymentMethodEl.textContent = paymentMethodText;
-                    summaryInstallmentsEl.textContent = `${selectedInstallments}x de ${formatCurrency(finalInstallmentValueForSummary)}`;
+                    // Conditionally display "Pagamento à vista" or "Parcelamento"
+                    if (selectedPaymentMethod === 'pix' || selectedPaymentMethod === 'dinheiro') {
+                        summaryInstallmentDetailsDiv.textContent = 'Pagamento: À vista';
+                    } else {
+                        summaryInstallmentDetailsDiv.textContent = `Parcelamento: ${selectedInstallments}x de ${formatCurrency(finalInstallmentValueForSummary)}`;
+                    }
                 }
 
                 // --- WHATSAPP & HIRING ---
