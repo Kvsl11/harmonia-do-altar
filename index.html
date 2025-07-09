@@ -157,17 +157,16 @@
 
         /* Custom Scrollbar for Webkit browsers (Chrome, Safari) */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px; /* Make it slightly thinner */
         }
 
         ::-webkit-scrollbar-track {
-            background: #f1f1f1; /* Light background for the track */
-            border-radius: 10px;
+            background: transparent; /* Changed to transparent to remove the visible track */
         }
 
         ::-webkit-scrollbar-thumb {
             background: #C9A959; /* Gold color for the scrollbar thumb */
-            border-radius: 10px;
+            border-radius: 10px; /* Keep rounded corners for the thumb */
         }
 
         ::-webkit-scrollbar-thumb:hover {
@@ -207,14 +206,14 @@
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <a href="#" class="text-white text-2xl font-bold font-playfair flex items-center">
-                <img src="H.png" alt="Logo Harmonia do Altar" class="h-8 mr-2 inline-block">armonia do Altar
+                <img src="https://storage.googleapis.com/gemini-prod-us-east1-user-content/image_e7691e.png" alt="Logo Harmonia do Altar" class="h-10 mr-2 inline-block" onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/c9a959?text=H'">armonia do Altar
             </a>
             
             <div class="hidden md:flex space-x-8">
                 <a href="#sobre" class="nav-link">Sobre</a>
                 <a href="#galeria" class="nav-link">Galeria</a>
                 <a href="#planos" class="nav-link">Planos</a>
-                <a href="#deslocamento" class="nav-link">Deslocamento</a>
+                <!-- Removed Deslocamento from main navigation -->
                 <a href="#contato" class="nav-link">Contato</a>
             </div>
 
@@ -228,7 +227,7 @@
             <a href="#sobre" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Sobre</a>
             <a href="#galeria" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Galeria</a>
             <a href="#planos" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Planos</a>
-            <a href="#deslocamento" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Deslocamento</a>
+            <!-- Removed Deslocamento from mobile navigation -->
             <a href="#contato" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Contato</a>
         </div>
     </nav>
@@ -236,7 +235,7 @@
     <header class="hero-bg text-white shadow-lg h-screen flex items-center justify-center">
         <div class="text-center">
             <h1 class="text-5xl md:text-7xl font-bold mb-2 animated-item">
-                <img src="H.png" alt="Logo Harmonia do Altar" class="h-16 md:h-24 inline-block align-middle mr-4">armonia do Altar
+                <img src="https://storage.googleapis.com/gemini-prod-us-east1-user-content/image_e7691e.png" alt="Logo Harmonia do Altar" class="h-20 md:h-32 inline-block align-middle mr-4" onerror="this.onerror=null; this.src='https://placehold.co/128x128/ffffff/c9a959?text=H'">armonia do Altar
             </h1>
             <p class="text-xl md:text-2xl font-light animated-item delay-1">A Trilha Sonora Perfeita para o Seu Grande Dia</p>
         </div>
@@ -302,8 +301,8 @@
             <div class="text-center max-w-4xl mx-auto mb-12 md:mb-16 animated-item">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">Nossas Configurações Sugeridas</h2>
                 <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
-                <p class="text-gray-600 leading-relaxed text-lg">
-                    A nossa formação padrão, com <strong>3 vozes e o teclado</strong>, é o ponto de partida. Veja algumas das nossas configurações mais pedidas.
+                <p class="text-gray-600 leading-relaxed text-lg mb-8">
+                    Nossa formação padrão inclui <strong>3 vozes e teclado</strong>, com a flexibilidade de adicionar outros instrumentos para personalizar sua sonoridade. O deslocamento tem tarifa fixa para <strong>Angélica/Ivinhema (MS) e valor por km para outras localidades (com um valor base).</strong> Taxas de processamento bancário aplicam-se a pagamentos via boleto e cartão (incluindo deslocamentos especiais), não sendo retidas pela Harmonia do Altar. <strong>Pix e dinheiro são isentos de taxas.</strong>
                 </p>
             </div>
             
@@ -375,7 +374,7 @@
                     </div>
                     <div class="p-6 border-t bg-white flex justify-between items-center">
                         <div class="text-2xl font-bold">R$ 1.800</div>
-                        <button onclick="handleContratar('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Contrabaixo', 'Violão'], 1800)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                        <button onclick="handleContratar('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Violão', 'Contrabaixo'], 1800)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
                     </div>
                 </div>
 
@@ -420,13 +419,7 @@
             </div>
 
             <div class="mt-8 max-w-2xl mx-auto border-t pt-6">
-                <!-- REMOVED: Original price display elements
-                <div class="text-right space-y-2 text-lg">
-                    <p class="text-2xl md:text-3xl font-bold">Valor do Plano: <span id="plan-price" class="text-gold">R$ 1.400,00</span></p>
-                    <p class="text-xl md:text-2xl font-bold">Valor do Deslocamento: <span id="freight-price" class="text-gold">R$ 0,00</span></p>
-                    <p class="text-2xl md:text-3xl font-bold">Valor Total: <span id="final-total-price" class="text-gold">R$ 1.400,00</span></p>
-                </div>
-                -->
+                <!-- Removed price display elements from the main page -->
                 <button id="contract-btn-custom" class="mt-6 w-full bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Contratar Plano Personalizado</button>
             </div>
         </section>
@@ -467,11 +460,11 @@
 
             <div id="deslocamento-tab" class="tab-content active">
                 <h4 class="text-xl font-bold text-gray-800 mb-4">Cálculo de Deslocamento</h4>
-                <p class="text-gray-600 mb-4">Informe o endereço do local da cerimônia para calcular o custo do deslocamento. *Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.*</p>
+                <p class="text-gray-600 mb-4">Informe o endereço do local da cerimônia para calcular o custo do deslocamento. <strong>Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.</strong></p>
                 <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço:</label>
                 <input type="text" id="modal-destination-address" placeholder="Rua, Número, Cidade, Estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold mb-4">
                 <p id="modal-deslocamento-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
-                <div id="modal-deslocamento-results" class="mt-6 p-4 bg-gray-100 rounded-lg hidden">
+                <div id="modal-deslocamento-results" class="mt-6 p-4 bg-gray-100 rounded-lg">
                     <p class="text-gray-700">Distância: <span id="modal-distance-display" class="font-bold"></span></p>
                     <p class="text-gray-700">Valor do Deslocamento: <span id="modal-calculated-deslocamento-display" class="font-bold text-gold"></span></p>
                 </div>
@@ -545,6 +538,20 @@
         </div>
     </div>
 
+    <!-- Boleto Notification Modal -->
+    <div id="boleto-notification-modal" class="modal fixed inset-0 flex items-center justify-center">
+        <div class="modal-content w-full max-w-md">
+            <span class="close-button" id="close-boleto-modal-button">&times;</span>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Atenção sobre o Pagamento via Boleto</h3>
+            <p class="text-gray-700 leading-relaxed">
+                Informamos que o boleto referente à sua contratação pode ser gerado e pago a qualquer momento antes da data da cerimônia. É fundamental que o pagamento seja efetuado até a data de vencimento. Boletos não pagos após o vencimento estão sujeitos a protesto em cartório, o que pode acarretar restrições de crédito. Para evitar inconvenientes, recomendamos a quitação dentro do prazo estabelecido.
+            </p>
+            <div class="flex justify-end mt-6">
+                <button id="ok-boleto-modal-button" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Entendi</button>
+            </div>
+        </div>
+    </div>
+
     <script async src="//www.instagram.com/embed.js"></script>
     
     <!-- Google Maps API with Places library -->
@@ -565,6 +572,7 @@
         // Define os preços dos instrumentos globalmente para fácil acesso na mensagem do WhatsApp
         const BASE_PLAN_PRICE = 1400;
         const BOLETO_PER_INSTALLMENT_FEE = 18; // R$18 fixo POR PARCELA para boleto
+        const FIXED_DESLOCAMENTO_AMOUNT = 50; // Valor fixo do deslocamento para as cidades específicas
         const PER_KM_DESLOCAMENTO_RATE = 1.80; // R$1,80 por Km para outras cidades
 
         const INSTRUMENT_PRICES = {
@@ -610,6 +618,7 @@
 
                 // --- GARANTE QUE OS MODAIS ESTÃO OCULTOS AO CARREGAR A PÁGINA ---
                 document.getElementById('main-contract-modal').style.display = 'none';
+                document.getElementById('boleto-notification-modal').style.display = 'none'; // Ensure boleto modal is hidden
 
                 // --- OBSERVER DE ANIMAÇÃO ---
                 const animatedItems = document.querySelectorAll('.animated-item');
@@ -841,13 +850,15 @@
                 function showMainContractModal(planPrice, deslocamentoPrice, totalPrice, planDetails) {
                     mainContractModal.style.display = 'flex';
                     currentPlanDetails = planDetails;
-                    currentFinalTotalPrice = totalPrice; // This will be updated in calculateDeslocamentoInModal
                     currentPlanOnlyPrice = planPrice;
-                    currentDeslocamentoCost = deslocamentoPrice; // This will be updated in calculateDeslocamentoInModal
+                    // Reset displacement cost to 0 initially when modal opens for a new plan
+                    currentDeslocamentoCost = 0; 
+                    currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Initial total before user enters address
 
                     modalDeslocamentoError.classList.add('hidden');
-                    modalDeslocamentoResultsDiv.classList.add('hidden');
-                    modalDestinationAddressInput.value = '';
+                    // Ensure modalDeslocamentoResultsDiv is hidden on new modal open
+                    modalDeslocamentoResultsDiv.classList.add('hidden'); 
+                    modalDestinationAddressInput.value = ''; // Clear address input on new modal open
 
                     unlockedTabs = ['deslocamento-tab']; 
 
@@ -866,12 +877,40 @@
                     }
                 });
 
+                // Boleto Notification Modal Logic
+                const boletoNotificationModal = document.getElementById('boleto-notification-modal');
+                const closeBoletoModalButton = document.getElementById('close-boleto-modal-button');
+                const okBoletoModalButton = document.getElementById('ok-boleto-modal-button');
+
+                if (closeBoletoModalButton) {
+                    closeBoletoModalButton.addEventListener('click', () => {
+                        boletoNotificationModal.style.display = 'none';
+                    });
+                }
+                if (okBoletoModalButton) {
+                    okBoletoModalButton.addEventListener('click', () => {
+                        boletoNotificationModal.style.display = 'none';
+                    });
+                }
+                window.addEventListener('click', (event) => {
+                    if (event.target == boletoNotificationModal) {
+                        boletoNotificationModal.style.display = 'none';
+                    }
+                });
+
+
                 paymentMethodRadios.forEach(radio => {
                     radio.addEventListener('change', () => {
                         selectedPaymentMethod = radio.value;
                         selectedInstallments = 1;
                         updateInstallmentOptions();
                         updatePaymentDetailsDisplay();
+
+                        if (selectedPaymentMethod === 'boleto') {
+                            boletoNotificationModal.style.display = 'flex'; // Show boleto notification
+                        } else {
+                            boletoNotificationModal.style.display = 'none'; // Hide if other payment method selected
+                        }
                     });
                 });
 
@@ -918,7 +957,8 @@
                     } else if (selectedPaymentMethod === 'cartao') {
                         const percentageFee = CREDIT_CARD_TOTAL_PERCENTAGES[selectedInstallments];
                         if (percentageFee !== undefined) {
-                            calculatedTotalForPayment *= (1 + percentageFee);
+                            // Apply the formula: total / (1 - percentage)
+                            calculatedTotalForPayment = currentFinalTotalPrice / (1 - percentageFee);
                         } else {
                             console.warn("Percentage fee not found for selected installments:", selectedInstallments);
                         }
@@ -959,7 +999,7 @@
                     } else if (selectedPaymentMethod === 'cartao') {
                         const percentageFee = CREDIT_CARD_TOTAL_PERCENTAGES[selectedInstallments];
                         if (percentageFee !== undefined) {
-                            calculatedTotalForSummary *= (1 + percentageFee);
+                            calculatedTotalForSummary = currentFinalTotalPrice / (1 - percentageFee);
                         }
                         paymentMethodText = 'Cartão de Crédito';
                         feesExplanationDiv.classList.remove('hidden');
@@ -1114,9 +1154,12 @@
                                     const lowerCaseDestination = destinationFormattedAddress.toLowerCase();
 
                                     let isFixedCity = false;
-                                    // Check for "angelica" AND "ms" or "ivinhema" AND "ms"
-                                    if ((lowerCaseDestination.includes('angelica') && lowerCaseDestination.includes('ms')) ||
-                                        (lowerCaseDestination.includes('ivinhema') && lowerCaseDestination.includes('ms'))) {
+                                    // Normalize destination to remove accents for robust comparison
+                                    const normalizedDestination = lowerCaseDestination.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                    
+                                    // Check for "angelica" AND "ms" or "ivinhema" AND "ms" (case and accent insensitive)
+                                    if ((normalizedDestination.includes('angelica') && normalizedDestination.includes('ms')) ||
+                                        (normalizedDestination.includes('ivinhema') && normalizedDestination.includes('ms'))) {
                                         isFixedCity = true;
                                     }
 
@@ -1125,7 +1168,8 @@
                                         modalDistanceDisplay.textContent = `Deslocamento Fixo: ${formatCurrency(currentDeslocamentoCost)}`;
                                     } else {
                                         const distanceInKm = distanceInMeters / 1000;
-                                        currentDeslocamentoCost = (distanceInKm * PER_KM_DESLOCAMENTO_RATE); // R$1,80 per km for others
+                                        // For other localities, it's R$ 50 fixed + R$ 1.80 per km
+                                        currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT + (distanceInKm * PER_KM_DESLOCAMENTO_RATE); 
                                         modalDistanceDisplay.textContent = `${distanceInKm.toFixed(2)} km`;
                                     }
 
@@ -1134,6 +1178,7 @@
 
                                     modalCalculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
                                     
+                                    // Ensure modalDeslocamentoResultsDiv is shown after successful calculation
                                     modalDeslocamentoResultsDiv.classList.remove('hidden');
                                     modalDeslocamentoError.classList.add('hidden');
                                 } else {
@@ -1183,6 +1228,22 @@
 
                 setInterval(checkDevTools, 1000);
                 checkDevTools();
+
+                // Call calculateDeslocamentoInModal on input change to update values dynamically
+                modalDestinationAddressInput.addEventListener('input', () => {
+                    const address = modalDestinationAddressInput.value.trim();
+                    if (address) {
+                        calculateDeslocamentoInModal(address);
+                    } else {
+                        // If address is empty, reset displacement display
+                        modalDeslocamentoResultsDiv.classList.add('hidden');
+                        modalDeslocamentoError.classList.add('hidden');
+                        currentDeslocamentoCost = 0;
+                        currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost;
+                        updatePaymentDetailsDisplay(); // Update payment tab prices
+                    }
+                });
+
             } catch (error) {
                 console.error("Erro durante o carregamento do script:", error);
             }
