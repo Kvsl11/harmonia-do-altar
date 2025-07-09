@@ -131,7 +131,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             width: 90%;
-            max-width: 500px;
+            max-width: 550px; /* Increased width for new fields */
             position: relative;
             animation: fadeIn 0.3s ease-out;
         }
@@ -188,6 +188,7 @@
             font-weight: 600;
             color: #888;
             transition: color 0.3s, border-bottom 0.3s;
+            font-size: 0.875rem; /* Smaller font for more tabs */
         }
         .tab-button.active {
             color: #b69260; /* Updated gold color */
@@ -213,7 +214,6 @@
                 <a href="#sobre" class="nav-link">Sobre</a>
                 <a href="#galeria" class="nav-link">Galeria</a>
                 <a href="#planos" class="nav-link">Planos</a>
-                <!-- Removed Deslocamento from main navigation -->
                 <a href="#contato" class="nav-link">Contato</a>
             </div>
 
@@ -227,7 +227,6 @@
             <a href="#sobre" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Sobre</a>
             <a href="#galeria" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Galeria</a>
             <a href="#planos" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Planos</a>
-            <!-- Removed Deslocamento from mobile navigation -->
             <a href="#contato" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Contato</a>
         </div>
     </nav>
@@ -310,7 +309,6 @@
                 
                 <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item">
                     <div class="p-8 flex-grow">
-                        <!-- Font Awesome Music Icon -->
                         <i class="fas fa-music text-gold text-3xl mb-4"></i>
                         <h3 class="text-xl font-bold text-gray-800 mb-2">Essência Clássica e Sublime</h3>
                         <p class="text-gray-600 mb-6 text-sm">A nossa formação padrão, com as <strong>3 vozes e o teclado</strong>. Perfeita para quem busca a elegância atemporal e a emoção pura.</p>
@@ -419,7 +417,6 @@
             </div>
 
             <div class="mt-8 max-w-2xl mx-auto border-t pt-6">
-                <!-- Removed price display elements from the main page -->
                 <button id="contract-btn-custom" class="mt-6 w-full bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Contratar Plano Personalizado</button>
             </div>
         </section>
@@ -454,28 +451,67 @@
 
             <div class="tab-header" role="tablist">
                 <button class="tab-button active" data-tab="deslocamento-tab" role="tab">Deslocamento</button>
-                <button class="tab-button" data-tab="payment-method-tab" role="tab">Forma de Pagamento</button>
-                <button class="tab-button" data-tab="summary-tab" role="tab">Resumo e Contratar</button>
+                <button class="tab-button" data-tab="event-details-tab" role="tab">Detalhes do Evento</button>
+                <button class="tab-button" data-tab="payment-method-tab" role="tab">Pagamento</button>
+                <button class="tab-button" data-tab="summary-tab" role="tab">Resumo</button>
             </div>
 
+            <!-- TAB 1: DESLOCAMENTO -->
             <div id="deslocamento-tab" class="tab-content active">
                 <h4 class="text-xl font-bold text-gray-800 mb-4">Cálculo de Deslocamento</h4>
                 <p class="text-gray-600 mb-4">Informe o endereço do local da cerimônia para calcular o custo do deslocamento. <strong>Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.</strong></p>
-                <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço:</label>
-                <input type="text" id="modal-destination-address" placeholder="Rua, Número, Cidade, Estado" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold mb-4">
+                <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço Completo (Rua, Número, Cidade, Estado):</label>
+                <div class="flex space-x-2 mb-4">
+                    <input type="text" id="modal-destination-address" placeholder="Ex: Av. Brasil, 123, Ivinhema, MS" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                    <button type="button" id="open-map-selection-btn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300 text-sm flex-shrink-0">
+                        <i class="fas fa-map-marker-alt mr-1"></i> Abrir Mapa
+                    </button>
+                </div>
                 <p id="modal-deslocamento-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
-                <div id="modal-deslocamento-results" class="mt-6 p-4 bg-gray-100 rounded-lg">
+                <div id="modal-deslocamento-results" class="mt-6 p-4 bg-gray-100 rounded-lg hidden">
                     <p class="text-gray-700">Distância: <span id="modal-distance-display" class="font-bold"></span></p>
                     <p class="text-gray-700">Valor do Deslocamento: <span id="modal-calculated-deslocamento-display" class="font-bold text-gold"></span></p>
                 </div>
                 <div class="flex justify-end mt-6">
+                    <button id="next-to-event-details-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Próximo</button>
+                </div>
+            </div>
+
+            <!-- TAB 2: DETALHES DO EVENTO (NOVO) -->
+            <div id="event-details-tab" class="tab-content">
+                <h4 class="text-xl font-bold text-gray-800 mb-4">Detalhes da Cerimônia</h4>
+                <p class="text-gray-600 mb-4">Por favor, preencha a data e o horário da sua cerimônia.</p>
+                
+                <div class="mb-4">
+                    <label for="ceremony-date" class="block text-gray-700 text-sm font-bold mb-2">Data da Cerimônia:</label>
+                    <input type="date" id="ceremony-date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="ceremony-time" class="block text-gray-700 text-sm font-bold mb-2">Horário da Cerimônia:</label>
+                    <input type="time" id="ceremony-time" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                </div>
+
+                <!-- Novo campo para Local de Referência -->
+                <div class="mb-4">
+                    <label for="reference-location" class="block text-gray-700 text-sm font-bold mb-2">Local de Referência (Opcional):</label>
+                    <input type="text" id="reference-location" placeholder="Ex: Próximo à praça central" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                </div>
+
+                <div class="mt-4 p-3 bg-gray-100 rounded-lg">
+                    <p class="text-sm text-gray-700"><strong>Endereço Confirmado:</strong> <span id="confirmed-address-display"></span></p>
+                </div>
+                <p id="modal-event-details-error" class="text-red-500 mt-2 hidden text-sm">Por favor, preencha a data e o horário.</p>
+
+                <div class="flex justify-between mt-6">
+                    <button class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-300" data-navigate-tab="deslocamento-tab">Voltar</button>
                     <button id="next-to-payment-method-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Próximo</button>
                 </div>
             </div>
 
+            <!-- TAB 3: FORMA DE PAGAMENTO -->
             <div id="payment-method-tab" class="tab-content">
                 <h4 class="text-xl font-bold text-gray-800 mb-4">Forma de Pagamento</h4>
-                <!-- Display elements for prices in the payment method tab -->
                 <div class="mb-4 text-gray-700">
                     <p>Valor do Plano: <span id="modal-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
                     <p>Valor do Deslocamento: <span id="modal-freight-price" class="font-bold text-gold">R$ 0,00</span></p>
@@ -505,27 +541,47 @@
 
                 <div id="installment-options" class="mb-6 hidden">
                     <label for="installments" class="block text-gray-700 text-sm font-bold mb-2">Número de Parcelas:</label>
-                    <select id="installments" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
-                        <!-- Options will be dynamically populated by JavaScript -->
-                    </select>
+                    <select id="installments" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold"></select>
                     <p class="mt-2 text-gray-700">Valor por parcela: <span id="installment-value" class="font-bold text-gold">R$ 0,00</span></p>
                 </div>
+
+                <div id="boleto-due-date-options" class="mb-6 hidden">
+                    <label for="boleto-due-date" class="block text-gray-700 text-sm font-bold mb-2">Melhor dia para vencimento do boleto:</label>
+                    <select id="boleto-due-date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                        <option value="5">Dia 5</option>
+                        <option value="10">Dia 10</option>
+                        <option value="15">Dia 15</option>
+                        <option value="20">Dia 20</option>
+                        <option value="25">Dia 25</option>
+                    </select>
+                    <p id="modal-boleto-date-error" class="text-red-500 mt-2 hidden text-sm">A data da última parcela não pode ser posterior à data da cerimônia. Por favor, ajuste as parcelas ou a data de vencimento.</p>
+                </div>
+
                 <div class="flex justify-between mt-6">
-                    <button class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-300" data-navigate-tab="deslocamento-tab">Voltar</button>
+                    <button class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-300" data-navigate-tab="event-details-tab">Voltar</button>
                     <button id="next-to-summary-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Próximo</button>
                 </div>
             </div>
 
+            <!-- TAB 4: RESUMO E CONTRATAR -->
             <div id="summary-tab" class="tab-content">
                 <h4 class="text-xl font-bold text-gray-800 mb-4">Resumo do Orçamento</h4>
-                <p class="text-gray-600 mb-2">Valor do Plano: <span id="summary-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
-                <p class="text-gray-600 mb-4">Valor do Deslocamento: <span id="summary-deslocamento-price" class="font-bold text-gold">R$ 0,00</span></p>
-                <p class="text-gray-600 mb-4">Valor Total (Plano + Deslocamento): <span id="summary-total-price" class="font-bold text-gold">R$ 0,00</span></p>
-                <p class="text-gray-600 mb-4" id="summary-total-with-fees-label-container">Valor Total a Pagar<span id="summary-fees-suffix"> (com taxas)</span>: <span id="summary-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
-                <p class="text-gray-600 mb-4">Forma de Pagamento: <span id="summary-payment-method" class="font-bold text-gold"></span></p>
-                <p class="text-gray-600 mb-4" id="summary-installment-details">Parcelamento: <span id="summary-installments" class="font-bold text-gold"></span></p>
+                <div class="bg-gray-50 p-4 rounded-lg space-y-2">
+                    <p class="text-gray-600"><strong>Plano:</strong> <span id="summary-plan-name" class="font-bold text-gray-800"></span></p>
+                    <p class="text-gray-600"><strong>Data do Evento:</strong> <span id="summary-event-date" class="font-bold text-gray-800"></span></p>
+                    <p class="text-gray-600"><strong>Endereço:</strong> <span id="summary-event-address" class="font-bold text-gray-800"></span></p>
+                    <p class="text-gray-600" id="summary-reference-location-display"><strong>Local de Referência:</strong> <span id="summary-reference-location" class="font-bold text-gray-800"></span></p>
+                    <hr class="my-2">
+                    <p class="text-gray-600">Valor do Plano: <span id="summary-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="text-gray-600">Valor do Deslocamento: <span id="summary-deslocamento-price" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="text-gray-600">Valor Total (Plano + Deslocamento): <span id="summary-total-price" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="text-gray-600" id="summary-total-with-fees-label-container">Valor Total a Pagar<span id="summary-fees-suffix"> (com taxas)</span>: <span id="summary-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="text-gray-600">Forma de Pagamento: <span id="summary-payment-method" class="font-bold text-gold"></span></p>
+                    <p class="text-gray-600" id="summary-installment-details">Parcelamento: <span id="summary-installments" class="font-bold text-gold"></span></p>
+                    <p class="text-gray-600 hidden" id="summary-boleto-due-date-details">Vencimento do Boleto: <span id="summary-boleto-due-date" class="font-bold text-gold"></span></p>
+                </div>
                 
-                <div id="fees-explanation" class="bg-gray-100 p-4 rounded-lg text-sm text-gray-700 mt-6 hidden">
+                <div id="fees-explanation" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg text-sm mt-6 hidden">
                     <p class="font-semibold mb-2">Informações sobre Taxas:</p>
                     <p>As taxas aplicadas em pagamentos via Boleto e Cartão de Crédito são referentes aos custos de processamento das operadoras financeiras e bancos. A Harmonia do Altar não retém qualquer valor sobre estas taxas, que são integralmente destinadas à viabilização do parcelamento e segurança da transação. Para pagamentos via Pix ou Dinheiro, não há incidência de taxas adicionais.</p>
                 </div>
@@ -535,6 +591,16 @@
                     <button id="confirm-contract-btn" class="bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Confirmar Contratação</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Map Selection Modal -->
+    <div id="map-selection-modal" class="modal fixed inset-0 flex items-center justify-center">
+        <div class="modal-content w-full max-w-xl h-3/4 flex flex-col">
+            <span class="close-button" id="close-map-modal-button">&times;</span>
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Selecione a Localização no Mapa</h3>
+            <div id="map-canvas" class="flex-grow rounded-lg mb-4" style="height: 400px; width: 100%;"></div>
+            <button id="confirm-map-location-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 mt-4">Confirmar Localização</button>
         </div>
     </div>
 
@@ -558,135 +624,380 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoL-Za52C0cbwOen71nbKqDpLKgBufd0Y&libraries=geometry,places&callback=initMap"></script>
 
     <script>
-        let mapsInitialized = false; // Flag para verificar se a API do Google Maps foi carregada
-        let autocomplete; // Objeto Autocomplete do Google Places
-        let currentPlanDetails = null; // Para armazenar detalhes do plano sendo contratado
-        let currentFinalTotalPrice = 0; // Armazena o valor total final (plano + deslocamento, antes das taxas de pagamento)
-        let currentPlanOnlyPrice = 0; // Armazena o preço do plano (sem deslocamento)
-        let currentDeslocamentoCost = 0; // Armazena o custo do deslocamento
-
-        // Variáveis globais para a forma de pagamento e parcelas
+        // --- GLOBAL VARIABLES & CONSTANTS ---
+        let mapsInitialized = false;
+        let autocomplete;
+        let currentPlanDetails = null;
+        let currentFinalTotalPrice = 0;
+        let currentPlanOnlyPrice = 0;
+        let currentDeslocamentoCost = 0;
         let selectedPaymentMethod = 'pix';
         let selectedInstallments = 1;
+        let ceremonyDate = null;
+        let ceremonyTime = null;
+        let selectedBoletoDueDate = 5;
+        let debounceTimer;
+        const whatsappNumber = '5567996884226'; // Moved to global scope
 
-        // Define os preços dos instrumentos globalmente para fácil acesso na mensagem do WhatsApp
+        // Google Maps related variables
+        let selectedPlaceDetails = {
+            address: '',
+            lat: null,
+            lng: null,
+            googleMapsUrl: ''
+        };
+        let map = null;
+        let marker = null;
+        let geocoder = null;
+        let referenceLocation = ''; // New variable for reference location
+
+        // DOM Element variables declared globally
+        let modalDestinationAddressInput, modalDeslocamentoError, modalDeslocamentoResultsDiv, modalDistanceDisplay, modalCalculatedDeslocamentoDisplay;
+        let referenceLocationInput; // New DOM element variable
+
         const BASE_PLAN_PRICE = 1400;
-        const BOLETO_PER_INSTALLMENT_FEE = 18; // R$18 fixo POR PARCELA para boleto
-        const FIXED_DESLOCAMENTO_AMOUNT = 70; // Updated: Valor fixo do deslocamento para as cidades específicas
-        const PER_KM_DESLOCAMENTO_RATE = 1.80 * 2; // Updated: R$1,80 por Km para outras cidades (ida e volta)
+        const BOLETO_PER_INSTALLMENT_FEE = 18;
+        const FIXED_DESLOCAMENTO_AMOUNT = 70;
+        const PER_KM_DESLOCAMENTO_RATE = 1.80 * 2;
+        const originAddress = "Angélica, MS, Brazil";
 
         const INSTRUMENT_PRICES = {
-            'Violão': 200,
-            'Contrabaixo': 200,
-            'Guitarra': 200,
-            'Saxofone': 500,
-            'Violino': 500,
-            '3 Vozes + Teclado/Piano': BASE_PLAN_PRICE // Preço base explícito para clareza
+            'Violão': 200, 'Contrabaixo': 200, 'Guitarra': 200,
+            'Saxofone': 500, 'Violino': 500, '3 Vozes + Teclado/Piano': BASE_PLAN_PRICE
         };
-
-        // Taxas de juros totais para cartão de crédito, conforme a nova tabela fornecida (juros da maquininha + juros de liberação)
         const CREDIT_CARD_TOTAL_PERCENTAGES = {
-            1: 0.04980, // 4.980% (maquininha)
-            2: 0.04590 + 0.0531, // 4.590% (maquininha) + 5.31% (liberação)
-            3: 0.05970 + 0.0531, // 5.970% (maquininha) + 5.31% (liberação)
-            4: 0.07330 + 0.0531, // 7.330% (maquininha) + 5.31% (liberação)
-            5: 0.08660 + 0.0531, // 8.660% (maquininha) + 5.31% (liberação)
-            6: 0.09960 + 0.0531, // 9.960% (maquininha) + 5.31% (liberação)
-            7: 0.11240 + 0.0531, // 11.240% (maquininha) + 5.31% (liberação)
-            8: 0.12500 + 0.0531, // 12.500% (maquininha) + 5.31% (liberação)
-            9: 0.13730 + 0.0531, // 13.730% (maquininha) + 5.31% (liberação)
-            10: 0.14930 + 0.0531, // 14.930% (maquininha) + 5.31% (liberação)
-            11: 0.16120 + 0.0531, // 16.120% (maquininha) + 5.31% (liberação)
-            12: 0.17280 + 0.0531  // 17.280% (maquininha) + 5.31% (liberação)
+            1: 0.04980, 2: 0.04590 + 0.0531, 3: 0.05970 + 0.0531, 4: 0.07330 + 0.0531,
+            5: 0.08660 + 0.0531, 6: 0.09960 + 0.0531, 7: 0.11240 + 0.0531, 8: 0.12500 + 0.0531,
+            9: 0.13730 + 0.0531, 10: 0.14930 + 0.0531, 11: 0.16120 + 0.0531, 12: 0.17280 + 0.0531
         };
 
+        // --- GLOBAL FUNCTIONS ---
+        function formatCurrency(value) {
+            if (typeof value !== 'number' || isNaN(value)) return 'R$ 0,00';
+            return `R$ ${value.toFixed(2).replace('.', ',')}`;
+        }
 
+        /**
+         * Calculates the displacement cost based on destination.
+         * Can accept either a formatted address string or latitude/longitude coordinates.
+         * @param {string|number} destinationOrLat - The destination address string or latitude.
+         * @param {number|null} [destinationLng=null] - The longitude, if latitude is provided.
+         * @param {function} [callback] - Optional callback function to execute after calculation.
+         */
+        function calculateDeslocamentoInModal(destinationOrLat, destinationLng = null, callback) {
+            if (!mapsInitialized) {
+                console.error("Google Maps API ainda não carregada.");
+                if(modalDeslocamentoError) {
+                    modalDeslocamentoError.textContent = "Erro ao carregar o serviço de mapas. Tente novamente.";
+                    modalDeslocamentoError.classList.remove('hidden');
+                }
+                currentDeslocamentoCost = 0;
+                currentFinalTotalPrice = currentPlanOnlyPrice;
+                if (callback) callback();
+                return;
+            }
+
+            const service = new google.maps.DistanceMatrixService();
+            let destinationsArray;
+
+            if (destinationLng !== null) { // If lat/lng are provided
+                destinationsArray = [new google.maps.LatLng(destinationOrLat, destinationLng)];
+            } else { // If address string is provided
+                destinationsArray = [destinationOrLat];
+            }
+
+            service.getDistanceMatrix({
+                origins: [originAddress],
+                destinations: destinationsArray,
+                travelMode: google.maps.TravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.METRIC,
+            }, (response, status) => {
+                if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
+                    const element = response.rows[0].elements[0];
+                    const distanceInMeters = element.distance.value;
+                    const destinationFormattedAddress = response.destinationAddresses[0];
+                    const normalizedDestination = destinationFormattedAddress.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    
+                    let isFixedCity = (normalizedDestination.includes('angelica') && normalizedDestination.includes('ms')) || (normalizedDestination.includes('ivinhema') && normalizedDestination.includes('ms'));
+
+                    if (isFixedCity) {
+                        currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT;
+                        modalDistanceDisplay.textContent = `Taxa Fixa`;
+                    } else {
+                        const distanceInKm = distanceInMeters / 1000;
+                        currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT + (distanceInKm * PER_KM_DESLOCAMENTO_RATE);
+                        modalDistanceDisplay.textContent = `${distanceInKm.toFixed(2)} km`;
+                    }
+                    currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost;
+                    modalCalculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
+                    modalDeslocamentoResultsDiv.classList.remove('hidden');
+                    modalDeslocamentoError.classList.add('hidden');
+                } else {
+                    modalDeslocamentoError.textContent = "Não foi possível calcular o deslocamento para o endereço fornecido.";
+                    modalDeslocamentoError.classList.remove('hidden');
+                    modalDeslocamentoResultsDiv.classList.add('hidden');
+                    currentDeslocamentoCost = 0;
+                    currentFinalTotalPrice = currentPlanOnlyPrice;
+                }
+                if (callback) callback();
+            });
+        }
+
+        /**
+         * Initializes the Google Maps API and Places Autocomplete.
+         */
         function initMap() {
             mapsInitialized = true;
             console.log("Google Maps API carregada.");
-
-            // Inicializa o Autocomplete para o campo de endereço do modal
-            const modalDestinationAddressInput = document.getElementById('modal-destination-address');
-            if (modalDestinationAddressInput) {
-                new google.maps.places.Autocomplete(modalDestinationAddressInput, { types: ['address'], componentRestrictions: { country: 'br' } });
+            geocoder = new google.maps.Geocoder(); // Initialize geocoder for reverse geocoding
+            const input = document.getElementById('modal-destination-address');
+            if (input) {
+                autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], componentRestrictions: { country: 'br' } });
+                autocomplete.addListener('place_changed', () => {
+                    const place = autocomplete.getPlace();
+                    if (place.formatted_address && place.geometry && place.geometry.location) {
+                        selectedPlaceDetails.address = place.formatted_address;
+                        selectedPlaceDetails.lat = place.geometry.location.lat();
+                        selectedPlaceDetails.lng = place.geometry.location.lng();
+                        selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
+                        calculateDeslocamentoInModal(selectedPlaceDetails.lat, selectedPlaceDetails.lng); // Pass lat/lng for precise calculation
+                    } else {
+                        // If autocomplete doesn't provide full details, clear selectedPlaceDetails and use raw input
+                        selectedPlaceDetails.address = input.value;
+                        selectedPlaceDetails.lat = null;
+                        selectedPlaceDetails.lng = null;
+                        selectedPlaceDetails.googleMapsUrl = '';
+                        calculateDeslocamentoInModal(input.value); // Fallback to address string
+                    }
+                });
             }
         }
 
+        /**
+         * Opens the map selection modal and initializes/updates the map.
+         */
+        function openMapSelectionModal() {
+            const mapSelectionModal = document.getElementById('map-selection-modal');
+            mapSelectionModal.style.display = 'flex';
+
+            if (!map) {
+                // Initialize map only once when the modal is opened for the first time
+                const mapCanvas = document.getElementById('map-canvas');
+                map = new google.maps.Map(mapCanvas, {
+                    center: { lat: -14.235, lng: -51.925 }, // Center of Brazil
+                    zoom: 4,
+                    fullscreenControl: false, 
+                    mapTypeControl: false, 
+                    streetViewControl: false, 
+                    zoomControl: true, 
+                });
+
+                marker = new google.maps.Marker({
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP,
+                });
+
+                // Listen for map clicks to place the marker
+                map.addListener('click', (e) => {
+                    placeMarkerAndPanTo(e.latLng, map);
+                });
+
+                // Listen for marker drag end to update location
+                marker.addListener('dragend', () => {
+                    placeMarkerAndPanTo(marker.getPosition(), map);
+                });
+            }
+
+            // Attempt to set initial map center based on current address input or previous selection
+            const currentAddress = modalDestinationAddressInput.value.trim();
+            if (currentAddress && geocoder) {
+                geocoder.geocode({ 'address': currentAddress }, (results, status) => {
+                    if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
+                        map.setCenter(results[0].geometry.location);
+                        map.setZoom(15); // Zoom in on the specific address
+                        placeMarkerAndPanTo(results[0].geometry.location, map);
+                    } else {
+                        // Fallback to default center if geocoding fails or no address
+                        map.setCenter({ lat: -14.235, lng: -51.925 });
+                        map.setZoom(4);
+                        marker.setMap(null); // Hide marker if no specific address to center on
+                    }
+                });
+            } else if (selectedPlaceDetails.lat && selectedPlaceDetails.lng) {
+                // If a location was previously selected from map, center on it
+                map.setCenter({ lat: selectedPlaceDetails.lat, lng: selectedPlaceDetails.lng });
+                map.setZoom(15);
+                placeMarkerAndPanTo(new google.maps.LatLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng), map);
+            } else {
+                // Default center if no address or previous selection
+                map.setCenter({ lat: -14.235, lng: -51.925 });
+                map.setZoom(4);
+                marker.setMap(null); // Hide marker initially
+            }
+
+            // This ensures the map resizes correctly if the modal was hidden
+            google.maps.event.trigger(map, 'resize');
+        }
+
+        /**
+         * Places a marker on the map and pans to its location, then reverse geocodes the address.
+         * @param {google.maps.LatLng} latLng - The latitude and longitude to place the marker.
+         * @param {google.maps.Map} mapInstance - The map instance.
+         */
+        function placeMarkerAndPanTo(latLng, mapInstance) {
+            marker.setPosition(latLng);
+            marker.setMap(mapInstance); // Ensure marker is visible
+            mapInstance.panTo(latLng);
+
+            // Reverse geocode to get the human-readable address
+            geocoder.geocode({ 'location': latLng }, (results, status) => {
+                if (status === 'OK' && results[0]) {
+                    selectedPlaceDetails.address = results[0].formatted_address;
+                    selectedPlaceDetails.lat = latLng.lat();
+                    selectedPlaceDetails.lng = latLng.lng();
+                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
+                } else {
+                    selectedPlaceDetails.address = `Coordenadas: ${latLng.lat().toFixed(4)}, ${latLng.lng().toFixed(4)}`;
+                    selectedPlaceDetails.lat = latLng.lat();
+                    selectedPlaceDetails.lng = latLng.lng();
+                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
+                    console.warn('No address found for selected coordinates, using lat/lng.');
+                }
+            });
+        }
+
+        /**
+         * Confirms the location selected on the map and updates the main modal's address input.
+         */
+        function confirmMapLocation() {
+            if (selectedPlaceDetails.lat !== null && selectedPlaceDetails.lng !== null) {
+                modalDestinationAddressInput.value = selectedPlaceDetails.address;
+                // Trigger the distance calculation based on the precise lat/lng from map
+                calculateDeslocamentoInModal(selectedPlaceDetails.lat, selectedPlaceDetails.lng);
+            }
+            document.getElementById('map-selection-modal').style.display = 'none';
+        }
+
+        /**
+         * Sends the formatted WhatsApp message with plan details and location.
+         * @param {object} plan - Details of the selected plan.
+         * @param {string} paymentMethod - Selected payment method.
+         * @param {number} installments - Number of installments.
+         * @param {number} totalAmountWithFees - Total amount including fees.
+         * @param {number} installmentValue - Value per installment.
+         */
+        function sendWhatsAppMessage(plan, paymentMethod, installments, totalAmountWithFees, installmentValue) {
+            // Prefer the address and URL from map selection if available, otherwise fallback to input field
+            const destinationAddress = selectedPlaceDetails.address || modalDestinationAddressInput.value;
+            const googleMapsLink = selectedPlaceDetails.googleMapsUrl;
+            const distanceText = modalDistanceDisplay.textContent;
+            const referenceLocationText = referenceLocationInput.value.trim(); // Get reference location text
+            
+            let message = `*Solicitação de Orçamento - ${plan.type}*\n\n`;
+            message += `Olá! Tenho interesse no plano *${plan.name}*.\n\n`;
+            message += `*Detalhes do Evento:*\n`;
+            const [year, month, day] = ceremonyDate.split('-');
+            message += `• *Data:* ${day}/${month}/${year}\n`;
+            message += `• *Horário:* ${ceremonyTime}\n`;
+            message += `• *Endereço:* ${destinationAddress}\n`;
+            if (referenceLocationText) { // Add reference location if available
+                message += `• *Local de Referência:* ${referenceLocationText}\n`;
+            }
+            if (googleMapsLink) {
+                message += `• *Localização no Mapa:* ${googleMapsLink}\n\n`; // Add the map link
+            } else {
+                message += `\n`; // Add a newline even if no map link
+            }
+            
+            message += '*Detalhes do Plano:*\n';
+            plan.instruments.forEach(instName => {
+                const price = INSTRUMENT_PRICES[instName];
+                message += `• ${instName}: ${formatCurrency(price)}\n`;
+            });
+
+            message += `\n*Resumo do Orçamento:*\n`;
+            message += `• *Valor do Contrato (Plano):* ${formatCurrency(plan.price)}\n`;
+            if (currentDeslocamentoCost > 0) {
+                message += `• *Valor do Deslocamento:* ${formatCurrency(currentDeslocamentoCost)} (Distância: ${distanceText})\n`;
+            }
+            if (paymentMethod === 'pix' || paymentMethod === 'dinheiro') {
+                message += `• *Valor Total a Pagar:* ${formatCurrency(totalAmountWithFees)}\n`;
+            } else {
+                message += `• *Valor Total a Pagar (com taxas):* ${formatCurrency(totalAmountWithFees)}\n`;
+            }
+            
+            message += `• *Forma de Pagamento:* ${paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}\n`;
+            message += `• *Parcelamento:* ${installments}x de ${formatCurrency(installmentValue)}\n`;
+            if (paymentMethod === 'boleto') {
+                message += `• *Vencimento do Boleto:* Todo dia ${selectedBoletoDueDate}\n`;
+            }
+            if (paymentMethod === 'dinheiro') {
+                message += `*(Pagamento a ser verificado com o contratado)*\n`;
+            }
+
+            message += '\nGostaria de verificar a disponibilidade e mais detalhes. Obrigado!';
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
+        }
+
+        // --- SCRIPT EXECUTION ---
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                const whatsappNumber = '5567996884226';
+                // Assign global DOM elements
+                modalDestinationAddressInput = document.getElementById('modal-destination-address');
+                modalDeslocamentoError = document.getElementById('modal-deslocamento-error');
+                modalDeslocamentoResultsDiv = document.getElementById('modal-deslocamento-results');
+                modalDistanceDisplay = document.getElementById('modal-distance-display');
+                modalCalculatedDeslocamentoDisplay = document.getElementById('modal-calculated-deslocamento-display');
+                referenceLocationInput = document.getElementById('reference-location'); // Assign new DOM element
+                
+                // const whatsappNumber = '5567996884226'; // Moved to global scope
 
-                // --- GARANTE QUE OS MODAIS ESTÃO OCULTOS AO CARREGAR A PÁGINA ---
+                // --- MODAL AND ANIMATION SETUP ---
                 document.getElementById('main-contract-modal').style.display = 'none';
-                document.getElementById('boleto-notification-modal').style.display = 'none'; // Ensure boleto modal is hidden
+                document.getElementById('boleto-notification-modal').style.display = 'none';
+                document.getElementById('map-selection-modal').style.display = 'none'; // Hide map modal initially
 
-                // --- OBSERVER DE ANIMAÇÃO ---
                 const animatedItems = document.querySelectorAll('.animated-item');
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                        }
+                        if (entry.isIntersecting) entry.target.classList.add('visible');
                     });
                 }, { threshold: 0.1 });
                 animatedItems.forEach(item => observer.observe(item));
 
-                // --- BARRA DE NAVEGAÇÃO E MENU MÓVEL ---
+                // --- NAVBAR & MOBILE MENU ---
                 const navbar = document.getElementById('navbar');
                 const mobileMenuButton = document.getElementById('mobile-menu-button');
                 const mobileMenu = document.getElementById('mobile-menu');
-
                 if (navbar && mobileMenuButton && mobileMenu) {
-                    window.onscroll = () => {
-                        if (window.scrollY > 50) {
-                            navbar.classList.add('bg-gray-900', 'shadow-lg');
-                        } else {
-                            navbar.classList.remove('bg-gray-900', 'shadow-lg');
-                        }
-                    };
-                    mobileMenuButton.addEventListener('click', () => {
-                        mobileMenu.classList.toggle('hidden');
+                    window.onscroll = () => navbar.classList.toggle('bg-gray-900', window.scrollY > 50);
+                    mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+                    document.querySelectorAll('.nav-link-mobile').forEach(link => {
+                        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
                     });
                 }
                 
-                document.querySelectorAll('.nav-link-mobile').forEach(link => {
-                    link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-                });
-
-                // --- CONSTRUTOR DE PLANO PERSONALIZADO ---
+                // --- CUSTOM PLAN BUILDER ---
                 const bandInstruments = [
-                    { name: 'Violão', price: 200 },
-                    { name: 'Contrabaixo', price: 200 },
-                    { name: 'Guitarra', price: 200 },
+                    { name: 'Violão', price: 200 }, { name: 'Contrabaixo', price: 200 }, { name: 'Guitarra', price: 200 },
                 ];
                 const guestInstruments = [
-                    { name: 'Saxofone', price: 500 },
-                    { name: 'Violino', price: 500 }
+                    { name: 'Saxofone', price: 500 }, { name: 'Violino', price: 500 }
                 ];
-
                 const bandOptionsContainer = document.getElementById('band-instrument-options');
                 const guestOptionsContainer = document.getElementById('guest-instrument-options');
                 const contractBtnCustom = document.getElementById('contract-btn-custom');
-                
-                let basePlanPrice = BASE_PLAN_PRICE;
                 const selectedInstruments = new Set();
 
-                function formatCurrency(value) {
-                    if (typeof value !== 'number' || isNaN(value)) {
-                        return 'R$ 0,00';
-                    }
-                    return `R$ ${value.toFixed(2).replace('.', ',')}`;
-                }
-
                 function calculateCustomPlanPrice() {
-                    let calculatedPlanPrice = BASE_PLAN_PRICE;
+                    let price = BASE_PLAN_PRICE;
                     selectedInstruments.forEach(name => {
                         const instrument = [...bandInstruments, ...guestInstruments].find(i => i.name === name);
-                        if (instrument) {
-                            calculatedPlanPrice += instrument.price;
-                        }
+                        if (instrument) price += instrument.price;
                     });
-                    return calculatedPlanPrice;
+                    return price;
                 }
 
                 function createCheckbox(instrument, container) {
@@ -694,7 +1005,6 @@
                     label.className = 'flex items-center space-x-3 cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition';
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
-                    checkbox.dataset.price = instrument.price;
                     checkbox.dataset.name = instrument.name;
                     checkbox.className = 'form-checkbox h-5 w-5 rounded custom-checkbox focus:ring-gold';
                     const span = document.createElement('span');
@@ -703,14 +1013,8 @@
                     label.appendChild(checkbox);
                     label.appendChild(span);
                     container.appendChild(label);
-
                     checkbox.addEventListener('change', (e) => {
-                        const name = e.target.dataset.name;
-                        if (e.target.checked) {
-                            selectedInstruments.add(name);
-                        } else {
-                            selectedInstruments.delete(name);
-                        }
+                        e.target.checked ? selectedInstruments.add(e.target.dataset.name) : selectedInstruments.delete(e.target.dataset.name);
                     });
                 }
 
@@ -719,217 +1023,191 @@
                     guestInstruments.forEach(inst => createCheckbox(inst, guestOptionsContainer));
                 }
 
-                // --- LÓGICA DO MODAL PRINCIPAL COM ABAS ---
+                // --- MAIN MODAL LOGIC ---
                 const mainContractModal = document.getElementById('main-contract-modal');
                 const closeMainModalButton = document.getElementById('close-main-modal-button');
                 const tabButtons = document.querySelectorAll('.tab-button');
                 const tabContents = document.querySelectorAll('.tab-content');
+                let unlockedTabs = ['deslocamento-tab'];
 
-                const modalDestinationAddressInput = document.getElementById('modal-destination-address');
-                const modalDeslocamentoError = document.getElementById('modal-deslocamento-error');
-                const modalDeslocamentoResultsDiv = document.getElementById('modal-deslocamento-results');
-                const modalDistanceDisplay = document.getElementById('modal-distance-display');
-                const modalCalculatedDeslocamentoDisplay = document.getElementById('modal-calculated-deslocamento-display');
-                const nextToPaymentMethodBtn = document.getElementById('next-to-payment-method-btn');
-                const nextToSummaryBtn = document.getElementById('next-to-summary-btn');
-                const confirmContractBtn = document.getElementById('confirm-contract-btn');
-
+                // --- Element Getters ---
+                const ceremonyDateInput = document.getElementById('ceremony-date');
+                const ceremonyTimeInput = document.getElementById('ceremony-time');
+                const confirmedAddressDisplay = document.getElementById('confirmed-address-display');
+                const modalEventDetailsError = document.getElementById('modal-event-details-error');
                 const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
                 const installmentOptionsDiv = document.getElementById('installment-options');
                 const installmentsSelect = document.getElementById('installments');
                 const installmentValueEl = document.getElementById('installment-value');
+                const boletoDueDateOptionsDiv = document.getElementById('boleto-due-date-options');
+                const boletoDueDateSelect = document.getElementById('boleto-due-date');
+                const modalBoletoDateError = document.getElementById('modal-boleto-date-error');
                 const feesSuffixSpan = document.getElementById('fees-suffix');
-
                 const modalPlanPriceEl = document.getElementById('modal-plan-price');
                 const modalFreightPriceEl = document.getElementById('modal-freight-price');
                 const modalTotalPriceEl = document.getElementById('modal-total-price');
                 const modalTotalPriceWithFeesEl = document.getElementById('modal-total-price-with-fees');
-
+                const summaryPlanNameEl = document.getElementById('summary-plan-name');
+                const summaryEventDateEl = document.getElementById('summary-event-date');
+                const summaryEventAddressEl = document.getElementById('summary-event-address');
+                const summaryReferenceLocationDisplay = document.getElementById('summary-reference-location-display'); // New summary element
+                const summaryReferenceLocationEl = document.getElementById('summary-reference-location'); // New summary element
                 const summaryPlanPriceEl = document.getElementById('summary-plan-price');
                 const summaryDeslocamentoPriceEl = document.getElementById('summary-deslocamento-price');
                 const summaryTotalPriceEl = document.getElementById('summary-total-price');
-                const summaryTotalWithFeesLabelContainer = document.getElementById('summary-total-with-fees-label-container');
-                const summaryFeesSuffixSpan = document.getElementById('summary-fees-suffix');
                 const summaryTotalWithFeesEl = document.getElementById('summary-total-price-with-fees');
                 const summaryPaymentMethodEl = document.getElementById('summary-payment-method');
                 const summaryInstallmentDetailsDiv = document.getElementById('summary-installment-details');
                 const summaryInstallmentsEl = document.getElementById('summary-installments');
+                const summaryBoletoDueDateDetailsDiv = document.getElementById('summary-boleto-due-date-details');
+                const summaryBoletoDueDateEl = document.getElementById('summary-boleto-due-date');
                 const feesExplanationDiv = document.getElementById('fees-explanation');
+                const summaryFeesSuffixSpan = document.getElementById('summary-fees-suffix');
 
-                let unlockedTabs = ['deslocamento-tab'];
-
-
+                // --- TAB NAVIGATION ---
                 function showTab(tabId) {
-                    tabContents.forEach(content => {
-                        content.classList.remove('active');
-                        content.style.display = 'none';
-                    });
-                    tabButtons.forEach(button => {
-                        button.classList.remove('active');
-                    });
-
-                    document.getElementById(tabId).classList.add('active');
+                    tabContents.forEach(content => content.style.display = 'none');
+                    tabButtons.forEach(button => button.classList.remove('active'));
                     document.getElementById(tabId).style.display = 'block';
                     document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
-
-                    if (tabId === 'payment-method-tab') {
-                        document.querySelector('input[name="payment-method"][value="pix"]').checked = true;
-                        selectedPaymentMethod = 'pix';
-                        selectedInstallments = 1;
-                        updateInstallmentOptions();
+                    
+                    if (tabId === 'event-details-tab') {
+                        confirmedAddressDisplay.textContent = modalDestinationAddressInput.value || 'Endereço não informado.';
+                    } else if (tabId === 'payment-method-tab') {
                         updatePaymentDetailsDisplay();
                     } else if (tabId === 'summary-tab') {
                         updateSummaryDisplay();
                     }
                 }
 
+                function navigateToTab(targetTab) {
+                    if (!unlockedTabs.includes(targetTab)) {
+                        unlockedTabs.push(targetTab);
+                    }
+                    showTab(targetTab);
+                }
+
                 tabButtons.forEach(button => {
                     button.addEventListener('click', (e) => {
                         const targetTab = e.target.dataset.tab;
-                        const currentActiveTab = document.querySelector('.tab-button.active').dataset.tab;
-
                         if (unlockedTabs.includes(targetTab)) {
                             showTab(targetTab);
-                        } else {
-                            if (currentActiveTab === 'deslocamento-tab') {
-                                const address = modalDestinationAddressInput.value.trim();
-                                if (!address || modalDeslocamentoResultsDiv.classList.contains('hidden')) {
-                                    modalDeslocamentoError.textContent = "Por favor, preencha o endereço e calcule o deslocamento para prosseguir.";
-                                    modalDeslocamentoError.classList.remove('hidden');
-                                    return;
-                                }
-                            } else if (currentActiveTab === 'payment-method-tab') {
-                                // Payment method tab doesn't have a direct "invalid" state,
-                                // as radio buttons are always selected.
-                            }
-                            if (!unlockedTabs.includes(targetTab)) {
-                                unlockedTabs.push(targetTab);
-                            }
-                            showTab(targetTab);
                         }
                     });
                 });
-
-                if (nextToPaymentMethodBtn) {
-                    nextToPaymentMethodBtn.addEventListener('click', () => {
-                        const address = modalDestinationAddressInput.value.trim();
-                        if (!address) {
-                            modalDeslocamentoError.textContent = "Por favor, digite o endereço de destino.";
-                            modalDeslocamentoError.classList.remove('hidden');
-                            return;
-                        }
-                        calculateDeslocamentoInModal(address, () => {
-                            if (!modalDeslocamentoResultsDiv.classList.contains('hidden')) {
-                                if (!unlockedTabs.includes('payment-method-tab')) {
-                                    unlockedTabs.push('payment-method-tab');
-                                }
-                                showTab('payment-method-tab');
-                            } else {
-                                modalDeslocamentoError.textContent = "Não foi possível calcular o deslocamento. Verifique o endereço.";
-                                modalDeslocamentoError.classList.remove('hidden');
-                            }
-                        });
-                    });
-                }
-
-                if (nextToSummaryBtn) {
-                    nextToSummaryBtn.addEventListener('click', () => {
-                        if (!unlockedTabs.includes('summary-tab')) {
-                            unlockedTabs.push('summary-tab');
-                        }
-                        showTab('summary-tab');
-                    });
-                }
-
+                
                 document.querySelectorAll('[data-navigate-tab]').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        showTab(e.target.dataset.navigateTab);
-                    });
+                    button.addEventListener('click', (e) => showTab(e.target.dataset.navigateTab));
                 });
 
-                function showMainContractModal(planPrice, deslocamentoPrice, totalPrice, planDetails) {
+                document.getElementById('next-to-event-details-btn').addEventListener('click', () => {
+                    const address = modalDestinationAddressInput.value.trim();
+                    if (!address || modalDeslocamentoResultsDiv.classList.contains('hidden')) {
+                        modalDeslocamentoError.textContent = "Por favor, digite um endereço válido e aguarde o cálculo, ou selecione no mapa.";
+                        modalDeslocamentoError.classList.remove('hidden');
+                        return;
+                    }
+                    navigateToTab('event-details-tab');
+                });
+
+                document.getElementById('next-to-payment-method-btn').addEventListener('click', () => {
+                    ceremonyDate = ceremonyDateInput.value;
+                    ceremonyTime = ceremonyTimeInput.value;
+                    referenceLocation = referenceLocationInput.value.trim(); // Capture reference location
+                    if (!ceremonyDate || !ceremonyTime) {
+                        modalEventDetailsError.textContent = "Por favor, preencha a data e o horário da cerimônia.";
+                        modalEventDetailsError.classList.remove('hidden');
+                        return;
+                    }
+                    modalEventDetailsError.classList.add('hidden');
+                    navigateToTab('payment-method-tab');
+                });
+
+                document.getElementById('next-to-summary-btn').addEventListener('click', () => {
+                    if (validateBoletoDueDate()) {
+                        navigateToTab('summary-tab');
+                    }
+                });
+
+                // --- MODAL OPEN/CLOSE ---
+                function showMainContractModal(planPrice, planDetails) {
                     mainContractModal.style.display = 'flex';
                     currentPlanDetails = planDetails;
                     currentPlanOnlyPrice = planPrice;
-                    // Reset displacement cost to 0 initially when modal opens for a new plan
-                    currentDeslocamentoCost = 0; 
-                    currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Initial total before user enters address
-
+                    currentDeslocamentoCost = 0;
+                    currentFinalTotalPrice = currentPlanOnlyPrice;
+                    
+                    // Reset fields
+                    modalDestinationAddressInput.value = '';
+                    ceremonyDateInput.value = '';
+                    ceremonyTimeInput.value = '';
+                    referenceLocationInput.value = ''; // Reset reference location input
+                    selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' }; // Reset map selection
+                    const today = new Date().toISOString().split('T')[0];
+                    ceremonyDateInput.setAttribute('min', today);
+                    modalDeslocamentoResultsDiv.classList.add('hidden');
                     modalDeslocamentoError.classList.add('hidden');
-                    // Ensure modalDeslocamentoResultsDiv is hidden on new modal open
-                    modalDeslocamentoResultsDiv.classList.add('hidden'); 
-                    modalDestinationAddressInput.value = ''; // Clear address input on new modal open
-
-                    unlockedTabs = ['deslocamento-tab']; 
-
+                    
+                    // Reset tabs
+                    unlockedTabs = ['deslocamento-tab'];
                     showTab('deslocamento-tab');
                 }
 
                 if (closeMainModalButton) {
-                    closeMainModalButton.addEventListener('click', () => {
-                        mainContractModal.style.display = 'none';
-                    });
+                    closeMainModalButton.addEventListener('click', () => mainContractModal.style.display = 'none');
                 }
-
                 window.addEventListener('click', (event) => {
-                    if (event.target == mainContractModal) {
-                        mainContractModal.style.display = 'none';
+                    if (event.target == mainContractModal) mainContractModal.style.display = 'none';
+                });
+
+                // --- MAP SELECTION MODAL LISTENERS ---
+                document.getElementById('open-map-selection-btn').addEventListener('click', openMapSelectionModal);
+                document.getElementById('close-map-modal-button').addEventListener('click', () => document.getElementById('map-selection-modal').style.display = 'none');
+                document.getElementById('confirm-map-location-btn').addEventListener('click', confirmMapLocation);
+                window.addEventListener('click', (event) => {
+                    if (event.target == document.getElementById('map-selection-modal')) {
+                        document.getElementById('map-selection-modal').style.display = 'none';
                     }
                 });
 
-                // Boleto Notification Modal Logic
+                // --- BOLETO NOTIFICATION MODAL ---
                 const boletoNotificationModal = document.getElementById('boleto-notification-modal');
                 const closeBoletoModalButton = document.getElementById('close-boleto-modal-button');
                 const okBoletoModalButton = document.getElementById('ok-boleto-modal-button');
-
-                if (closeBoletoModalButton) {
-                    closeBoletoModalButton.addEventListener('click', () => {
-                        boletoNotificationModal.style.display = 'none';
-                    });
-                }
-                if (okBoletoModalButton) {
-                    okBoletoModalButton.addEventListener('click', () => {
-                        boletoNotificationModal.style.display = 'none';
-                    });
-                }
+                if (closeBoletoModalButton) closeBoletoModalButton.addEventListener('click', () => boletoNotificationModal.style.display = 'none');
+                if (okBoletoModalButton) okBoletoModalButton.addEventListener('click', () => boletoNotificationModal.style.display = 'none');
                 window.addEventListener('click', (event) => {
-                    if (event.target == boletoNotificationModal) {
-                        boletoNotificationModal.style.display = 'none';
-                    }
+                    if (event.target == boletoNotificationModal) boletoNotificationModal.style.display = 'none';
                 });
 
-
+                // --- PAYMENT LOGIC ---
                 paymentMethodRadios.forEach(radio => {
                     radio.addEventListener('change', () => {
                         selectedPaymentMethod = radio.value;
                         selectedInstallments = 1;
                         updateInstallmentOptions();
                         updatePaymentDetailsDisplay();
-
                         if (selectedPaymentMethod === 'boleto') {
-                            boletoNotificationModal.style.display = 'flex'; // Show boleto notification
-                        } else {
-                            boletoNotificationModal.style.display = 'none'; // Hide if other payment method selected
+                            boletoNotificationModal.style.display = 'flex';
                         }
                     });
                 });
 
-                if (installmentsSelect) {
-                    installmentsSelect.addEventListener('change', (e) => {
-                        selectedInstallments = parseInt(e.target.value);
-                        updatePaymentDetailsDisplay();
-                    });
-                }
+                installmentsSelect.addEventListener('change', (e) => {
+                    selectedInstallments = parseInt(e.target.value);
+                    updatePaymentDetailsDisplay();
+                });
+                
+                boletoDueDateSelect.addEventListener('change', (e) => {
+                    selectedBoletoDueDate = parseInt(e.target.value);
+                    updatePaymentDetailsDisplay();
+                });
 
                 function updateInstallmentOptions() {
                     installmentsSelect.innerHTML = '';
                     let maxInstallments = 1;
-
-                    if (selectedPaymentMethod === 'boleto') {
-                        maxInstallments = 5;
-                    } else if (selectedPaymentMethod === 'cartao') {
-                        maxInstallments = 12;
-                    }
+                    if (selectedPaymentMethod === 'boleto') maxInstallments = 5;
+                    else if (selectedPaymentMethod === 'cartao') maxInstallments = 12;
 
                     for (let i = 1; i <= maxInstallments; i++) {
                         const option = document.createElement('option');
@@ -937,312 +1215,183 @@
                         option.textContent = `${i}x`;
                         installmentsSelect.appendChild(option);
                     }
-                    selectedInstallments = Math.min(selectedInstallments, maxInstallments);
                     installmentsSelect.value = selectedInstallments;
-                    console.log('updateInstallmentOptions: selectedInstallments set to', selectedInstallments);
                 }
-
 
                 function updatePaymentDetailsDisplay() {
                     let calculatedTotalForPayment = currentFinalTotalPrice;
                     let finalInstallmentValue = 0;
 
-                    console.log('updatePaymentDetailsDisplay called. selectedPaymentMethod:', selectedPaymentMethod);
-                    console.log('Initial currentFinalTotalPrice (Plano + Deslocamento):', currentFinalTotalPrice);
+                    boletoDueDateOptionsDiv.style.display = (selectedPaymentMethod === 'boleto') ? 'block' : 'none';
+                    installmentOptionsDiv.style.display = (selectedPaymentMethod === 'boleto' || selectedPaymentMethod === 'cartao') ? 'block' : 'none';
+                    feesSuffixSpan.style.display = 'none';
 
                     if (selectedPaymentMethod === 'boleto') {
                         calculatedTotalForPayment += (BOLETO_PER_INSTALLMENT_FEE * selectedInstallments);
                         feesSuffixSpan.style.display = 'inline';
-                        console.log('Setting display for feesSuffixSpan (Boleto):', feesSuffixSpan.style.display);
                     } else if (selectedPaymentMethod === 'cartao') {
                         const percentageFee = CREDIT_CARD_TOTAL_PERCENTAGES[selectedInstallments];
-                        if (percentageFee !== undefined) {
-                            // Apply the formula: total / (1 - percentage)
+                        if (percentageFee) {
                             calculatedTotalForPayment = currentFinalTotalPrice / (1 - percentageFee);
-                        } else {
-                            console.warn("Percentage fee not found for selected installments:", selectedInstallments);
                         }
                         feesSuffixSpan.style.display = 'inline';
-                        console.log('Setting display for feesSuffixSpan (Cartao):', feesSuffixSpan.style.display);
-                    } else {
-                        calculatedTotalForPayment = currentFinalTotalPrice;
-                        feesSuffixSpan.style.display = 'none';
-                        console.log('Setting display for feesSuffixSpan (Pix/Dinheiro):', feesSuffixSpan.style.display);
                     }
-
+                    
                     finalInstallmentValue = calculatedTotalForPayment / selectedInstallments;
-
+                    
                     modalPlanPriceEl.textContent = formatCurrency(currentPlanOnlyPrice);
                     modalFreightPriceEl.textContent = formatCurrency(currentDeslocamentoCost);
                     modalTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice);
                     modalTotalPriceWithFeesEl.textContent = formatCurrency(calculatedTotalForPayment);
-                    console.log('Final value assigned to modalTotalPriceWithFeesEl (textContent):', formatCurrency(calculatedTotalForPayment));
                     installmentValueEl.textContent = formatCurrency(finalInstallmentValue);
 
-                    if (selectedPaymentMethod === 'boleto' || selectedPaymentMethod === 'cartao') {
-                        installmentOptionsDiv.style.display = 'block';
+                    validateBoletoDueDate();
+                }
+                
+                function validateBoletoDueDate() {
+                    if (selectedPaymentMethod !== 'boleto' || !ceremonyDate) {
+                        modalBoletoDateError.classList.add('hidden');
+                        document.getElementById('next-to-summary-btn').disabled = false;
+                        return true;
+                    }
+
+                    const today = new Date();
+                    const ceremony = new Date(ceremonyDate + 'T23:59:59');
+                    
+                    let firstPaymentDate = new Date(today.getFullYear(), today.getMonth(), selectedBoletoDueDate);
+                    if (firstPaymentDate <= today) {
+                        firstPaymentDate.setMonth(firstPaymentDate.getMonth() + 1);
+                    }
+
+                    let lastPaymentDate = new Date(firstPaymentDate);
+                    lastPaymentDate.setMonth(lastPaymentDate.getMonth() + selectedInstallments - 1);
+
+                    if (lastPaymentDate > ceremony) {
+                        modalBoletoDateError.classList.remove('hidden');
+                        document.getElementById('next-to-summary-btn').disabled = true;
+                        return false;
                     } else {
-                        installmentOptionsDiv.style.display = 'none';
+                        modalBoletoDateError.classList.add('hidden');
+                        document.getElementById('next-to-summary-btn').disabled = false;
+                        return true;
                     }
                 }
 
+                // --- SUMMARY LOGIC ---
                 function updateSummaryDisplay() {
                     let calculatedTotalForSummary = currentFinalTotalPrice;
                     let finalInstallmentValueForSummary = 0;
                     let paymentMethodText = '';
-                    let installmentText = '';
+
+                    summaryFeesSuffixSpan.style.display = 'none';
+                    feesExplanationDiv.classList.add('hidden');
+                    summaryBoletoDueDateDetailsDiv.classList.add('hidden');
 
                     if (selectedPaymentMethod === 'boleto') {
                         calculatedTotalForSummary += (BOLETO_PER_INSTALLMENT_FEE * selectedInstallments);
                         paymentMethodText = 'Boleto';
                         feesExplanationDiv.classList.remove('hidden');
+                        summaryFeesSuffixSpan.style.display = 'inline';
+                        summaryBoletoDueDateDetailsDiv.classList.remove('hidden');
+                        summaryBoletoDueDateEl.textContent = `Todo dia ${selectedBoletoDueDate}`;
                     } else if (selectedPaymentMethod === 'cartao') {
                         const percentageFee = CREDIT_CARD_TOTAL_PERCENTAGES[selectedInstallments];
-                        if (percentageFee !== undefined) {
-                            calculatedTotalForSummary = currentFinalTotalPrice / (1 - percentageFee);
-                        }
+                        if (percentageFee) calculatedTotalForSummary = currentFinalTotalPrice / (1 - percentageFee);
                         paymentMethodText = 'Cartão de Crédito';
                         feesExplanationDiv.classList.remove('hidden');
+                        summaryFeesSuffixSpan.style.display = 'inline';
                     } else if (selectedPaymentMethod === 'pix') {
                         paymentMethodText = 'Pix';
-                        feesExplanationDiv.classList.add('hidden');
                     } else if (selectedPaymentMethod === 'dinheiro') {
                         paymentMethodText = 'Dinheiro (a verificar com o contratado)';
-                        feesExplanationDiv.classList.add('hidden');
                     }
 
                     finalInstallmentValueForSummary = calculatedTotalForSummary / selectedInstallments;
+
+                    summaryPlanNameEl.textContent = currentPlanDetails.name;
+                    const [year, month, day] = ceremonyDate.split('-');
+                    summaryEventDateEl.textContent = `${day}/${month}/${year} às ${ceremonyTime}`;
+                    summaryEventAddressEl.textContent = selectedPlaceDetails.address || modalDestinationAddressInput.value; // Use selected address or input
+                    
+                    // Update and show/hide reference location in summary
+                    if (referenceLocationInput.value.trim()) {
+                        summaryReferenceLocationEl.textContent = referenceLocationInput.value.trim();
+                        summaryReferenceLocationDisplay.style.display = 'block';
+                    } else {
+                        summaryReferenceLocationEl.textContent = '';
+                        summaryReferenceLocationDisplay.style.display = 'none';
+                    }
 
                     summaryPlanPriceEl.textContent = formatCurrency(currentPlanOnlyPrice);
                     summaryDeslocamentoPriceEl.textContent = formatCurrency(currentDeslocamentoCost);
                     summaryTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice);
                     summaryTotalWithFeesEl.textContent = formatCurrency(calculatedTotalForSummary);
                     summaryPaymentMethodEl.textContent = paymentMethodText;
-
-                    if (selectedInstallments > 1) {
-                        installmentText = `${selectedInstallments}x de ${formatCurrency(finalInstallmentValueForSummary)}`;
-                        summaryInstallmentDetailsDiv.style.display = 'block';
-                    } else {
-                        installmentText = 'Pagamento único';
-                        summaryInstallmentDetailsDiv.style.display = 'none';
-                    }
-                    summaryInstallmentsEl.textContent = installmentText;
-
-                    if (selectedPaymentMethod === 'pix' || selectedPaymentMethod === 'dinheiro') {
-                        summaryFeesSuffixSpan.style.display = 'none';
-                    } else {
-                        summaryFeesSuffixSpan.style.display = 'inline';
-                    }
+                    summaryInstallmentsEl.textContent = `${selectedInstallments}x de ${formatCurrency(finalInstallmentValueForSummary)}`;
                 }
 
-
-                if (confirmContractBtn) {
-                    confirmContractBtn.addEventListener('click', () => {
-                        const totalAmountWithFees = parseFloat(summaryTotalWithFeesEl.textContent.replace('R$', '').replace(',', '.'));
-                        const installmentValuePerInstallment = parseFloat(summaryInstallmentsEl.textContent.split('de ')[1]?.replace('R$', '').replace(',', '.') || totalAmountWithFees);
-                        sendWhatsAppMessage(currentPlanDetails, selectedPaymentMethod, selectedInstallments, totalAmountWithFees, installmentValuePerInstallment);
-                        mainContractModal.style.display = 'none';
-                    });
-                }
-
-                function sendWhatsAppMessage(plan, paymentMethod, installments, totalAmountWithFees, installmentValuePerInstallment) {
-                    const destinationAddress = modalDestinationAddressInput.value;
-                    const distanceText = modalDistanceDisplay.textContent;
-                    let message = `*Solicitação de Orçamento - ${plan.type}*\n\n`;
-                    message += `Olá! Tenho interesse no plano *${plan.name}*.\n\n`;
-                    
-                    message += '*Detalhes do Plano:*\n';
-                    message += `• Formação Padrão (3 Vozes + Teclado/Piano): ${formatCurrency(INSTRUMENT_PRICES['3 Vozes + Teclado/Piano'])}\n`;
-
-                    const instrumentsForMessage = plan.instruments.filter(
-                        inst => inst !== '3 Vozes + Teclado/Piano' && INSTRUMENT_PRICES[inst] !== undefined
-                    );
-
-                    instrumentsForMessage.forEach(instName => {
-                        const price = INSTRUMENT_PRICES[instName];
-                        message += `• ${instName}: ${formatCurrency(price)}\n`;
-                    });
-
-                    message += `\n*Resumo do Orçamento:*\n`;
-                    message += `*Valor do Contrato (Plano):* ${formatCurrency(plan.price)}\n`;
-
-                    if (currentDeslocamentoCost > 0) {
-                        message += `*Valor do Deslocamento:* ${formatCurrency(currentDeslocamentoCost)} para ${destinationAddress} (Distância: ${distanceText})\n`;
-                    }
-                    
-                    if (paymentMethod === 'pix' || paymentMethod === 'dinheiro') {
-                        message += `*Valor Total a Pagar:* ${formatCurrency(totalAmountWithFees)}\n`;
-                    } else {
-                        message += `*Valor Total a Pagar (com taxas):* ${formatCurrency(totalAmountWithFees)}\n`;
-                    }
-                    
-                    message += `*Forma de Pagamento Selecionada:* ${paymentMethod.toUpperCase()}\n`;
-                    if (installments > 1) {
-                        message += `*Parcelamento:* ${installments}x de ${formatCurrency(installmentValuePerInstallment)}\n`;
-                    } else if (paymentMethod === 'dinheiro') {
-                        message += `*(Pagamento em dinheiro a ser verificado com o contratado)*\n`;
-                    }
-
-                    message += '\nGostaria de verificar a disponibilidade e mais detalhes. Obrigado!';
-
-                    const encodedMessage = encodeURIComponent(message);
-                    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
-                }
+                // --- WHATSAPP & HIRING ---
+                document.getElementById('confirm-contract-btn').addEventListener('click', () => {
+                    const totalAmountWithFees = parseFloat(summaryTotalWithFeesEl.textContent.replace('R$', '').replace(',', '.'));
+                    const installmentValuePerInstallment = parseFloat(summaryInstallmentsEl.textContent.split('de ')[1]?.replace('R$', '').replace(',', '.') || totalAmountWithFees);
+                    sendWhatsAppMessage(currentPlanDetails, selectedPaymentMethod, selectedInstallments, totalAmountWithFees, installmentValuePerInstallment);
+                    mainContractModal.style.display = 'none';
+                });
 
                 window.handleContratar = function(planName, instruments, price) {
-                    currentPlanDetails = {
-                        type: 'Plano Pronto',
-                        name: planName,
-                        instruments: instruments,
-                        price: price
+                    const planDetails = {
+                        type: 'Plano Pronto', name: planName, instruments: instruments, price: price
                     };
-
-                    showMainContractModal(currentPlanDetails.price, 0, currentPlanDetails.price, currentPlanDetails);
+                    showMainContractModal(price, planDetails);
                 };
 
                 if(contractBtnCustom){
                     contractBtnCustom.addEventListener('click', () => {
-                        currentPlanDetails = {
-                            type: 'Plano Personalizado',
-                            name: 'Plano Personalizado',
+                        const customPlanPrice = calculateCustomPlanPrice();
+                        const planDetails = {
+                            type: 'Plano Personalizado', name: 'Plano Personalizado',
                             instruments: ['3 Vozes + Teclado/Piano', ...Array.from(selectedInstruments)],
-                            price: calculateCustomPlanPrice()
+                            price: customPlanPrice
                         };
-
-                        showMainContractModal(currentPlanDetails.price, 0, currentPlanDetails.price, currentPlanDetails);
+                        showMainContractModal(customPlanPrice, planDetails);
                     });
                 }
 
-                const originAddress = "Angélica, MS, Brazil";
-
-                function calculateDeslocamentoInModal(destination, callback = () => {}) {
-                    if (!mapsInitialized) {
-                        console.error("Google Maps API ainda não carregada.");
-                        modalDeslocamentoError.textContent = "Erro ao carregar o serviço de mapas. Por favor, tente novamente em alguns segundos.";
-                        modalDeslocamentoError.classList.remove('hidden');
-                        modalDeslocamentoResultsDiv.classList.add('hidden');
-                        currentDeslocamentoCost = 0;
-                        currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Ensure total is updated even on error
-                        callback();
-                        return;
-                    }
-
-                    if (!destination) {
-                        modalDeslocamentoError.textContent = "Por favor, digite o endereço de destino.";
-                        modalDeslocamentoError.classList.remove('hidden');
-                        modalDeslocamentoResultsDiv.classList.add('hidden');
-                        currentDeslocamentoCost = 0;
-                        currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Ensure total is updated
-                        callback();
-                        return;
-                    }
-
-                    const service = new google.maps.DistanceMatrixService();
-                    service.getDistanceMatrix(
-                        {
-                            origins: [originAddress],
-                            destinations: [destination],
-                            travelMode: google.maps.TravelMode.DRIVING,
-                            unitSystem: google.maps.UnitSystem.METRIC,
-                        },
-                        (response, status) => {
-                            if (status === 'OK') {
-                                const element = response.rows[0].elements[0];
-                                if (element.status === 'OK') {
-                                    const distanceInMeters = element.distance.value;
-                                    const destinationFormattedAddress = response.destinationAddresses[0];
-                                    const lowerCaseDestination = destinationFormattedAddress.toLowerCase();
-
-                                    let isFixedCity = false;
-                                    // Normalize destination to remove accents for robust comparison
-                                    const normalizedDestination = lowerCaseDestination.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                                    
-                                    // Check for "angelica" AND "ms" or "ivinhema" AND "ms" (case and accent insensitive)
-                                    if ((normalizedDestination.includes('angelica') && normalizedDestination.includes('ms')) ||
-                                        (normalizedDestination.includes('ivinhema') && normalizedDestination.includes('ms'))) {
-                                        isFixedCity = true;
-                                    }
-
-                                    if (isFixedCity) {
-                                        currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT; // Fixed R$ 70 for Angélica and Ivinhema
-                                        modalDistanceDisplay.textContent = `Deslocamento Fixo: ${formatCurrency(currentDeslocamentoCost)}`;
-                                    } else {
-                                        const distanceInKm = distanceInMeters / 1000;
-                                        // For other localities, it's R$ 70 fixed + R$ 1.80 * 2 per km
-                                        currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT + (distanceInKm * PER_KM_DESLOCAMENTO_RATE); 
-                                        modalDistanceDisplay.textContent = `${distanceInKm.toFixed(2)} km`;
-                                    }
-
-                                    // Update the currentFinalTotalPrice after calculating displacement
-                                    currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost;
-
-                                    modalCalculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
-                                    
-                                    // Ensure modalDeslocamentoResultsDiv is shown after successful calculation
-                                    modalDeslocamentoResultsDiv.classList.remove('hidden');
-                                    modalDeslocamentoError.classList.add('hidden');
-                                } else {
-                                    modalDeslocamentoError.textContent = "Não foi possível calcular o deslocamento para o endereço fornecido. Por favor, tente novamente.";
-                                    modalDeslocamentoError.classList.remove('hidden');
-                                    modalDeslocamentoResultsDiv.classList.add('hidden');
-                                    currentDeslocamentoCost = 0;
-                                    currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Ensure total is updated
-                                }
-                            } else {
-                                modalDeslocamentoError.textContent = "Erro ao calcular o deslocamento. Verifique o endereço e sua conexão com a internet.";
-                                modalDeslocamentoError.classList.remove('hidden');
-                                modalDeslocamentoResultsDiv.classList.add('hidden');
-                                currentDeslocamentoCost = 0;
-                                currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost; // Ensure total is updated
-                            }
-                            callback();
-                        }
-                    );
-                }
-
-                document.addEventListener('keydown', function(event) {
-                    if (event.key === 'F12') {
-                        event.preventDefault();
-                        console.log('F12 bloqueado.');
-                    }
-                });
-
-                document.addEventListener('contextmenu', function(event) {
-                    event.preventDefault();
-                    console.log('Botão direito do mouse bloqueado.');
-                });
-
-                let devtoolsOpen = false;
-                const threshold = 160;
-
-                const checkDevTools = () => {
-                    if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
-                        if (!devtoolsOpen) {
-                            console.log('DevTools abertas! Tentando fechar ou redirecionar...');
-                            devtoolsOpen = true;
-                        }
-                    } else {
-                        devtoolsOpen = false;
-                    }
-                };
-
-                setInterval(checkDevTools, 1000);
-                checkDevTools();
-
-                // Call calculateDeslocamentoInModal on input change to update values dynamically
+                // --- DESLOCAMENTO CALCULATION ---
                 modalDestinationAddressInput.addEventListener('input', () => {
+                    clearTimeout(debounceTimer);
                     const address = modalDestinationAddressInput.value.trim();
-                    if (address) {
-                        calculateDeslocamentoInModal(address);
+                    if (address.length > 3) {
+                        debounceTimer = setTimeout(() => {
+                            // When typing, use the address string for calculation
+                            calculateDeslocamentoInModal(address);
+                            // Also try to geocode and store lat/lng for WhatsApp link, but don't force map selection
+                            if (geocoder) {
+                                geocoder.geocode({ 'address': address }, (results, status) => {
+                                    if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
+                                        selectedPlaceDetails.address = results[0].formatted_address;
+                                        selectedPlaceDetails.lat = results[0].geometry.location.lat();
+                                        selectedPlaceDetails.lng = results[0].geometry.location.lng();
+                                        selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
+                                    } else {
+                                        selectedPlaceDetails.lat = null;
+                                        selectedPlaceDetails.lng = null;
+                                        selectedPlaceDetails.googleMapsUrl = '';
+                                    }
+                                });
+                            }
+                        }, 500); // 500ms delay
                     } else {
-                        // If address is empty, reset displacement display
                         modalDeslocamentoResultsDiv.classList.add('hidden');
                         modalDeslocamentoError.classList.add('hidden');
                         currentDeslocamentoCost = 0;
-                        currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost;
-                        updatePaymentDetailsDisplay(); // Update payment tab prices
+                        currentFinalTotalPrice = currentPlanOnlyPrice;
+                        selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' }; // Clear map data
                     }
                 });
+                
+                // --- SECURITY (Optional but good practice) ---
+                document.addEventListener('contextmenu', event => event.preventDefault());
 
             } catch (error) {
                 console.error("Erro durante o carregamento do script:", error);
