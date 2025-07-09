@@ -857,10 +857,14 @@
                 map = new google.maps.Map(mapCanvas, {
                     center: { lat: -14.235, lng: -51.925 }, // Center of Brazil
                     zoom: 4,
-                    fullscreenControl: false, 
-                    mapTypeControl: false, 
-                    streetViewControl: false, 
-                    zoomControl: true, 
+                    fullscreenControl: false,  
+                    mapTypeControl: true, // Enable map type control
+                    mapTypeControlOptions: {
+                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU, // Or HORIZONTAL_BAR
+                        position: google.maps.ControlPosition.TOP_RIGHT, // Position the control
+                    },
+                    streetViewControl: false,  
+                    zoomControl: true,  
                 });
 
                 marker = new google.maps.Marker({
@@ -1260,7 +1264,7 @@
                     closeBoletoModalButton.addEventListener('click', () => {
                         boletoNotificationModal.style.display = 'none';
                         // After closing the first notification, check for date warning
-                        validateBoletoDueDate(); 
+                        validateBoletoDueDate();  
                     });
                 }
                 if (okBoletoModalButton) {
