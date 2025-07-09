@@ -554,6 +554,7 @@
                         <option value="20">Dia 20</option>
                         <option value="25">Dia 25</option>
                     </select>
+                    <!-- This inline error message will now be hidden and replaced by a modal -->
                     <p id="modal-boleto-date-error" class="text-red-500 mt-2 hidden text-sm">A data da última parcela não pode ser posterior à data da cerimônia. Por favor, ajuste as parcelas ou a data de vencimento.</p>
                 </div>
 
@@ -618,6 +619,21 @@
         </div>
     </div>
 
+    <!-- New: Boleto Date Validation Notification Modal -->
+    <div id="boleto-date-warning-modal" class="modal fixed inset-0 flex items-center justify-center">
+        <div class="modal-content w-full max-w-md">
+            <span class="close-button" id="close-boleto-date-warning-modal-button">&times;</span>
+            <h3 class="text-xl font-bold text-red-600 mb-4">Atenção: Data de Vencimento do Boleto</h3>
+            <p class="text-gray-700 leading-relaxed">
+                A data da última parcela do boleto que você selecionou (dia <span id="warning-due-date"></span>) excede a data da sua cerimônia (<span id="warning-ceremony-date"></span>).
+                Para prosseguir com o pagamento via boleto, por favor, ajuste o número de parcelas ou o dia de vencimento do boleto para que todas as parcelas sejam quitadas antes da data do evento.
+            </p>
+            <div class="flex justify-end mt-6">
+                <button id="ok-boleto-date-warning-modal-button" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300">Entendi</button>
+            </div>
+        </div>
+    </div>
+
     <script async src="//www.instagram.com/embed.js"></script>
     
     <!-- Google Maps API with Places library -->
@@ -649,11 +665,55 @@
         let map = null;
         let marker = null;
         let geocoder = null;
-        let referenceLocation = ''; // New variable for reference location
 
-        // DOM Element variables declared globally
-        let modalDestinationAddressInput, modalDeslocamentoError, modalDeslocamentoResultsDiv, modalDistanceDisplay, modalCalculatedDeslocamentoDisplay;
-        let referenceLocationInput; // New DOM element variable
+        // DOM Element variables declared globally (now correctly assigned in DOMContentLoaded)
+        let modalDestinationAddressInput;
+        let modalDeslocamentoError;
+        let modalDeslocamentoResultsDiv;
+        let modalDistanceDisplay;
+        let modalCalculatedDeslocamentoDisplay;
+        let referenceLocationInput;
+        let nextToSummaryBtn;
+        let boletoDateWarningModal;
+        let warningDueDateSpan;
+        let warningCeremonyDateSpan;
+
+        // Element Getters for main modal
+        let ceremonyDateInput;
+        let ceremonyTimeInput;
+        let confirmedAddressDisplay;
+        let modalEventDetailsError;
+        let paymentMethodRadios;
+        let installmentOptionsDiv;
+        let installmentsSelect;
+        let installmentValueEl;
+        let boletoDueDateOptionsDiv;
+        let boletoDueDateSelect;
+        let modalBoletoDateError;
+        let feesSuffixSpan;
+        let modalPlanPriceEl;
+        let modalFreightPriceEl;
+        let modalTotalPriceEl;
+        let modalTotalPriceWithFeesEl;
+
+        // Element Getters for summary tab
+        let summaryPlanNameEl;
+        let summaryEventDateEl;
+        let summaryEventAddressEl;
+        let summaryReferenceLocationDisplay;
+        let summaryReferenceLocationEl;
+        let summaryPlanPriceEl;
+        let summaryDeslocamentoPriceEl;
+        let summaryTotalPriceEl;
+        let summaryTotalWithFeesEl;
+        let summaryPaymentMethodEl;
+        let summaryInstallmentDetailsDiv;
+        let summaryInstallmentsEl;
+        let summaryBoletoDueDateDetailsDiv;
+        let summaryBoletoDueDateEl;
+        let feesExplanationDiv;
+        let summaryFeesSuffixSpan;
+
 
         const BASE_PLAN_PRICE = 1400;
         const BOLETO_PER_INSTALLMENT_FEE = 18;
@@ -950,14 +1010,54 @@
                 modalDeslocamentoResultsDiv = document.getElementById('modal-deslocamento-results');
                 modalDistanceDisplay = document.getElementById('modal-distance-display');
                 modalCalculatedDeslocamentoDisplay = document.getElementById('modal-calculated-deslocamento-display');
-                referenceLocationInput = document.getElementById('reference-location'); // Assign new DOM element
-                
-                // const whatsappNumber = '5567996884226'; // Moved to global scope
+                referenceLocationInput = document.getElementById('reference-location');
+                nextToSummaryBtn = document.getElementById('next-to-summary-btn');
+                boletoDateWarningModal = document.getElementById('boleto-date-warning-modal');
+                warningDueDateSpan = document.getElementById('warning-due-date');
+                warningCeremonyDateSpan = document.getElementById('warning-ceremony-date');
+
+                // Element Getters for main modal
+                ceremonyDateInput = document.getElementById('ceremony-date');
+                ceremonyTimeInput = document.getElementById('ceremony-time');
+                confirmedAddressDisplay = document.getElementById('confirmed-address-display');
+                modalEventDetailsError = document.getElementById('modal-event-details-error');
+                paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
+                installmentOptionsDiv = document.getElementById('installment-options');
+                installmentsSelect = document.getElementById('installments');
+                installmentValueEl = document.getElementById('installment-value');
+                boletoDueDateOptionsDiv = document.getElementById('boleto-due-date-options');
+                boletoDueDateSelect = document.getElementById('boleto-due-date');
+                modalBoletoDateError = document.getElementById('modal-boleto-date-error');
+                feesSuffixSpan = document.getElementById('fees-suffix');
+                modalPlanPriceEl = document.getElementById('modal-plan-price');
+                modalFreightPriceEl = document.getElementById('modal-freight-price');
+                modalTotalPriceEl = document.getElementById('modal-total-price');
+                modalTotalPriceWithFeesEl = document.getElementById('modal-total-price-with-fees');
+
+                // Element Getters for summary tab
+                summaryPlanNameEl = document.getElementById('summary-plan-name');
+                summaryEventDateEl = document.getElementById('summary-event-date');
+                summaryEventAddressEl = document.getElementById('summary-event-address');
+                summaryReferenceLocationDisplay = document.getElementById('summary-reference-location-display');
+                summaryReferenceLocationEl = document.getElementById('summary-reference-location');
+                summaryPlanPriceEl = document.getElementById('summary-plan-price');
+                summaryDeslocamentoPriceEl = document.getElementById('summary-deslocamento-price');
+                summaryTotalPriceEl = document.getElementById('summary-total-price');
+                summaryTotalWithFeesEl = document.getElementById('summary-total-price-with-fees');
+                summaryPaymentMethodEl = document.getElementById('summary-payment-method');
+                summaryInstallmentDetailsDiv = document.getElementById('summary-installment-details');
+                summaryInstallmentsEl = document.getElementById('summary-installments');
+                summaryBoletoDueDateDetailsDiv = document.getElementById('summary-boleto-due-date-details');
+                summaryBoletoDueDateEl = document.getElementById('summary-boleto-due-date');
+                feesExplanationDiv = document.getElementById('fees-explanation');
+                summaryFeesSuffixSpan = document.getElementById('summary-fees-suffix');
+
 
                 // --- MODAL AND ANIMATION SETUP ---
                 document.getElementById('main-contract-modal').style.display = 'none';
                 document.getElementById('boleto-notification-modal').style.display = 'none';
                 document.getElementById('map-selection-modal').style.display = 'none'; // Hide map modal initially
+                boletoDateWarningModal.style.display = 'none'; // Hide new warning modal initially
 
                 const animatedItems = document.querySelectorAll('.animated-item');
                 const observer = new IntersectionObserver((entries) => {
@@ -1030,40 +1130,6 @@
                 const tabContents = document.querySelectorAll('.tab-content');
                 let unlockedTabs = ['deslocamento-tab'];
 
-                // --- Element Getters ---
-                const ceremonyDateInput = document.getElementById('ceremony-date');
-                const ceremonyTimeInput = document.getElementById('ceremony-time');
-                const confirmedAddressDisplay = document.getElementById('confirmed-address-display');
-                const modalEventDetailsError = document.getElementById('modal-event-details-error');
-                const paymentMethodRadios = document.querySelectorAll('input[name="payment-method"]');
-                const installmentOptionsDiv = document.getElementById('installment-options');
-                const installmentsSelect = document.getElementById('installments');
-                const installmentValueEl = document.getElementById('installment-value');
-                const boletoDueDateOptionsDiv = document.getElementById('boleto-due-date-options');
-                const boletoDueDateSelect = document.getElementById('boleto-due-date');
-                const modalBoletoDateError = document.getElementById('modal-boleto-date-error');
-                const feesSuffixSpan = document.getElementById('fees-suffix');
-                const modalPlanPriceEl = document.getElementById('modal-plan-price');
-                const modalFreightPriceEl = document.getElementById('modal-freight-price');
-                const modalTotalPriceEl = document.getElementById('modal-total-price');
-                const modalTotalPriceWithFeesEl = document.getElementById('modal-total-price-with-fees');
-                const summaryPlanNameEl = document.getElementById('summary-plan-name');
-                const summaryEventDateEl = document.getElementById('summary-event-date');
-                const summaryEventAddressEl = document.getElementById('summary-event-address');
-                const summaryReferenceLocationDisplay = document.getElementById('summary-reference-location-display'); // New summary element
-                const summaryReferenceLocationEl = document.getElementById('summary-reference-location'); // New summary element
-                const summaryPlanPriceEl = document.getElementById('summary-plan-price');
-                const summaryDeslocamentoPriceEl = document.getElementById('summary-deslocamento-price');
-                const summaryTotalPriceEl = document.getElementById('summary-total-price');
-                const summaryTotalWithFeesEl = document.getElementById('summary-total-price-with-fees');
-                const summaryPaymentMethodEl = document.getElementById('summary-payment-method');
-                const summaryInstallmentDetailsDiv = document.getElementById('summary-installment-details');
-                const summaryInstallmentsEl = document.getElementById('summary-installments');
-                const summaryBoletoDueDateDetailsDiv = document.getElementById('summary-boleto-due-date-details');
-                const summaryBoletoDueDateEl = document.getElementById('summary-boleto-due-date');
-                const feesExplanationDiv = document.getElementById('fees-explanation');
-                const summaryFeesSuffixSpan = document.getElementById('summary-fees-suffix');
-
                 // --- TAB NAVIGATION ---
                 function showTab(tabId) {
                     tabContents.forEach(content => content.style.display = 'none');
@@ -1113,7 +1179,6 @@
                 document.getElementById('next-to-payment-method-btn').addEventListener('click', () => {
                     ceremonyDate = ceremonyDateInput.value;
                     ceremonyTime = ceremonyTimeInput.value;
-                    referenceLocation = referenceLocationInput.value.trim(); // Capture reference location
                     if (!ceremonyDate || !ceremonyTime) {
                         modalEventDetailsError.textContent = "Por favor, preencha a data e o horário da cerimônia.";
                         modalEventDetailsError.classList.remove('hidden');
@@ -1178,6 +1243,13 @@
                 if (okBoletoModalButton) okBoletoModalButton.addEventListener('click', () => boletoNotificationModal.style.display = 'none');
                 window.addEventListener('click', (event) => {
                     if (event.target == boletoNotificationModal) boletoNotificationModal.style.display = 'none';
+                });
+
+                // --- NEW: BOLETO DATE WARNING MODAL LISTENERS ---
+                document.getElementById('close-boleto-date-warning-modal-button').addEventListener('click', () => boletoDateWarningModal.style.display = 'none');
+                document.getElementById('ok-boleto-date-warning-modal-button').addEventListener('click', () => boletoDateWarningModal.style.display = 'none');
+                window.addEventListener('click', (event) => {
+                    if (event.target == boletoDateWarningModal) boletoDateWarningModal.style.display = 'none';
                 });
 
                 // --- PAYMENT LOGIC ---
@@ -1245,13 +1317,14 @@
                     modalTotalPriceWithFeesEl.textContent = formatCurrency(calculatedTotalForPayment);
                     installmentValueEl.textContent = formatCurrency(finalInstallmentValue);
 
-                    validateBoletoDueDate();
+                    validateBoletoDueDate(); // Validate on every payment detail update
                 }
                 
                 function validateBoletoDueDate() {
                     if (selectedPaymentMethod !== 'boleto' || !ceremonyDate) {
-                        modalBoletoDateError.classList.add('hidden');
-                        document.getElementById('next-to-summary-btn').disabled = false;
+                        modalBoletoDateError.classList.add('hidden'); // Hide inline error
+                        boletoDateWarningModal.style.display = 'none'; // Hide modal warning
+                        if (nextToSummaryBtn) nextToSummaryBtn.disabled = false;
                         return true;
                     }
 
@@ -1267,12 +1340,19 @@
                     lastPaymentDate.setMonth(lastPaymentDate.getMonth() + selectedInstallments - 1);
 
                     if (lastPaymentDate > ceremony) {
-                        modalBoletoDateError.classList.remove('hidden');
-                        document.getElementById('next-to-summary-btn').disabled = true;
+                        // Display the elaborate warning modal
+                        warningDueDateSpan.textContent = selectedBoletoDueDate;
+                        const [year, month, day] = ceremonyDate.split('-');
+                        warningCeremonyDateSpan.textContent = `${day}/${month}/${year}`;
+                        boletoDateWarningModal.style.display = 'flex';
+                        
+                        modalBoletoDateError.classList.remove('hidden'); // Keep inline error for consistency, though modal is primary
+                        if (nextToSummaryBtn) nextToSummaryBtn.disabled = true;
                         return false;
                     } else {
-                        modalBoletoDateError.classList.add('hidden');
-                        document.getElementById('next-to-summary-btn').disabled = false;
+                        modalBoletoDateError.classList.add('hidden'); // Hide inline error
+                        boletoDateWarningModal.style.display = 'none'; // Hide modal warning
+                        if (nextToSummaryBtn) nextToSummaryBtn.disabled = false;
                         return true;
                     }
                 }
