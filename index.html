@@ -22,13 +22,13 @@
             font-family: 'Playfair Display', serif;
         }
         .text-gold {
-            color: #C9A959; /* Slightly softer gold */
+            color: #b69260; /* Updated gold color */
         }
         .bg-gold {
-            background-color: #C9A959;
+            background-color: #b69260; /* Updated gold color */
         }
         .border-gold {
-            border-color: #C9A959;
+            border-color: #b69260; /* Updated gold color */
         }
         .hero-bg {
             background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
@@ -74,11 +74,11 @@
 
         /* Custom checkbox style */
         .custom-checkbox:checked {
-            background-color: #C9A959;
-            border-color: #C9A959;
+            background-color: #b69260; /* Updated gold color */
+            border-color: #b69260; /* Updated gold color */
         }
         .custom-checkbox:checked + span {
-            color: #C9A959;
+            color: #b69260; /* Updated gold color */
         }
         
         /* Navlink style */
@@ -96,11 +96,11 @@
             bottom: -5px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #C9A959;
+            background-color: #b69260; /* Updated gold color */
             transition: width 0.3s;
         }
         .nav-link:hover {
-            color: #C9A959;
+            color: #b69260; /* Updated gold color */
         }
         .nav-link:hover::after {
             width: 100%;
@@ -165,12 +165,12 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #C9A959; /* Gold color for the scrollbar thumb */
+            background: #b69260; /* Updated gold color for the scrollbar thumb */
             border-radius: 10px; /* Keep rounded corners for the thumb */
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #b3944d; /* Darker gold on hover */
+            background: #a08154; /* Darker gold on hover */
         }
 
         /* Tab styles */
@@ -190,8 +190,8 @@
             transition: color 0.3s, border-bottom 0.3s;
         }
         .tab-button.active {
-            color: #C9A959;
-            border-bottom: 2px solid #C9A959;
+            color: #b69260; /* Updated gold color */
+            border-bottom: 2px solid #b69260; /* Updated gold color */
         }
         .tab-content {
             display: none;
@@ -206,7 +206,7 @@
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <a href="#" class="text-white text-2xl font-bold font-playfair flex items-center">
-                <img src="H.png" alt="Logo Harmonia do Altar" class="h-10 mr-2 inline-block" onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/c9a959?text=H'">armonia do Altar
+                <img src="H.png" alt="Logo Harmonia do Altar" class="h-10 mr-2 inline-block" onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/b69260?text=H'">armonia do Altar
             </a>
             
             <div class="hidden md:flex space-x-8">
@@ -235,7 +235,7 @@
     <header class="hero-bg text-white shadow-lg h-screen flex items-center justify-center">
         <div class="text-center">
             <h1 class="text-5xl md:text-7xl font-bold mb-2 animated-item">
-                <img src="H.png" alt="Logo Harmonia do Altar" class="h-20 md:h-32 inline-block align-middle mr-4" onerror="this.onerror=null; this.src='https://placehold.co/128x128/ffffff/c9a959?text=H'">armonia do Altar
+                <img src="H.png" alt="Logo Harmonia do Altar" class="h-20 md:h-32 inline-block align-middle mr-4" onerror="this.onerror=null; this.src='https://placehold.co/128x128/ffffff/b69260?text=H'">armonia do Altar
             </h1>
             <p class="text-xl md:text-2xl font-light animated-item delay-1">A Trilha Sonora Perfeita para o Seu Grande Dia</p>
         </div>
@@ -572,8 +572,8 @@
         // Define os preços dos instrumentos globalmente para fácil acesso na mensagem do WhatsApp
         const BASE_PLAN_PRICE = 1400;
         const BOLETO_PER_INSTALLMENT_FEE = 18; // R$18 fixo POR PARCELA para boleto
-        const FIXED_DESLOCAMENTO_AMOUNT = 50; // Valor fixo do deslocamento para as cidades específicas
-        const PER_KM_DESLOCAMENTO_RATE = 1.80; // R$1,80 por Km para outras cidades
+        const FIXED_DESLOCAMENTO_AMOUNT = 70; // Updated: Valor fixo do deslocamento para as cidades específicas
+        const PER_KM_DESLOCAMENTO_RATE = 1.80 * 2; // Updated: R$1,80 por Km para outras cidades (ida e volta)
 
         const INSTRUMENT_PRICES = {
             'Violão': 200,
@@ -591,12 +591,12 @@
             3: 0.05970 + 0.0531, // 5.970% (maquininha) + 5.31% (liberação)
             4: 0.07330 + 0.0531, // 7.330% (maquininha) + 5.31% (liberação)
             5: 0.08660 + 0.0531, // 8.660% (maquininha) + 5.31% (liberação)
-            6: 0.09960 + 0.0531, // 9.980% (maquininha) + 5.31% (liberação)
+            6: 0.09960 + 0.0531, // 9.960% (maquininha) + 5.31% (liberação)
             7: 0.11240 + 0.0531, // 11.240% (maquininha) + 5.31% (liberação)
             8: 0.12500 + 0.0531, // 12.500% (maquininha) + 5.31% (liberação)
             9: 0.13730 + 0.0531, // 13.730% (maquininha) + 5.31% (liberação)
             10: 0.14930 + 0.0531, // 14.930% (maquininha) + 5.31% (liberação)
-            11: 0.16120 + 0.0531, // 16.100% (maquininha) + 5.31% (liberação)
+            11: 0.16120 + 0.0531, // 16.120% (maquininha) + 5.31% (liberação)
             12: 0.17280 + 0.0531  // 17.280% (maquininha) + 5.31% (liberação)
         };
 
@@ -1164,11 +1164,11 @@
                                     }
 
                                     if (isFixedCity) {
-                                        currentDeslocamentoCost = 50; // Fixed R$ 50 for Angélica and Ivinhema
+                                        currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT; // Fixed R$ 70 for Angélica and Ivinhema
                                         modalDistanceDisplay.textContent = `Deslocamento Fixo: ${formatCurrency(currentDeslocamentoCost)}`;
                                     } else {
                                         const distanceInKm = distanceInMeters / 1000;
-                                        // For other localities, it's R$ 50 fixed + R$ 1.80 per km
+                                        // For other localities, it's R$ 70 fixed + R$ 1.80 * 2 per km
                                         currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT + (distanceInKm * PER_KM_DESLOCAMENTO_RATE); 
                                         modalDistanceDisplay.textContent = `${distanceInKm.toFixed(2)} km`;
                                     }
