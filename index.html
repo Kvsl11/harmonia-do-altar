@@ -4,32 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harmonia do Altar</title>
+    <!-- Favicon with fallback -->
     <link rel="icon" href="H.png" type="image/png">
+    <!-- Tailwind CSS CDN for utility-first styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for custom typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Smooth scrolling for anchor links */
         html {
             scroll-behavior: smooth;
         }
+        /* Base font for the body */
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #FDFBF8; /* Softer background color */
         }
+        /* Heading font for a more elegant look */
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Playfair Display', serif;
         }
+        /* Custom gold color for branding consistency */
         .text-gold {
-            color: #b69260; /* Updated gold color */
+            color: #b69260;
         }
         .bg-gold {
-            background-color: #b69260; /* Updated gold color */
+            background-color: #b69260;
         }
         .border-gold {
-            border-color: #b69260; /* Updated gold color */
+            border-color: #b69260;
         }
+        /* Hero section background with gradient overlay */
         .hero-bg {
             background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
             background-position: center;
@@ -37,11 +46,11 @@
             background-size: cover;
         }
         
-        /* Media Cropper for Instagram videos */
+        /* Media Cropper for Instagram videos to ensure square aspect ratio */
         .media-cropper {
             position: relative;
             overflow: hidden;
-            padding-top: 100%;
+            padding-top: 100%; /* Creates a square container */
             border-radius: 12px;
             background-color: #e0e0e0;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -52,13 +61,14 @@
             left: 0;
             width: 100% !important;
             height: 100% !important;
-            transform: scale(1.25) translateY(-4.5%);
+            /* Adjust transform values if content is cut off or not centered */
+            transform: scale(1.25) translateY(-4.5%); /* Scales and slightly adjusts position to crop */
             border: none !important;
             box-shadow: none !important;
             margin: 0 !important;
         }
         
-        /* Animations */
+        /* Animations for elements entering the viewport */
         .animated-item {
             opacity: 0;
             transform: translateY(30px);
@@ -72,16 +82,16 @@
         .animated-item.delay-2 { transition-delay: 0.2s; }
         .animated-item.delay-3 { transition-delay: 0.3s; }
 
-        /* Custom checkbox style */
+        /* Custom checkbox styling for better aesthetics */
         .custom-checkbox:checked {
-            background-color: #b69260; /* Updated gold color */
-            border-color: #b69260; /* Updated gold color */
+            background-color: #b69260;
+            border-color: #b69260;
         }
         .custom-checkbox:checked + span {
-            color: #b69260; /* Updated gold color */
+            color: #b69260;
         }
         
-        /* Navlink style */
+        /* Navigation link hover effect */
         .nav-link {
             position: relative;
             color: white;
@@ -96,21 +106,22 @@
             bottom: -5px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #b69260; /* Updated gold color */
+            background-color: #b69260;
             transition: width 0.3s;
         }
         .nav-link:hover {
-            color: #b69260; /* Updated gold color */
+            color: #b69260;
         }
         .nav-link:hover::after {
             width: 100%;
         }
 
+        /* Adjust scroll margin for sections to account for fixed navbar */
         section[id] {
             scroll-margin-top: 80px;
         }
 
-        /* Modal styles - Ensure display: none by default */
+        /* Modal styles - Ensure display: none by default to prevent FOUC */
         .modal {
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
@@ -150,6 +161,7 @@
             text-decoration: none;
             cursor: pointer;
         }
+        /* Fade-in animation for modals */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -173,12 +185,13 @@
             background: #a08154; /* Darker gold on hover */
         }
 
-        /* Tab styles */
+        /* Tab styles for modal navigation */
         .tab-header {
             display: flex;
             justify-content: space-around;
             border-bottom: 1px solid #e0e0e0;
             margin-bottom: 20px;
+            font-family: 'Montserrat', sans-serif; /* Ensure consistent font for tabs */
         }
         .tab-button {
             padding: 10px 15px;
@@ -191,320 +204,713 @@
             font-size: 0.875rem; /* Smaller font for more tabs */
         }
         .tab-button.active {
-            color: #b69260; /* Updated gold color */
-            border-bottom: 2px solid #b69260; /* Updated gold color */
+            color: #b69260;
+            border-bottom: 2px solid #b69260;
         }
         .tab-content {
-            display: none;
+            display: none; /* Hidden by default, shown by JS */
         }
         .tab-content.active {
             display: block;
         }
+
+        /* Custom styles for enhanced design */
+        .navbar-scrolled {
+            background-color: rgba(26, 32, 44, 0.9); /* Darker, slightly transparent background */
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .plan-card {
+            border: 1px solid #e0e0e0; /* Subtle border for all cards */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Softer initial shadow */
+        }
+
+        .plan-card:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
+            transform: translateY(-5px) scale(1.01); /* Slightly more lift and scale */
+            border-color: #b69260; /* Gold border on hover */
+        }
+
+        .plan-card.popular {
+            border: 2px solid #b69260; /* Gold border for popular card */
+            box-shadow: 0 10px 20px rgba(182, 146, 96, 0.25); /* Gold-tinted shadow for popular */
+        }
+
+        .plan-card.popular:hover {
+            box-shadow: 0 15px 30px rgba(182, 146, 96, 0.4); /* Stronger gold shadow on hover */
+        }
+
+        .btn-primary {
+            background-image: linear-gradient(to right, #b69260 0%, #a08154 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(182, 146, 96, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-position: right center; /* Change gradient direction on hover */
+            box-shadow: 0 6px 15px rgba(182, 146, 96, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #4a5568; /* Gray-800 */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background-color: #2d3748; /* Gray-900 */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-whatsapp {
+            background-image: linear-gradient(to right, #25D366 0%, #1DA851 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            background-position: right center;
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Modal specific styles */
+        .modal-content {
+            background-color: #ffffff; /* White background for modal */
+            border-radius: 16px; /* More rounded corners */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* Stronger, more modern shadow */
+            padding: 30px; /* More padding */
+        }
+
+        .modal-header {
+            border-bottom: 2px solid #f0f0f0; /* Subtle separator */
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: #1a202c; /* gray-900 */
+        }
+
+        .modal-close-button {
+            color: #718096; /* gray-500 */
+            font-size: 2.25rem; /* text-4xl */
+            line-height: 1;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .modal-close-button:hover {
+            color: #4a5568; /* gray-700 */
+        }
+
+        .modal-tab-header {
+            border-bottom: none; /* Remove default border */
+            margin-bottom: 25px;
+            background-color: #f7fafc; /* Light background for tabs */
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .modal-tab-button {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 8px; /* Rounded tab buttons */
+            font-size: 1rem; /* Base font size */
+            font-weight: 600;
+            color: #718096; /* gray-500 */
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-tab-button.active {
+            color: #ffffff; /* White text for active tab */
+            background-color: #b69260; /* Gold background for active tab */
+            box-shadow: 0 4px 10px rgba(182, 146, 96, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .modal-input-group label {
+            font-size: 0.95rem;
+            color: #2d3748; /* gray-800 */
+            margin-bottom: 8px;
+        }
+
+        .modal-input-group input[type="text"],
+        .modal-input-group input[type="date"],
+        .modal-input-group input[type="time"],
+        .modal-input-group select {
+            border: 1px solid #cbd5e0; /* light gray border */
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            color: #4a5568; /* gray-700 */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .modal-input-group input:focus,
+        .modal-input-group select:focus {
+            border-color: #b69260;
+            box-shadow: 0 0 0 3px rgba(182, 146, 96, 0.2);
+            outline: none;
+        }
+
+        .modal-radio-label {
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0; /* light border */
+            border-radius: 8px;
+            background-color: #f7fafc; /* very light gray */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .modal-radio-label:hover {
+            background-color: #edf2f7; /* slightly darker on hover */
+            border-color: #b69260;
+        }
+
+        .modal-radio-label input[type="radio"]:checked + span {
+            color: #b69260;
+            font-weight: 600;
+        }
+
+        .modal-summary-box {
+            background-color: #f0f4f8; /* Light blue-gray for summary */
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .modal-summary-item {
+            color: #4a5568; /* Darker gray for text */
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .modal-summary-item strong {
+            color: #2d3748; /* Even darker for strong text */
+        }
+
+        .modal-footer-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .modal-footer-buttons .btn-primary,
+        .modal-footer-buttons .btn-secondary {
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+
+        /* Notification Modals */
+        .notification-modal-content {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            padding: 30px;
+            max-width: 450px; /* Slightly smaller for notifications */
+            text-align: center;
+        }
+
+        .notification-modal-title {
+            font-size: 1.75rem; /* text-2xl */
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 15px;
+            display: flex; /* Make it a flex container to align icon and text */
+            align-items: center; /* Vertically center items */
+            justify-content: center; /* Horizontally center items */
+            gap: 10px; /* Space between icon and text */
+        }
+
+        .notification-modal-title .icon {
+            font-size: 2rem; /* Adjust icon size */
+        }
+
+        .notification-modal-title.info .icon {
+            color: #b69260; /* Gold color for info icon */
+        }
+
+        .notification-modal-title.warning .icon {
+            color: #dc2626; /* Red color for warning icon */
+        }
+
+        .notification-modal-text {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .notification-modal-button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(182, 146, 96, 0.3);
+            transition: all 0.3s ease;
+        }
+        .notification-modal-button.red {
+            background-image: linear-gradient(to right, #ef4444 0%, #dc2626 100%); /* Red gradient */
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+        }
+        .notification-modal-button.red:hover {
+            background-position: right center;
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Custom Plan Builder Checkbox Styling */
+        .custom-plan-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 16px; /* Increased gap for better spacing */
+            cursor: pointer;
+            padding: 16px; /* Increased padding */
+            background-color: #ffffff; /* White background */
+            border: 1px solid #e2e8f0; /* Light border */
+            border-radius: 12px; /* More rounded */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            transition: all 0.2s ease-in-out;
+        }
+
+        .custom-plan-checkbox-label:hover {
+            background-color: #f7fafc; /* Very light gray on hover */
+            border-color: #b69260; /* Gold border on hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slightly more pronounced shadow */
+            transform: translateY(-2px); /* Slight lift */
+        }
+
+        .custom-plan-checkbox-label input[type="checkbox"] {
+            -webkit-appearance: none; /* Hide default checkbox */
+            -moz-appearance: none;
+            appearance: none;
+            width: 24px; /* Larger checkbox */
+            height: 24px;
+            border: 2px solid #cbd5e0; /* Light gray border */
+            border-radius: 6px; /* Rounded corners for checkbox */
+            background-color: #ffffff;
+            transition: all 0.2s ease-in-out;
+            position: relative;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+
+        .custom-plan-checkbox-label input[type="checkbox"]:checked {
+            background-color: #b69260; /* Gold background when checked */
+            border-color: #b69260;
+        }
+
+        .custom-plan-checkbox-label input[type="checkbox"]:checked::after {
+            content: '\2713'; /* Checkmark character */
+            color: white;
+            font-size: 16px; /* Size of checkmark */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+        }
+
+        .custom-plan-checkbox-label span {
+            font-size: 1.05rem; /* Slightly larger text */
+            color: #2d3748; /* Darker text */
+            transition: color 0.2s ease-in-out;
+        }
+
+        .custom-plan-checkbox-label input[type="checkbox"]:checked + span {
+            color: #b69260; /* Gold text when checked */
+            font-weight: 700; /* Bolder text when checked */
+        }
+
+        /* Plan Card Instrument List Styling */
+        .plan-instrument-item {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between icon and text */
+            color: #4a5568; /* Darker text for readability */
+            font-size: 1rem; /* Base font size */
+        }
+        .plan-instrument-item i {
+            color: #b69260; /* Gold color for icons */
+            font-size: 1.1rem; /* Slightly larger icon */
+        }
     </style>
 </head>
 <body class="text-gray-800">
-    <!-- Script para ocultar modais imediatamente ao carregar a página -->
+    <!-- Script to hide modals immediately on page load to prevent FOUC -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Seleciona todos os elementos com a classe 'modal'
+            // Select all elements with the class 'modal'
             const modals = document.querySelectorAll('.modal');
-            // Itera sobre cada modal e define seu estilo de exibição como 'none'
+            // Iterate over each modal and define its display style as 'none'
             modals.forEach(modal => {
                 modal.style.display = 'none';
             });
         });
     </script>
 
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-2">
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4">
         <div class="container mx-auto px-6 flex justify-between items-center">
-            <a href="#" class="text-white text-2xl font-bold font-playfair flex items-center">
-                <img src="H.png" alt="Logo Harmonia do Altar" class="h-10 mr-2 inline-block" onerror="this.onerror=null; this.src='https://placehold.co/40x40/ffffff/b69260?text=H'">armonia do Altar
+            <!-- Logo and Site Title -->
+            <a href="#" class="text-white text-2xl md:text-3xl font-bold font-playfair flex items-center">
+                <img src="H.png" alt="Logo Harmonia do Altar" class="h-10 md:h-12 mr-3 inline-block" onerror="this.onerror=null; this.src='https://placehold.co/48x48/ffffff/b69260?text=H'">armonia do Altar
             </a>
             
-            <div class="hidden md:flex space-x-8">
-                <a href="#sobre" class="nav-link">Sobre</a>
-                <a href="#galeria" class="nav-link">Galeria</a>
-                <a href="#planos" class="nav-link">Planos</a>
-                <a href="#contato" class="nav-link">Contato</a>
+            <!-- Desktop Navigation Links -->
+            <div class="hidden md:flex space-x-10">
+                <a href="#sobre" class="nav-link text-lg">Sobre</a>
+                <a href="#galeria" class="nav-link text-lg">Galeria</a>
+                <a href="#planos" class="nav-link text-lg">Planos</a>
+                <a href="#contato" class="nav-link text-lg">Contato</a>
             </div>
 
+            <!-- Mobile Menu Button -->
             <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-white focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <button id="mobile-menu-button" class="text-white focus:outline-none" aria-label="Toggle mobile menu">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
+        <!-- Mobile Navigation Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-gray-800 bg-opacity-95">
-            <a href="#sobre" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Sobre</a>
-            <a href="#galeria" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Galeria</a>
-            <a href="#planos" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Planos</a>
-            <a href="#contato" class="nav-link-mobile block py-3 px-6 text-sm text-white hover:bg-gold transition-colors">Contato</a>
+            <a href="#sobre" class="nav-link-mobile block py-3 px-6 text-base text-white hover:bg-gold transition-colors">Sobre</a>
+            <a href="#galeria" class="nav-link-mobile block py-3 px-6 text-base text-white hover:bg-gold transition-colors">Galeria</a>
+            <a href="#planos" class="nav-link-mobile block py-3 px-6 text-base text-white hover:bg-gold transition-colors">Planos</a>
+            <a href="#contato" class="nav-link-mobile block py-3 px-6 text-base text-white hover:bg-gold transition-colors">Contato</a>
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <header class="hero-bg text-white shadow-lg h-screen flex items-center justify-center">
-        <div class="text-center">
-            <h1 class="text-5xl md:text-7xl font-bold mb-2 animated-item">
-                <img src="H.png" alt="Logo Harmonia do Altar" class="h-20 md:h-32 inline-block align-middle mr-4" onerror="this.onerror=null; this.src='https://placehold.co/128x128/ffffff/b69260?text=H'">armonia do Altar
+        <div class="text-center px-4">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 animated-item">
+                <img src="H.png" alt="Logo Harmonia do Altar" class="h-24 md:h-36 inline-block align-middle mr-4" onerror="this.onerror=null; this.src='https://placehold.co/144x144/ffffff/b69260?text=H'">armonia do Altar
             </h1>
-            <p class="text-xl md:text-2xl font-light animated-item delay-1">A Trilha Sonora Perfeita para o Seu Grande Dia</p>
+            <p class="text-xl md:text-3xl font-light animated-item delay-1 leading-snug">A Trilha Sonora Perfeita para o Seu Grande Dia</p>
         </div>
     </header>
 
-    <main class="container mx-auto px-6 py-12 md:py-20">
+    <main class="container mx-auto px-6 py-16 md:py-24">
         
-        <section id="sobre" class="text-center max-w-4xl mx-auto mb-16 md:mb-24 animated-item">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Música que Conta a Sua História</h2>
-            <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
-            <p class="text-gray-600 leading-relaxed text-lg">
+        <!-- About Section -->
+        <section id="sobre" class="text-center max-w-4xl mx-auto mb-20 md:mb-32 animated-item">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4">Música que Conta a Sua História</h2>
+            <div class="w-24 h-1.5 bg-gold mx-auto mb-8 rounded-full"></div>
+            <p class="text-gray-600 leading-relaxed text-lg md:text-xl">
                 Para nós, cada casamento é a celebração de uma história de amor única. E toda grande história merece uma trilha sonora inesquecível. Somos o Harmonia do Altar, um grupo de músicos apaixonados por transformar cerimônias em eventos memoráveis. Nosso propósito é ir além da música: queremos tocar o coração de cada convidado e, principalmente, o de vocês, com arranjos que capturam a essência do seu amor e a solenidade do seu grande dia.
             </p>
         </section>
         
-        <section id="galeria" class="mb-16 md:mb-24">
+        <!-- Gallery Section -->
+        <section id="galeria" class="mb-20 md:mb-32">
             <div class="animated-item">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Sinta a Nossa Harmonia</h2>
-                <div class="w-20 h-1 bg-gold mx-auto mb-12"></div>
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-4">Sinta a Nossa Harmonia</h2>
+                <div class="w-24 h-1.5 bg-gold mx-auto mb-16 rounded-full"></div>
             </div>
             
             <div class="text-center max-w-3xl mx-auto animated-item">
-                <h3 class="text-2xl font-bold text-gold mb-3">A Emoção em Cada Nota</h3>
-                <p class="text-gray-600 mb-8">A música tem o poder de evocar sentimentos profundos. Imagine a entrada da noiva ao som de um violino emocionante, ou a troca de alianças embalada por um piano suave e vozes que se entrelaçam. É essa atmosfera que criamos.</p>
+                <h3 class="text-3xl font-bold text-gold mb-4">A Emoção em Cada Nota</h3>
+                <p class="text-gray-600 mb-10 text-lg">A música tem o poder de evocar sentimentos profundos. Imagine a entrada da noiva ao som de um violino emocionante, ou a troca de alianças embalada por um piano suave e vozes que se entrelaçam. É essa atmosfera que criamos.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
+                <!-- Instagram Embed 1 -->
                 <div class="media-cropper animated-item delay-1">
                     <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YQSOEsv0-/" data-instgrm-version="14"></blockquote>
                 </div>
+                <!-- Instagram Embed 2 -->
                 <div class="media-cropper animated-item delay-2">
                     <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8V3pPAsYSj/" data-instgrm-version="14"></blockquote>
                 </div>
             </div>
 
-            <div class="text-center max-w-3xl mx-auto mt-20 animated-item">
-                <h3 class="text-2xl font-bold text-gold mb-3">Elegância e Profissionalismo</h3>
-                <p class="text-gray-600 mb-8">Acreditamos que a beleza está na harmonia, não só musical, mas também visual. Nossos músicos se apresentam com a sofisticação que a sua cerimônia merece, e nossas performances são um reflexo do nosso compromisso com a excelência.</p>
+            <div class="text-center max-w-3xl mx-auto mt-24 animated-item">
+                <h3 class="text-3xl font-bold text-gold mb-4">Elegância e Profissionalismo</h3>
+                <p class="text-gray-600 mb-10 text-lg">Acreditamos que a beleza está na harmonia, não só musical, mas também visual. Nossos músicos se apresentam com a sofisticação que a sua cerimônia merece, e nossas performances são um reflexo do nosso compromisso com a excelência.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
+                <!-- Instagram Embed 3 -->
                 <div class="media-cropper animated-item delay-1">
                     <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C8VlkbksuVZ/" data-instgrm-version="14"></blockquote>
                 </div>
+                <!-- Instagram Embed 4 -->
                 <div class="media-cropper animated-item delay-2">
                     <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CpBIkGaOdrZ/" data-instgrm-version="14"></blockquote>
                 </div>
             </div>
 
-            <div class="text-center max-w-3xl mx-auto mt-20 animated-item">
-                <h3 class="text-2xl font-bold text-gold mb-3">Alegria e Versatilidade</h3>
-                <p class="text-gray-600 mb-8">Seu casamento deve refletir sua personalidade. Do clássico ao popular, do sacro ao contemporâneo, nosso repertório é vasto e adaptável. Celebramos o amor em todos os ritmos, garantindo momentos de pura alegria e emoção.</p>
+            <div class="text-center max-w-3xl mx-auto mt-24 animated-item">
+                <h3 class="text-3xl font-bold text-gold mb-4">Alegria e Versatilidade</h3>
+                <p class="text-gray-600 mb-10 text-lg">Seu casamento deve refletir sua personalidade. Do clássico ao popular, do sacro ao contemporâneo, nosso repertório é vasto e adaptável. Celebramos o amor em todos os ritmos, garantindo momentos de pura alegria e emoção.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Instagram Embed 5 -->
                 <div class="media-cropper animated-item delay-1">
                     <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8VkPNDsAit/" data-instgrm-version="14"></blockquote>
                 </div>
+                <!-- Instagram Embed 6 -->
                 <div class="media-cropper animated-item delay-2">
                     <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YEx9mse1O/" data-instgrm-version="14"></blockquote>
                 </div>
             </div>
         </section>
 
-        <section id="planos" class="py-16 md:py-24 bg-white rounded-2xl shadow-sm">
-            <div class="text-center max-w-4xl mx-auto mb-12 md:mb-16 animated-item">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Nossas Configurações Sugeridas</h2>
-                <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
-                <p class="text-gray-600 leading-relaxed text-lg mb-8">
+        <!-- Plans Section -->
+        <section id="planos" class="py-20 md:py-32 bg-white rounded-3xl shadow-xl">
+            <div class="text-center max-w-4xl mx-auto mb-16 md:mb-20 animated-item">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Nossas Configurações Sugeridas</h2>
+                <div class="w-24 h-1.5 bg-gold mx-auto mb-8 rounded-full"></div>
+                <p class="text-gray-600 leading-relaxed text-lg md:text-xl mb-8">
                     Nossa formação padrão inclui <strong>3 vozes e teclado</strong>, com a flexibilidade de adicionar outros instrumentos para personalizar sua sonoridade. O deslocamento tem tarifa fixa para <strong>Angélica/Ivinhema (MS) e valor por km para outras localidades (com um valor base).</strong> Taxas de processamento bancário aplicam-se a pagamentos via boleto e cartão (incluindo deslocamentos especiais), não sendo retidas pela Harmonia do Altar. <strong>Pix e dinheiro são isentos de taxas bancárias.</strong>
                 </p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-center px-4">
                 
-                <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item">
+                <!-- Plan Card 1: Essência Clássica e Sublime -->
+                <div class="bg-gray-50 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item">
                     <div class="p-8 flex-grow">
-                        <i class="fas fa-music text-gold text-3xl mb-4"></i>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Essência Clássica e Sublime</h3>
-                        <p class="text-gray-600 mb-6 text-sm">A nossa formação padrão, com as <strong>3 vozes e o teclado</strong>. Perfeita para quem busca a elegância atemporal e a emoção pura.</p>
-                        <h4 class="font-bold mb-2 text-sm">Instrumentos:</h4>
-                        <ul class="text-gray-700 text-sm space-y-2">
-                            <li>• 3 Vozes + Teclado/Piano</li>
-                        </ul>
+                        <i class="fas fa-music text-gold text-4xl mb-6"></i>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Essência Clássica e Sublime</h3>
+                        <p class="text-gray-600 mb-8 text-base">A nossa formação padrão, com as <strong>3 vozes e o teclado</strong>. Perfeita para quem busca a elegância atemporal e a emoção pura.</p>
+                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <div class="space-y-2">
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <span>3 Vozes + Teclado/Piano</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6 border-t bg-white flex justify-between items-center">
-                        <div class="text-2xl font-bold">R$ 1.400</div>
-                        <button onclick="handleContratar('Essência Clássica e Sublime', ['3 Vozes + Teclado/Piano'], 1400)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                        <div class="text-3xl font-bold text-gold">R$ 1.400</div>
+                        <button onclick="handleSimular('Essência Clássica e Sublime', ['3 Vozes + Teclado/Piano'], 1400)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
                 </div>
 
-                <div class="bg-gray-50 rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 flex flex-col animated-item delay-1 border-2 border-gold relative">
-                    <div class="absolute top-0 right-0 bg-gold text-white text-xs font-bold px-3 py-1 rounded-bl-lg">MAIS POPULAR</div>
+                <!-- Plan Card 2: Harmonia Delicada e Acústica (Most Popular) -->
+                <div class="bg-gray-50 rounded-2xl plan-card popular overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item delay-1 relative">
+                    <div class="absolute top-0 right-0 bg-gold text-white text-sm font-bold px-4 py-1.5 rounded-bl-xl">MAIS POPULAR</div>
                     <div class="p-8 flex-grow">
-                        <i class="fas fa-guitar text-gold text-3xl mb-4"></i>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Harmonia Delicada e Acústica</h3>
-                        <p class="text-gray-600 mb-6 text-sm">A formação padrão com o acréscimo do <strong>violão</strong>. O som quente e dedilhado cria uma atmosfera romântica e acolhedora.</p>
-                        <h4 class="font-bold mb-2 text-sm">Instrumentos:</h4>
-                        <ul class="text-gray-700 text-sm space-y-2">
-                            <li>• 3 Vozes + Teclado/Piano</li>
-                            <li>• Violão</li>
-                        </ul>
+                        <i class="fas fa-guitar text-gold text-4xl mb-6"></i>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Harmonia Delicada e Acústica</h3>
+                        <p class="text-gray-600 mb-8 text-base">A formação padrão com o acréscimo do <strong>violão</strong>. O som quente e dedilhado cria uma atmosfera romântica e acolhedora.</p>
+                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <div class="space-y-2">
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <span>3 Vozes + Teclado/Piano</span>
+                            </div>
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-guitar"></i> <!-- Changed icon -->
+                                <span>Violão</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6 border-t bg-white flex justify-between items-center">
-                        <div class="text-2xl font-bold">R$ 1.600</div>
-                        <button onclick="handleContratar('Harmonia Delicada e Acústica', ['3 Vozes + Teclado/Piano', 'Violão'], 1600)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                        <div class="text-3xl font-bold text-gold">R$ 1.600</div>
+                        <button onclick="handleSimular('Harmonia Delicada e Acústica', ['3 Vozes + Teclado/Piano', 'Violão'], 1600)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
                 </div>
                 
-                <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item delay-2">
+                <!-- Plan Card 3: Sofisticação e Envolvimento -->
+                <div class="bg-gray-50 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item delay-2">
                     <div class="p-8 flex-grow">
-                        <i class="fas fa-layer-group text-gold text-3xl mb-4"></i>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Sofisticação e Envolvimento</h3>
-                        <p class="text-gray-600 mb-6 text-sm">Além da base, o <strong>contrabaixo</strong> adiciona uma sonoridade mais encorpada e um groove sutil, trazendo profundidade e elegância.</p>
-                        <h4 class="font-bold mb-2 text-sm">Instrumentos:</h4>
-                        <ul class="text-gray-700 text-sm space-y-2">
-                            <li>• 3 Vozes + Teclado/Piano</li>
-                            <li>• Contrabaixo</li>
-                        </ul>
+                        <i class="fas fa-layer-group text-gold text-4xl mb-6"></i>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Sofisticação e Envolvimento</h3>
+                        <p class="text-gray-600 mb-8 text-base">Além da base, o <strong>contrabaixo</strong> adiciona uma sonoridade mais encorpada e um groove sutil, trazendo profundidade e elegância.</p>
+                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <div class="space-y-2">
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <span>3 Vozes + Teclado/Piano</span>
+                            </div>
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-volume-down"></i> <!-- Changed icon -->
+                                <span>Contrabaixo</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6 border-t bg-white flex justify-between items-center">
-                        <div class="text-2xl font-bold">R$ 1.600</div>
-                        <button onclick="handleContratar('Sofisticação e Envolvimento', ['3 Vozes + Teclado/Piano', 'Contrabaixo'], 1600)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                        <div class="text-3xl font-bold text-gold">R$ 1.600</div>
+                        <button onclick="handleSimular('Sofisticação e Envolvimento', ['3 Vozes + Teclado/Piano', 'Contrabaixo'], 1600)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
                 </div>
 
-                <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item">
+                <!-- Plan Card 4: Sonoridade Completa e Marcante -->
+                <div class="bg-gray-50 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item">
                     <div class="p-8 flex-grow">
-                        <i class="fas fa-sliders-h text-gold text-3xl mb-4"></i>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Sonoridade Completa e Marcante</h3>
-                        <p class="text-gray-600 mb-6 text-sm">Com <strong>contrabaixo e violão</strong> somados à base, esta opção traz uma sonoridade grandiosa, preenchida e com uma textura rica.</p>
-                        <h4 class="font-bold mb-2 text-sm">Instrumentos:</h4>
-                        <ul class="text-gray-700 text-sm space-y-2">
-                            <li>• 3 Vozes + Teclado/Piano</li>
-                            <li>• Contrabaixo</li>
-                            <li>• Violão</li>
-                        </ul>
+                        <i class="fas fa-sliders-h text-gold text-4xl mb-6"></i>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Sonoridade Completa e Marcante</h3>
+                        <p class="text-gray-600 mb-8 text-base">Com <strong>contrabaixo e violão</strong> somados à base, esta opção traz uma sonoridade grandiosa, preenchida e com uma textura rica.</p>
+                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <div class="space-y-2">
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <span>3 Vozes + Teclado/Piano</span>
+                            </div>
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-volume-down"></i> <!-- Changed icon -->
+                                <span>Contrabaixo</span>
+                            </div>
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-guitar"></i> <!-- Changed icon -->
+                                <span>Violão</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6 border-t bg-white flex justify-between items-center">
-                        <div class="text-2xl font-bold">R$ 1.800</div>
-                        <button onclick="handleContratar('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Violão', 'Contrabaixo'], 1800)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                        <div class="text-3xl font-bold text-gold">R$ 1.800</div>
+                        <button onclick="handleSimular('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Violão', 'Contrabaixo'], 1800)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
                 </div>
 
-                <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 flex flex-col animated-item delay-1">
+                <!-- Plan Card 5: Versatilidade e Brilho Acústico -->
+                <div class="bg-gray-50 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item delay-1">
                     <div class="p-8 flex-grow">
-                        <i class="fas fa-star text-gold text-3xl mb-4"></i>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Versatilidade e Brilho Acústico</h3>
-                        <p class="text-gray-600 mb-6 text-sm">A formação mais completa, com <strong>violão, guitarra e contrabaixo</strong>. Permite explorar diferentes estilos com arranjos modernos.</p>
-                        <h4 class="font-bold mb-2 text-sm">Instrumentos:</h4>
-                        <ul class="text-gray-700 text-sm space-y-2">
-                            <li>• 3 Vozes + Teclado/Piano</li>
-                            <li>• Violão</li>
-                            <li>• Guitarra</li>
-                            <li>• Contrabaixo</li>
-                        </ul>
+                        <i class="fas fa-star text-gold text-4xl mb-6"></i>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Versatilidade e Brilho Acústico</h3>
+                        <p class="text-gray-600 mb-8 text-base">A formação mais completa, com <strong>violão, guitarra e contrabaixo</strong>. Permite explorar diferentes estilos com arranjos modernos.</p>
+                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <div class="space-y-2">
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <span>3 Vozes + Teclado/Piano</span>
+                            </div>
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-guitar"></i> <!-- Changed icon -->
+                                <span>Violão</span>
+                            </div>
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-bolt"></i> <!-- Changed icon -->
+                                <span>Guitarra</span>
+                            </div>
+                            <div class="plan-instrument-item">
+                                <i class="fas fa-volume-down"></i> <!-- Changed icon -->
+                                <span>Contrabaixo</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6 border-t bg-white flex justify-between items-center">
-                        <div class="text-2xl font-bold">R$ 2.000</div>
-                        <button onclick="handleContratar('Versatilidade e Brilho Acústica', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'], 2000)" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 text-sm">Contratar</button>
+                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                        <div class="text-3xl font-bold text-gold">R$ 2.000</div>
+                        <button onclick="handleSimular('Versatilidade e Brilho Acústica', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'], 2000)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="custom-plan-builder" class="bg-white rounded-2xl shadow-sm p-8 md:p-12 text-center mt-16 md:mt-24 animated-item">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Crie o Seu Plano Personalizado</h2>
-            <div class="w-20 h-1 bg-gold mx-auto mb-6"></div>
-            <p class="max-w-3xl mx-auto text-gray-600 mb-8">
+        <!-- Custom Plan Builder Section -->
+        <section id="custom-plan-builder" class="bg-white rounded-3xl shadow-xl p-8 md:p-12 text-center mt-20 md:mt-32 animated-item">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4">Crie o Seu Plano Personalizado</h2>
+            <div class="w-24 h-1.5 bg-gold mx-auto mb-8 rounded-full"></div>
+            <p class="max-w-3xl mx-auto text-gray-600 text-lg mb-10">
                 Adicione instrumentos à nossa formação padrão para criar a sonoridade perfeita para o seu dia.
             </p>
             <div class="max-w-2xl mx-auto text-left">
-                <div class="p-4 bg-gray-100 rounded-lg mb-4 flex justify-between items-center">
-                    <span class="font-bold text-gray-700">Formação Padrão (3 Vozes + Teclado)</span>
-                    <span class="font-bold text-gray-700">R$ 1.400,00</span>
+                <div class="p-5 bg-gray-100 rounded-xl mb-6 flex justify-between items-center border border-gray-200">
+                    <span class="font-bold text-gray-700 text-lg">Formação Padrão (3 Vozes + Teclado)</span>
+                    <span class="font-bold text-gray-700 text-lg">R$ 1.400,00</span>
                 </div>
-                <h4 class="text-lg font-bold text-gray-800 mt-6 mb-3">Instrumentos da Banda:</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="band-instrument-options"></div>
+                <h4 class="text-xl font-bold text-gray-800 mt-8 mb-4">Instrumentos da Banda:</h4>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="band-instrument-options"></div>
                 
-                <h4 class="text-lg font-bold text-gray-800 mt-8 mb-2">Músicos Convidados: <span class="text-sm font-normal text-gray-600">(Um toque de brilho)</span></h4>
-                <p class="text-sm text-gray-600 mb-4">Para uma sonoridade ainda mais especial, adicione o romantismo do violino ou a sofisticação do saxofone.</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="guest-instrument-options"></div>
+                <h4 class="text-xl font-bold text-gray-800 mt-10 mb-4">Músicos Convidados: <span class="text-base font-normal text-gray-600">(Um toque de brilho)</span></h4>
+                <p class="text-base text-gray-600 mb-6">Para uma sonoridade ainda mais especial, adicione o romantismo do violino ou a sofisticação do saxofone.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="guest-instrument-options"></div>
             </div>
 
-            <div class="mt-8 max-w-2xl mx-auto border-t pt-6">
-                <button id="contract-btn-custom" class="mt-6 w-full bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Contratar Plano Personalizado</button>
+            <div class="mt-10 max-w-2xl mx-auto border-t border-gray-200 pt-8">
+                <button id="simulate-btn-custom" class="w-full btn-primary text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg">Simular Plano Personalizado</button>
             </div>
         </section>
 
     </main>
 
-    <footer id="contato" class="bg-gray-800 text-white mt-12 md:mt-20">
+    <!-- Footer Section -->
+    <footer id="contato" class="bg-gray-900 text-white mt-20 md:mt-32 py-16">
         <div class="container mx-auto px-6 py-12 text-center animated-item">
-            <h2 class="text-3xl font-bold mb-4">Vamos Conversar?</h2>
-            <p class="max-w-3xl mx-auto mb-6 text-gray-300">
+            <h2 class="text-4xl font-bold mb-6">Vamos Conversar?</h2>
+            <p class="max-w-3xl mx-auto mb-8 text-gray-300 text-lg">
                 Estamos aqui para tirar todas as dúvidas e garantir que cada nota no seu grande dia seja exatamente como vocês sonham.
             </p>
-            <a href="https://wa.me/5567996884226?text=Olá!%20Vi%20o%20site%20do%20Harmonia%20do%20Altar%20e%20gostaria%20de%20um%20orçamento." target="_blank" rel="noopener noreferrer" class="bg-green-500 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-green-600 transition-colors duration-300 transform hover:scale-105 inline-block">
-                <i class="fab fa-whatsapp mr-2"></i> Chamar no WhatsApp
+            <!-- WhatsApp Contact Button -->
+            <a href="https://wa.me/5567996884226?text=Olá!%20Vi%20o%20site%20do%20Harmonia%20do%20Altar%20e%20gostaria%20de%20um%20orçamento." target="_blank" rel="noopener noreferrer" class="btn-whatsapp text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 inline-block text-lg">
+                <i class="fab fa-whatsapp mr-3"></i> Chamar no WhatsApp
             </a>
-            <div class="flex justify-center space-x-6 mt-8">
-                <a href="https://www.instagram.com/harmoniadoaltar?utm_source=qr&igsh=cXF5dGJ6cTFobmVr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-gray-400 hover:text-white transition-colors duration-300">
-                    <i class="fab fa-instagram text-2xl"></i>
+            <!-- Social Media Links -->
+            <div class="flex justify-center space-x-8 mt-10">
+                <a href="https://www.instagram.com/harmoniadoaltar?utm_source=qr&igsh=cXF5dGJ6cTFobmVr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-gray-400 hover:text-white transition-colors duration-300 transform hover:scale-110">
+                    <i class="fab fa-instagram text-3xl"></i>
                 </a>
-                <a href="https://www.facebook.com/share/1CBb9XQqiD/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-gray-400 hover:text-white transition-colors duration-300">
-                    <i class="fab fa-facebook text-2xl"></i>
+                <a href="https://www.facebook.com/share/1CBb9XQqiD/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-gray-400 hover:text-white transition-colors duration-300 transform hover:scale-110">
+                    <i class="fab fa-facebook text-3xl"></i>
                 </a>
             </div>
         </div>
     </footer>
 
-    <!-- Main Contract Modal (Unified with Tabs) -->
-    <div id="main-contract-modal" class="modal fixed inset-0 flex items-center justify-center">
+    <!-- Main Simulation Modal (Unified with Tabs) -->
+    <div id="main-simulation-modal" class="modal fixed inset-0 flex items-center justify-center">
         <div class="modal-content w-full max-w-2xl">
-            <span class="close-button" id="close-main-modal-button">&times;</span>
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Contratação do Plano</h3>
+            <div class="modal-header">
+                <h3 class="modal-title">Simulação de Orçamento</h3>
+                <span class="close-button modal-close-button" id="close-main-modal-button" aria-label="Close modal">&times;</span>
+            </div>
 
-            <div class="tab-header" role="tablist">
-                <button class="tab-button active" data-tab="deslocamento-tab" role="tab">Deslocamento</button>
-                <button class="tab-button" data-tab="event-details-tab" role="tab">Detalhes do Evento</button>
-                <button class="tab-button" data-tab="payment-method-tab" role="tab">Pagamento</button>
-                <button class="tab-button" data-tab="summary-tab" role="tab">Resumo</button>
+            <!-- Tab Navigation for the Modal -->
+            <div class="tab-header modal-tab-header" role="tablist">
+                <button class="tab-button modal-tab-button active" data-tab="deslocamento-tab" role="tab" aria-controls="deslocamento-tab-content">Deslocamento</button>
+                <button class="tab-button modal-tab-button" data-tab="event-details-tab" role="tab" aria-controls="event-details-tab-content">Detalhes do Evento</button>
+                <button class="tab-button modal-tab-button" data-tab="payment-method-tab" role="tab" aria-controls="payment-method-tab-content">Pagamento</button>
+                <button class="tab-button modal-tab-button" data-tab="summary-tab" role="tab" aria-controls="summary-tab-content">Resumo</button>
             </div>
 
             <!-- TAB 1: DESLOCAMENTO -->
-            <div id="deslocamento-tab" class="tab-content active">
+            <div id="deslocamento-tab" class="tab-content active" role="tabpanel" aria-labelledby="deslocamento-tab">
                 <h4 class="text-xl font-bold text-gray-800 mb-4">Cálculo de Deslocamento</h4>
-                <p class="text-gray-600 mb-4">Informe o endereço do local da cerimônia para calcular o custo do deslocamento. <strong>Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.</strong></p>
-                <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço Completo (Rua, Número, Cidade, Estado):</label>
-                <div class="flex space-x-2 mb-4">
-                    <input type="text" id="modal-destination-address" placeholder="Ex: Av. Brasil, 123, Ivinhema, MS" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
-                    <button type="button" id="open-map-selection-btn" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-600 transition-colors duration-300 text-sm flex-shrink-0">
-                        <i class="fas fa-map-marker-alt mr-1"></i> Abrir Mapa
-                    </button>
+                <p class="text-gray-600 mb-6">Informe o endereço do local da cerimônia para calcular o custo do deslocamento. <strong>Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.</strong></p>
+                <div class="modal-input-group mb-4">
+                    <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço Completo (Rua, Número, Cidade, Estado):</label>
+                    <div class="flex space-x-2">
+                        <input type="text" id="modal-destination-address" placeholder="Ex: Av. Brasil, 123, Ivinhema, MS" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                        <button type="button" id="open-map-selection-btn" class="btn-secondary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 text-sm flex-shrink-0">
+                            <i class="fas fa-map-marker-alt mr-1"></i> Abrir Mapa
+                        </button>
+                    </div>
+                    <p id="modal-deslocamento-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
                 </div>
-                <p id="modal-deslocamento-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
                 <div id="modal-deslocamento-results" class="mt-6 p-4 bg-gray-100 rounded-lg hidden">
                     <p class="text-gray-700">Distância: <span id="modal-distance-display" class="font-bold"></span></p>
                     <p class="text-gray-700">Valor do Deslocamento: <span id="modal-calculated-deslocamento-display" class="font-bold text-gold"></span></p>
                 </div>
-                <div class="flex justify-end mt-6">
-                    <button id="next-to-event-details-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Próximo</button>
+                <div class="modal-footer-buttons">
+                    <button id="next-to-event-details-btn" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">Próximo</button>
                 </div>
             </div>
 
-            <!-- TAB 2: DETALHES DO EVENTO (NOVO) -->
-            <div id="event-details-tab" class="tab-content">
+            <!-- TAB 2: DETALHES DO EVENTO -->
+            <div id="event-details-tab" class="tab-content" role="tabpanel" aria-labelledby="event-details-tab">
                 <h4 class="text-xl font-bold text-gray-800 mb-4">Detalhes da Cerimônia</h4>
-                <p class="text-gray-600 mb-4">Por favor, preencha a data e o horário da sua cerimônia.</p>
+                <p class="text-gray-600 mb-6">Por favor, preencha a data e o horário da sua cerimônia.</p>
                 
-                <div class="mb-4">
+                <div class="modal-input-group mb-4">
                     <label for="ceremony-date" class="block text-gray-700 text-sm font-bold mb-2">Data da Cerimônia:</label>
                     <input type="date" id="ceremony-date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
                 </div>
                 
-                <div class="mb-4">
+                <div class="modal-input-group mb-4">
                     <label for="ceremony-time" class="block text-gray-700 text-sm font-bold mb-2">Horário da Cerimônia:</label>
                     <input type="time" id="ceremony-time" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
                 </div>
 
-                <!-- Novo campo para Local de Referência -->
-                <div class="mb-4">
+                <!-- New field for Reference Location -->
+                <div class="modal-input-group mb-4">
                     <label for="reference-location" class="block text-gray-700 text-sm font-bold mb-2">Local de Referência (Opcional):</label>
                     <input type="text" id="reference-location" placeholder="Ex: Próximo à praça central" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
                 </div>
@@ -514,14 +920,14 @@
                 </div>
                 <p id="modal-event-details-error" class="text-red-500 mt-2 hidden text-sm">Por favor, preencha a data e o horário.</p>
 
-                <div class="flex justify-between mt-6">
-                    <button class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-300" data-navigate-tab="deslocamento-tab">Voltar</button>
-                    <button id="next-to-payment-method-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Próximo</button>
+                <div class="modal-footer-buttons">
+                    <button class="btn-secondary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300" data-navigate-tab="deslocamento-tab">Voltar</button>
+                    <button id="next-to-payment-method-btn" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">Próximo</button>
                 </div>
             </div>
 
             <!-- TAB 3: FORMA DE PAGAMENTO -->
-            <div id="payment-method-tab" class="tab-content">
+            <div id="payment-method-tab" class="tab-content" role="tabpanel" aria-labelledby="payment-method-tab">
                 <h4 class="text-xl font-bold text-gray-800 mb-4">Forma de Pagamento</h4>
                 <div class="mb-4 text-gray-700">
                     <p>Valor do Plano: <span id="modal-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
@@ -529,34 +935,32 @@
                     <p>Valor Total (Plano + Deslocamento): <span id="modal-total-price" class="font-bold text-gold">R$ 0,00</span></p>
                     <p class="mt-2 text-lg font-bold">Valor Total a Pagar<span id="fees-suffix" class="text-sm font-normal text-gray-600"> (com taxas)</span>: <span id="modal-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
                 </div>
-                <div class="mb-6">
-                    <div class="space-y-2">
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="radio" name="payment-method" value="pix" class="form-radio h-4 w-4 text-gold" checked>
-                            <span>Pix</span>
-                        </label>
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="radio" name="payment-method" value="dinheiro" class="form-radio h-4 w-4 text-gold">
-                            <span>Dinheiro (a verificar com o contratado)</span>
-                        </label>
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="radio" name="payment-method" value="boleto" class="form-radio h-4 w-4 text-gold">
-                            <span>Boleto (parcelamento em até 5x)</span>
-                        </label>
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="radio" name="payment-method" value="cartao" class="form-radio h-4 w-4 text-gold">
-                            <span>Cartão de Crédito (parcelamento em até 12x)</span>
-                        </label>
-                    </div>
+                <div class="mb-6 space-y-3">
+                    <label class="flex items-center space-x-3 cursor-pointer modal-radio-label">
+                        <input type="radio" name="payment-method" value="pix" class="form-radio h-5 w-5 text-gold" checked>
+                        <span>Pix</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer modal-radio-label">
+                        <input type="radio" name="payment-method" value="dinheiro" class="form-radio h-5 w-5 text-gold">
+                        <span>Dinheiro (a verificar com o contratado)</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer modal-radio-label">
+                        <input type="radio" name="payment-method" value="boleto" class="form-radio h-5 w-5 text-gold">
+                        <span>Boleto (parcelamento em até 5x)</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer modal-radio-label">
+                        <input type="radio" name="payment-method" value="cartao" class="form-radio h-5 w-5 text-gold">
+                        <span>Cartão de Crédito (parcelamento em até 12x)</span>
+                    </label>
                 </div>
 
-                <div id="installment-options" class="mb-6 hidden">
+                <div id="installment-options" class="mb-6 hidden modal-input-group">
                     <label for="installments" class="block text-gray-700 text-sm font-bold mb-2">Número de Parcelas:</label>
                     <select id="installments" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold"></select>
                     <p class="mt-2 text-gray-700">Valor por parcela: <span id="installment-value" class="font-bold text-gold">R$ 0,00</span></p>
                 </div>
 
-                <div id="boleto-due-date-options" class="mb-6 hidden">
+                <div id="boleto-due-date-options" class="mb-6 hidden modal-input-group">
                     <label for="boleto-due-date" class="block text-gray-700 text-sm font-bold mb-2">Melhor dia para vencimento do boleto:</label>
                     <select id="boleto-due-date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
                         <option value="5">Dia 5</option>
@@ -569,28 +973,28 @@
                     <p id="modal-boleto-date-error" class="text-red-500 mt-2 hidden text-sm">A data da última parcela não pode ser posterior à data da cerimônia. Por favor, ajuste as parcelas ou a data de vencimento.</p>
                 </div>
 
-                <div class="flex justify-between mt-6">
-                    <button class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-300" data-navigate-tab="event-details-tab">Voltar</button>
-                    <button id="next-to-summary-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Próximo</button>
+                <div class="modal-footer-buttons">
+                    <button class="btn-secondary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300" data-navigate-tab="event-details-tab">Voltar</button>
+                    <button id="next-to-summary-btn" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">Próximo</button>
                 </div>
             </div>
 
-            <!-- TAB 4: RESUMO E CONTRATAR -->
-            <div id="summary-tab" class="tab-content">
+            <!-- TAB 4: RESUMO E SIMULAR -->
+            <div id="summary-tab" class="tab-content" role="tabpanel" aria-labelledby="summary-tab">
                 <h4 class="text-xl font-bold text-gray-800 mb-4">Resumo do Orçamento</h4>
-                <div class="bg-gray-50 p-4 rounded-lg space-y-2">
-                    <p class="text-gray-600"><strong>Plano:</strong> <span id="summary-plan-name" class="font-bold text-gray-800"></span></p>
-                    <p class="text-gray-600"><strong>Data do Evento:</strong> <span id="summary-event-date" class="font-bold text-gray-800"></span></p>
-                    <p class="text-gray-600"><strong>Endereço:</strong> <span id="summary-event-address" class="font-bold text-gray-800"></span></p>
-                    <p class="text-gray-600" id="summary-reference-location-display"><strong>Local de Referência:</strong> <span id="summary-reference-location" class="font-bold text-gray-800"></span></p>
-                    <hr class="my-2">
-                    <p class="text-gray-600">Valor do Plano: <span id="summary-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="text-gray-600">Valor do Deslocamento: <span id="summary-deslocamento-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="text-gray-600">Valor Total (Plano + Deslocamento): <span id="summary-total-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="text-gray-600" id="summary-total-with-fees-label-container">Valor Total a Pagar<span id="summary-fees-suffix"> (com taxas)</span>: <span id="summary-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="text-gray-600">Forma de Pagamento: <span id="summary-payment-method" class="font-bold text-gold"></span></p>
-                    <p class="text-gray-600" id="summary-installment-details">Parcelamento: <span id="summary-installments" class="font-bold text-gold"></span></p>
-                    <p class="text-gray-600 hidden" id="summary-boleto-due-date-details">Vencimento do Boleto: <span id="summary-boleto-due-date" class="font-bold text-gold"></span></p>
+                <div class="modal-summary-box space-y-3">
+                    <p class="modal-summary-item"><strong>Plano:</strong> <span id="summary-plan-name" class="font-bold text-gray-800"></span></p>
+                    <p class="modal-summary-item"><strong>Data do Evento:</strong> <span id="summary-event-date" class="font-bold text-gray-800"></span></p>
+                    <p class="modal-summary-item"><strong>Endereço:</strong> <span id="summary-event-address" class="font-bold text-gray-800"></span></p>
+                    <p class="modal-summary-item" id="summary-reference-location-display"><strong>Local de Referência:</strong> <span id="summary-reference-location" class="font-bold text-gray-800"></span></p>
+                    <hr class="my-3 border-gray-300">
+                    <p class="modal-summary-item">Valor do Plano: <span id="summary-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="modal-summary-item">Valor do Deslocamento: <span id="summary-deslocamento-price" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="modal-summary-item">Valor Total (Plano + Deslocamento): <span id="summary-total-price" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="modal-summary-item" id="summary-total-with-fees-label-container">Valor Total a Pagar<span id="summary-fees-suffix"> (com taxas)</span>: <span id="summary-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="modal-summary-item">Forma de Pagamento: <span id="summary-payment-method" class="font-bold text-gold"></span></p>
+                    <p class="modal-summary-item" id="summary-installment-details">Parcelamento: <span id="summary-installments" class="font-bold text-gold"></span></p>
+                    <p class="modal-summary-item hidden" id="summary-boleto-due-date-details">Vencimento do Boleto: <span id="summary-boleto-due-date" class="font-bold text-gold"></span></p>
                 </div>
                 
                 <div id="fees-explanation" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg text-sm mt-6 hidden">
@@ -598,9 +1002,9 @@
                     <p>As taxas aplicadas em pagamentos via Boleto e Cartão de Crédito são referentes aos custos de processamento das operadoras financeiras e bancos. A Harmonia do Altar não retém qualquer valor sobre estas taxas, que são integralmente destinadas à viabilização do parcelamento e segurança da transação. Para pagamentos via Pix ou Dinheiro, não há incidência de taxas adicionais.</p>
                 </div>
 
-                <div class="flex justify-between mt-6">
-                    <button class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-400 transition-colors duration-300" data-navigate-tab="payment-method-tab">Voltar</button>
-                    <button id="confirm-contract-btn" class="bg-gold text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 transform hover:scale-105">Confirmar Contratação</button>
+                <div class="modal-footer-buttons">
+                    <button class="btn-secondary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300" data-navigate-tab="payment-method-tab">Voltar</button>
+                    <button id="confirm-simulation-btn" class="btn-primary text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">Confirmar Simulação</button>
                 </div>
             </div>
         </div>
@@ -608,63 +1012,67 @@
 
     <!-- Map Selection Modal -->
     <div id="map-selection-modal" class="modal fixed inset-0 flex items-center justify-center">
-        <div class="modal-content w-full max-w-xl h-3/4 flex flex-col">
-            <span class="close-button" id="close-map-modal-button">&times;</span>
-            <h3 class="text-xl font-bold text-gray-800 mb-4">Selecione a Localização no Mapa</h3>
+        <div class="notification-modal-content w-full h-3/4 flex flex-col">
+            <span class="close-button modal-close-button" id="close-map-modal-button" aria-label="Close map modal">&times;</span>
+            <h3 class="notification-modal-title">Selecione a Localização no Mapa</h3>
             <div id="map-canvas" class="flex-grow rounded-lg mb-4" style="height: 400px; width: 100%;"></div>
-            <button id="confirm-map-location-btn" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300 mt-4">Confirmar Localização</button>
+            <button id="confirm-map-location-btn" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 mt-4 notification-modal-button">Confirmar Localização</button>
         </div>
     </div>
 
     <!-- Boleto Notification Modal -->
     <div id="boleto-notification-modal" class="modal fixed inset-0 flex items-center justify-center">
-        <div class="modal-content w-full max-w-md">
-            <span class="close-button" id="close-boleto-modal-button">&times;</span>
-            <h3 class="text-xl font-bold text-gray-800 mb-4">Atenção sobre o Pagamento via Boleto</h3>
-            <p class="text-gray-700 leading-relaxed">
-                Informamos que o boleto referente à sua contratação pode ser gerado e pago a qualquer momento antes da data da cerimônia. É fundamental que o pagamento seja efetuado até a data de vencimento. Boletos não pagos após o vencimento estão sujeitos a protesto em cartório, o que pode acarretar restrições de crédito. Para evitar inconvenientes, recomendamos a quitação dentro do prazo estabelecido.
+        <div class="notification-modal-content w-full">
+            <span class="close-button modal-close-button" id="close-boleto-modal-button" aria-label="Close notification">&times;</span>
+            <h3 class="notification-modal-title info">
+                <i class="fas fa-info-circle icon"></i> Atenção Importante: Pagamento via Boleto!
+            </h3>
+            <p class="notification-modal-text">
+                Para sua comodidade, o boleto da sua simulação pode ser gerado e quitado a qualquer momento antes da data da cerimônia. Lembre-se: o pagamento pontual é essencial! Boletos não pagos após o vencimento podem estar sujeitos a protesto em cartório, o que pode gerar restrições de crédito. Para garantir a tranquilidade do seu grande dia, recomendamos a quitação dentro do prazo estabelecido. Contamos com você para essa harmonia financeira!
             </p>
             <div class="flex justify-end mt-6">
-                <button id="ok-boleto-modal-button" class="bg-gold text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-yellow-600 transition-colors duration-300">Entendi</button>
+                <button id="ok-boleto-modal-button" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 notification-modal-button">Entendi</button>
             </div>
         </div>
     </div>
 
     <!-- New: Boleto Date Validation Notification Modal -->
     <div id="boleto-date-warning-modal" class="modal fixed inset-0 flex items-center justify-center">
-        <div class="modal-content w-full max-w-md">
-            <span class="close-button" id="close-boleto-date-warning-modal-button">&times;</span>
-            <h3 class="text-xl font-bold text-red-600 mb-4">Atenção: Data de Vencimento do Boleto</h3>
-            <p class="text-gray-700 leading-relaxed">
-                A data da última parcela do boleto que você selecionou (dia <span id="warning-due-date"></span>) excede a data da sua cerimônia (<span id="warning-ceremony-date"></span>).
-                Para prosseguir com o pagamento via boleto, por favor, ajuste o número de parcelas ou o dia de vencimento do boleto para que todas as parcelas sejam quitadas antes da data do evento.
+        <div class="notification-modal-content w-full">
+            <span class="close-button modal-close-button" id="close-boleto-date-warning-modal-button" aria-label="Close warning">&times;</span>
+            <h3 class="notification-modal-title warning">
+                <i class="fas fa-exclamation-triangle icon"></i> Alerta Importante: Ajuste a Data do Boleto!
+            </h3>
+            <p class="notification-modal-text">
+                Identificamos que a data da última parcela do boleto que você selecionou (dia <span id="warning-due-date"></span>) ultrapassa a data da sua cerimônia (<span id="warning-ceremony-date"></span>). Para que tudo corra perfeitamente e sem imprevistos, é fundamental que todas as parcelas sejam quitadas antes do seu grande dia. Por favor, ajuste o número de parcelas ou o dia de vencimento do boleto. Estamos aqui para ajudar a encontrar a melhor solução!
             </p>
             <div class="flex justify-end mt-6">
-                <button id="ok-boleto-date-warning-modal-button" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-red-600 transition-colors duration-300">Entendi</button>
+                <button id="ok-boleto-date-warning-modal-button" class="btn-primary red text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 notification-modal-button">Entendi</button>
             </div>
         </div>
     </div>
 
+    <!-- Instagram Embed Script -->
     <script async src="//www.instagram.com/embed.js"></script>
     
-    <!-- Google Maps API with Places library -->
+    <!-- Google Maps API with Places library for autocomplete and distance matrix -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoL-Za52C0cbwOen71nbKqDpLKgBufd0Y&libraries=geometry,places&callback=initMap"></script>
 
     <script>
         // --- GLOBAL VARIABLES & CONSTANTS ---
-        let mapsInitialized = false;
-        let autocomplete;
-        let currentPlanDetails = null;
-        let currentFinalTotalPrice = 0;
-        let currentPlanOnlyPrice = 0;
-        let currentDeslocamentoCost = 0;
-        let selectedPaymentMethod = 'pix';
-        let selectedInstallments = 1;
-        let ceremonyDate = null;
-        let ceremonyTime = null;
-        let selectedBoletoDueDate = 5;
-        let debounceTimer;
-        const whatsappNumber = '5567996884226'; // Moved to global scope
+        let mapsInitialized = false; // Flag to check if Google Maps API is loaded
+        let autocomplete; // Google Places Autocomplete instance
+        let currentPlanDetails = null; // Stores details of the selected plan
+        let currentFinalTotalPrice = 0; // Total price including plan and displacement
+        let currentPlanOnlyPrice = 0; // Price of the selected plan only
+        let currentDeslocamentoCost = 0; // Cost of displacement
+        let selectedPaymentMethod = 'pix'; // Default payment method
+        let selectedInstallments = 1; // Default number of installments
+        let ceremonyDate = null; // Date of the ceremony
+        let ceremonyTime = null; // Time of the ceremony
+        let selectedBoletoDueDate = 5; // Default day for boleto due date
+        let debounceTimer; // Timer for input debouncing
+        const whatsappNumber = '5567996884226'; // WhatsApp number for contact
 
         // Google Maps related variables
         let selectedPlaceDetails = {
@@ -673,11 +1081,11 @@
             lng: null,
             googleMapsUrl: ''
         };
-        let map = null;
-        let marker = null;
-        let geocoder = null;
+        let map = null; // Google Map instance
+        let marker = null; // Google Map marker instance
+        let geocoder = null; // Google Maps Geocoder instance
 
-        // DOM Element variables declared globally (now correctly assigned in DOMContentLoaded)
+        // DOM Element variables declared globally (assigned in DOMContentLoaded)
         let modalDestinationAddressInput;
         let modalDeslocamentoError;
         let modalDeslocamentoResultsDiv;
@@ -725,17 +1133,19 @@
         let feesExplanationDiv;
         let summaryFeesSuffixSpan;
 
-
+        // Pricing constants
         const BASE_PLAN_PRICE = 1400;
         const BOLETO_PER_INSTALLMENT_FEE = 18;
         const FIXED_DESLOCAMENTO_AMOUNT = 70;
-        const PER_KM_DESLOCAMENTO_RATE = 1.80 * 2;
-        const originAddress = "Angélica, MS, Brazil";
+        const PER_KM_DESLOCAMENTO_RATE = 1.80 * 2; // R$1.80 per km, multiplied by 2 for round trip
+        const originAddress = "Angélica, MS, Brazil"; // Origin for distance calculation
 
+        // Instrument prices for custom plan builder
         const INSTRUMENT_PRICES = {
             'Violão': 200, 'Contrabaixo': 200, 'Guitarra': 200,
             'Saxofone': 500, 'Violino': 500, '3 Vozes + Teclado/Piano': BASE_PLAN_PRICE
         };
+        // Credit card fee percentages based on number of installments
         const CREDIT_CARD_TOTAL_PERCENTAGES = {
             1: 0.04980, 2: 0.04590 + 0.0531, 3: 0.05970 + 0.0531, 4: 0.07330 + 0.0531,
             5: 0.08660 + 0.0531, 6: 0.09960 + 0.0531, 7: 0.11240 + 0.0531, 8: 0.12500 + 0.0531,
@@ -743,6 +1153,12 @@
         };
 
         // --- GLOBAL FUNCTIONS ---
+
+        /**
+         * Formats a number as Brazilian currency (R$).
+         * @param {number} value - The number to format.
+         * @returns {string} The formatted currency string.
+         */
         function formatCurrency(value) {
             if (typeof value !== 'number' || isNaN(value)) return 'R$ 0,00';
             return `R$ ${value.toFixed(2).replace('.', ',')}`;
@@ -816,6 +1232,7 @@
 
         /**
          * Initializes the Google Maps API and Places Autocomplete.
+         * This function is called as a callback by the Google Maps script.
          */
         function initMap() {
             mapsInitialized = true;
@@ -875,12 +1292,12 @@
 
                 // Listen for map clicks to place the marker
                 map.addListener('click', (e) => {
-                    placeMarkerAndPanTo(e.latLng, map);
+                    placeMarkerAndMapanTo(e.latLng, map);
                 });
 
                 // Listen for marker drag end to update location
                 marker.addListener('dragend', () => {
-                    placeMarkerAndPanTo(marker.getPosition(), map);
+                    placeMarkerAndMapanTo(marker.getPosition(), map);
                 });
             }
 
@@ -891,7 +1308,7 @@
                     if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
                         map.setCenter(results[0].geometry.location);
                         map.setZoom(15); // Zoom in on the specific address
-                        placeMarkerAndPanTo(results[0].geometry.location, map);
+                        placeMarkerAndMapanTo(results[0].geometry.location, map);
                     } else {
                         // Fallback to default center if geocoding fails or no address
                         map.setCenter({ lat: -14.235, lng: -51.925 });
@@ -903,7 +1320,7 @@
                 // If a location was previously selected from map, center on it
                 map.setCenter({ lat: selectedPlaceDetails.lat, lng: selectedPlaceDetails.lng });
                 map.setZoom(15);
-                placeMarkerAndPanTo(new google.maps.LatLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng), map);
+                placeMarkerAndMapanTo(new google.maps.LatLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng), map);
             } else {
                 // Default center if no address or previous selection
                 map.setCenter({ lat: -14.235, lng: -51.925 });
@@ -920,7 +1337,7 @@
          * @param {google.maps.LatLng} latLng - The latitude and longitude to place the marker.
          * @param {google.maps.Map} mapInstance - The map instance.
          */
-        function placeMarkerAndPanTo(latLng, mapInstance) {
+        function placeMarkerAndMapanTo(latLng, mapInstance) {
             marker.setPosition(latLng);
             marker.setMap(mapInstance); // Ensure marker is visible
             mapInstance.panTo(latLng);
@@ -1005,8 +1422,6 @@
             }
             
             message += `• *Forma de Pagamento:* ${paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}\n`;
-            // The installment line is now conditional above, so remove the generic one here
-            // message += `• *Parcelamento:* ${installments}x de ${formatCurrency(installmentValue)}\n`;
             if (paymentMethod === 'boleto') {
                 message += `• *Vencimento do Boleto:* Todo dia ${selectedBoletoDueDate}\n`;
             }
@@ -1088,7 +1503,14 @@
                 const mobileMenuButton = document.getElementById('mobile-menu-button');
                 const mobileMenu = document.getElementById('mobile-menu');
                 if (navbar && mobileMenuButton && mobileMenu) {
-                    window.onscroll = () => navbar.classList.toggle('bg-gray-900', window.scrollY > 50);
+                    // Add/remove 'navbar-scrolled' class based on scroll position
+                    window.onscroll = () => {
+                        if (window.scrollY > 50) {
+                            navbar.classList.add('navbar-scrolled');
+                        } else {
+                            navbar.classList.remove('navbar-scrolled');
+                        }
+                    };
                     mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
                     document.querySelectorAll('.nav-link-mobile').forEach(link => {
                         link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
@@ -1104,9 +1526,13 @@
                 ];
                 const bandOptionsContainer = document.getElementById('band-instrument-options');
                 const guestOptionsContainer = document.getElementById('guest-instrument-options');
-                const contractBtnCustom = document.getElementById('contract-btn-custom');
+                const simulateBtnCustom = document.getElementById('simulate-btn-custom'); // Changed ID
                 const selectedInstruments = new Set();
 
+                /**
+                 * Calculates the total price for the custom plan based on selected instruments.
+                 * @returns {number} The calculated price.
+                 */
                 function calculateCustomPlanPrice() {
                     let price = BASE_PLAN_PRICE;
                     selectedInstruments.forEach(name => {
@@ -1116,9 +1542,14 @@
                     return price;
                 }
 
+                /**
+                 * Creates a checkbox element for an instrument and appends it to the container.
+                 * @param {object} instrument - The instrument object with name and price.
+                 * @param {HTMLElement} container - The DOM element to append the checkbox to.
+                 */
                 function createCheckbox(instrument, container) {
                     const label = document.createElement('label');
-                    label.className = 'flex items-center space-x-3 cursor-pointer p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition';
+                    label.className = 'custom-plan-checkbox-label'; /* Apply new custom class */
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
                     checkbox.dataset.name = instrument.name;
@@ -1140,13 +1571,16 @@
                 }
 
                 // --- MAIN MODAL LOGIC ---
-                const mainContractModal = document.getElementById('main-contract-modal');
+                const mainSimulationModal = document.getElementById('main-simulation-modal'); // Changed ID
                 const closeMainModalButton = document.getElementById('close-main-modal-button');
                 const tabButtons = document.querySelectorAll('.tab-button');
                 const tabContents = document.querySelectorAll('.tab-content');
-                let unlockedTabs = ['deslocamento-tab'];
+                let unlockedTabs = ['deslocamento-tab']; // Initially, only the first tab is unlocked
 
-                // --- TAB NAVIGATION ---
+                /**
+                 * Shows a specific tab within the main simulation modal.
+                 * @param {string} tabId - The ID of the tab to show.
+                 */
                 function showTab(tabId) {
                     tabContents.forEach(content => content.style.display = 'none');
                     tabButtons.forEach(button => button.classList.remove('active'));
@@ -1162,6 +1596,10 @@
                     }
                 }
 
+                /**
+                 * Navigates to a specific tab, unlocking it if necessary.
+                 * @param {string} targetTab - The ID of the tab to navigate to.
+                 */
                 function navigateToTab(targetTab) {
                     if (!unlockedTabs.includes(targetTab)) {
                         unlockedTabs.push(targetTab);
@@ -1169,6 +1607,7 @@
                     showTab(targetTab);
                 }
 
+                // Event listeners for tab buttons
                 tabButtons.forEach(button => {
                     button.addEventListener('click', (e) => {
                         const targetTab = e.target.dataset.tab;
@@ -1178,10 +1617,12 @@
                     });
                 });
                 
+                // Event listeners for "Voltar" buttons
                 document.querySelectorAll('[data-navigate-tab]').forEach(button => {
                     button.addEventListener('click', (e) => showTab(e.target.dataset.navigateTab));
                 });
 
+                // Navigation to Event Details tab
                 document.getElementById('next-to-event-details-btn').addEventListener('click', () => {
                     const address = modalDestinationAddressInput.value.trim();
                     if (!address || modalDeslocamentoResultsDiv.classList.contains('hidden')) {
@@ -1192,6 +1633,7 @@
                     navigateToTab('event-details-tab');
                 });
 
+                // Navigation to Payment Method tab
                 document.getElementById('next-to-payment-method-btn').addEventListener('click', () => {
                     ceremonyDate = ceremonyDateInput.value;
                     ceremonyTime = ceremonyTimeInput.value;
@@ -1204,20 +1646,26 @@
                     navigateToTab('payment-method-tab');
                 });
 
+                // Navigation to Summary tab
                 document.getElementById('next-to-summary-btn').addEventListener('click', () => {
-                    if (validateBoletoDueDate()) {
+                    if (validateBoletoDueDate()) { // Validate boleto date before proceeding
                         navigateToTab('summary-tab');
                     }
                 });
 
                 // --- MODAL OPEN/CLOSE ---
-                function showMainContractModal(planPrice, planDetails) {
-                    mainContractModal.style.display = 'flex';
+                /**
+                 * Displays the main simulation modal with initial plan details.
+                 * @param {number} planPrice - The base price of the selected plan.
+                 * @param {object} planDetails - Detailed information about the plan.
+                 */
+                function showMainSimulationModal(planPrice, planDetails) { // Changed function name
+                    mainSimulationModal.style.display = 'flex'; // Changed ID
                     currentPlanDetails = planDetails;
                     currentPlanOnlyPrice = planPrice;
-                    currentDeslocamentoCost = 0;
-                    currentFinalTotalPrice = currentPlanOnlyPrice;
-                    
+                    currentDeslocamentoCost = 0; // Reset displacement cost
+                    currentFinalTotalPrice = currentPlanOnlyPrice; // Reset total price
+
                     // Reset fields
                     modalDestinationAddressInput.value = '';
                     ceremonyDateInput.value = '';
@@ -1225,23 +1673,25 @@
                     referenceLocationInput.value = ''; // Reset reference location input
                     selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' }; // Reset map selection
                     const today = new Date().toISOString().split('T')[0];
-                    ceremonyDateInput.setAttribute('min', today);
+                    ceremonyDateInput.setAttribute('min', today); // Set minimum date for ceremony
                     modalDeslocamentoResultsDiv.classList.add('hidden');
                     modalDeslocamentoError.classList.add('hidden');
                     
-                    // Reset tabs
+                    // Reset tabs and show the first one
                     unlockedTabs = ['deslocamento-tab'];
                     showTab('deslocamento-tab');
                 }
 
+                // Close main modal button listener
                 if (closeMainModalButton) {
                     closeMainModalButton.addEventListener('click', () => {
-                        mainContractModal.style.display = 'none';
+                        mainSimulationModal.style.display = 'none'; // Changed ID
                     });
                 }
+                // Close main modal when clicking outside
                 window.addEventListener('click', (event) => {
-                    if (event.target == mainContractModal) {
-                        mainContractModal.style.display = 'none';
+                    if (event.target == mainSimulationModal) { // Changed ID
+                        mainSimulationModal.style.display = 'none'; // Changed ID
                     }
                 });
 
@@ -1302,7 +1752,7 @@
                 paymentMethodRadios.forEach(radio => {
                     radio.addEventListener('change', () => {
                         selectedPaymentMethod = radio.value;
-                        selectedInstallments = 1;
+                        selectedInstallments = 1; // Reset installments on method change
                         updateInstallmentOptions();
                         updatePaymentDetailsDisplay();
                         // Only show the first boleto notification here.
@@ -1326,6 +1776,9 @@
                     updatePaymentDetailsDisplay();
                 });
 
+                /**
+                 * Updates the installment options dropdown based on the selected payment method.
+                 */
                 function updateInstallmentOptions() {
                     installmentsSelect.innerHTML = '';
                     let maxInstallments = 1;
@@ -1341,6 +1794,9 @@
                     installmentsSelect.value = selectedInstallments;
                 }
 
+                /**
+                 * Updates the payment details display in the modal based on selected options.
+                 */
                 function updatePaymentDetailsDisplay() {
                     let calculatedTotalForPayment = currentFinalTotalPrice;
                     let finalInstallmentValue = 0;
@@ -1375,19 +1831,25 @@
                     }
                 }
                 
+                /**
+                 * Validates if the last boleto installment date is before the ceremony date.
+                 * Displays a warning modal if not.
+                 * @returns {boolean} True if validation passes, false otherwise.
+                 */
                 function validateBoletoDueDate() {
                     // Only perform validation if the payment method is boleto and a ceremony date is set
                     if (selectedPaymentMethod !== 'boleto' || !ceremonyDate) {
-                        modalBoletoDateError.classList.add('hidden'); // Esconde o erro inline
-                        boletoDateWarningModal.style.display = 'none'; // Esconde o modal de aviso
+                        modalBoletoDateError.classList.add('hidden'); // Hide inline error
+                        boletoDateWarningModal.style.display = 'none'; // Hide warning modal
                         if (nextToSummaryBtn) nextToSummaryBtn.disabled = false;
                         return true;
                     }
 
                     const today = new Date();
-                    const ceremony = new Date(ceremonyDate + 'T23:59:59');
+                    const ceremony = new Date(ceremonyDate + 'T23:59:59'); // End of ceremony day
                     
                     let firstPaymentDate = new Date(today.getFullYear(), today.getMonth(), selectedBoletoDueDate);
+                    // If the first payment date is in the past or today, set it to next month
                     if (firstPaymentDate <= today) {
                         firstPaymentDate.setMonth(firstPaymentDate.getMonth() + 1);
                     }
@@ -1414,6 +1876,9 @@
                 }
 
                 // --- SUMMARY LOGIC ---
+                /**
+                 * Updates the summary display in the modal with all selected details.
+                 */
                 function updateSummaryDisplay() {
                     let calculatedTotalForSummary = currentFinalTotalPrice;
                     let finalInstallmentValueForSummary = 0;
@@ -1465,40 +1930,49 @@
                     summaryPaymentMethodEl.textContent = paymentMethodText;
                     // Conditionally display "Pagamento à vista" or "Parcelamento"
                     if (selectedPaymentMethod === 'pix' || selectedPaymentMethod === 'dinheiro') {
-                        summaryInstallmentDetailsDiv.textContent = 'Pagamento: À vista';
+                        summaryInstallmentDetailsDiv.innerHTML = `Pagamento: <span class="font-bold text-gold">À vista</span>`;
                     } else {
-                        summaryInstallmentDetailsDiv.textContent = `Parcelamento: ${selectedInstallments}x de ${formatCurrency(finalInstallmentValueForSummary)}`;
+                        summaryInstallmentDetailsDiv.innerHTML = `Parcelamento: <span class="font-bold text-gold">${selectedInstallments}x de ${formatCurrency(finalInstallmentValueForSummary)}</span>`;
                     }
                 }
 
-                // --- WHATSAPP & HIRING ---
-                document.getElementById('confirm-contract-btn').addEventListener('click', () => {
+                // --- WHATSAPP & SIMULATION ---
+                document.getElementById('confirm-simulation-btn').addEventListener('click', () => { // Changed ID
                     const totalAmountWithFees = parseFloat(summaryTotalWithFeesEl.textContent.replace('R$', '').replace(',', '.'));
-                    const installmentValuePerInstallment = parseFloat(summaryInstallmentsEl.textContent.split('de ')[1]?.replace('R$', '').replace(',', '.') || totalAmountWithFees);
+                    // Safely get installment value, defaulting to total if not applicable (e.g., Pix/Dinheiro)
+                    const installmentValuePerInstallment = parseFloat(summaryInstallmentDetailsDiv.textContent.split('de ')[1]?.replace('R$', '').replace(',', '.') || totalAmountWithFees);
                     sendWhatsAppMessage(currentPlanDetails, selectedPaymentMethod, selectedInstallments, totalAmountWithFees, installmentValuePerInstallment);
-                    mainContractModal.style.display = 'none';
+                    mainSimulationModal.style.display = 'none'; // Changed ID
                 });
 
-                window.handleContratar = function(planName, instruments, price) {
+                /**
+                 * Global function to handle "Simular" button clicks for predefined plans.
+                 * @param {string} planName - The name of the plan.
+                 * @param {string[]} instruments - An array of instruments included in the plan.
+                 * @param {number} price - The price of the plan.
+                 */
+                window.handleSimular = function(planName, instruments, price) { // Changed function name
                     const planDetails = {
                         type: 'Plano Pronto', name: planName, instruments: instruments, price: price
                     };
-                    showMainContractModal(price, planDetails);
+                    showMainSimulationModal(price, planDetails); // Changed function call
                 };
 
-                if(contractBtnCustom){
-                    contractBtnCustom.addEventListener('click', () => {
+                // Event listener for the custom plan "Simular" button
+                if(simulateBtnCustom){ // Changed ID
+                    simulateBtnCustom.addEventListener('click', () => { // Changed ID
                         const customPlanPrice = calculateCustomPlanPrice();
                         const planDetails = {
                             type: 'Plano Personalizado', name: 'Plano Personalizado',
                             instruments: ['3 Vozes + Teclado/Piano', ...Array.from(selectedInstruments)],
                             price: customPlanPrice
                         };
-                        showMainContractModal(customPlanPrice, planDetails);
+                        showMainSimulationModal(customPlanPrice, planDetails); // Changed function call
                     });
                 }
 
                 // --- DESLOCAMENTO CALCULATION ---
+                // Debounce input for address calculation to prevent excessive API calls
                 modalDestinationAddressInput.addEventListener('input', () => {
                     clearTimeout(debounceTimer);
                     const address = modalDestinationAddressInput.value.trim();
@@ -1509,7 +1983,7 @@
                             // Also try to geocode and store lat/lng for WhatsApp link, but don't force map selection
                             if (geocoder) {
                                 geocoder.geocode({ 'address': address }, (results, status) => {
-                                    if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) { // Corrected typo: fgeometry to geometry
+                                    if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
                                         selectedPlaceDetails.address = results[0].formatted_address;
                                         selectedPlaceDetails.lat = results[0].geometry.location.lat();
                                         selectedPlaceDetails.lng = results[0].geometry.location.lng();
@@ -1532,6 +2006,7 @@
                 });
                 
                 // --- SECURITY (Optional but good practice) ---
+                // Disable right-click context menu
                 document.addEventListener('contextmenu', event => event.preventDefault());
 
             } catch (error) {
