@@ -22,11 +22,13 @@
         /* Base font for the body */
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: #FDFBF8; /* Softer background color */
+            background-color: #1a202c; /* Fundo mais escuro para uma sensação mais cinematográfica */
+            color: #e2e8f0; /* Texto mais claro para contraste em fundo escuro */
         }
         /* Heading font for a more elegant look */
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Playfair Display', serif;
+            color: #ffffff; /* Títulos brancos para forte contraste */
         }
         /* Custom gold color for branding consistency */
         .text-gold {
@@ -40,7 +42,7 @@
         }
         /* Hero section background with gradient overlay */
         .hero-bg {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -50,10 +52,10 @@
         .media-cropper {
             position: relative;
             overflow: hidden;
-            padding-top: 100%; /* Creates a square container */
+            padding-top: 100%; /* Cria um container quadrado */
             border-radius: 12px;
-            background-color: #e0e0e0;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background-color: #2d3748; /* Fundo mais escuro para o cropper */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
         }
         .media-cropper .instagram-media {
             position: absolute;
@@ -61,28 +63,26 @@
             left: 0;
             width: 100% !important;
             height: 100% !important;
-            /* Adjust transform values if content is cut off or not centered */
-            transform: scale(1.25) translateY(-4.5%); /* Scales and slightly adjusts position to crop */
+            /* Ajusta os valores de transformação se o conteúdo estiver cortado ou não centralizado */
+            transform: scale(1.25) translateY(-4.5%); /* Escala e ajusta ligeiramente a posição para cortar */
             border: none !important;
             box-shadow: none !important;
             margin: 0 !important;
         }
         
-        /* Animations for elements entering the viewport */
+        /* Animações para elementos entrando na viewport - Aprimorado para sensação cinematográfica */
         .animated-item {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(40px) scale(0.98);
+            transition: opacity 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, opacity; /* Dica de desempenho para animações */
         }
         .animated-item.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
-        .animated-item.delay-1 { transition-delay: 0.1s; }
-        .animated-item.delay-2 { transition-delay: 0.2s; }
-        .animated-item.delay-3 { transition-delay: 0.3s; }
 
-        /* Custom checkbox styling for better aesthetics */
+        /* Estilo de checkbox personalizado para melhor estética */
         .custom-checkbox:checked {
             background-color: #b69260;
             border-color: #b69260;
@@ -91,7 +91,7 @@
             color: #b69260;
         }
         
-        /* Navigation link hover effect */
+        /* Efeito hover do link de navegação */
         .nav-link {
             position: relative;
             color: white;
@@ -116,38 +116,58 @@
             width: 100%;
         }
 
-        /* Adjust scroll margin for sections to account for fixed navbar */
+        /* Ajusta a margem de rolagem para seções para considerar a barra de navegação fixa */
         section[id] {
             scroll-margin-top: 80px;
         }
 
-        /* Modal styles - Ensure display: none by default to prevent FOUC */
+        /* Estilos de modal - Garante display: none por padrão para evitar FOUC */
         .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
+            display: none; /* Oculto por padrão */
+            position: fixed; /* Permanece no lugar */
+            z-index: 1000; /* Fica no topo */
             left: 0;
             top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            width: 100%; /* Largura total */
+            height: 100%; /* Altura total */
+            overflow: auto; /* Habilita rolagem se necessário */
+            background-color: rgba(0,0,0,0.8); /* Overlay mais escuro e opaco para modais */
             justify-content: center;
             align-items: center;
+            opacity: 0; /* Começa invisível */
+            transform: translateY(-20px); /* Começa ligeiramente acima */
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out; /* Transição suave */
         }
+
+        .modal.show {
+            display: flex; /* Mostra o modal */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .modal-content {
-            background-color: #fefefe;
+            background-color: #1a202c; /* Fundo escuro para o conteúdo do modal */
+            color: #e2e8f0; /* Texto mais claro para o conteúdo do modal */
             margin: auto;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15); /* Sombras mais escuras */
             width: 90%;
-            max-width: 550px; /* Increased width for new fields */
+            max-width: 550px; /* Largura aumentada para novos campos */
             position: relative;
-            animation: fadeIn 0.3s ease-out;
+            /* Animação para o próprio conteúdo do modal */
+            opacity: 0; /* Começa invisível */
+            transform: translateY(-20px); /* Começa ligeiramente acima */
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out; /* Transição suave */
         }
+        /* Quando o modal pai é mostrado, aplica o estado ativo ao conteúdo */
+        .modal.show .modal-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .close-button {
-            color: #aaa;
+            color: #a0aec0; /* Cor mais clara do botão de fechar */
             float: right;
             font-size: 28px;
             font-weight: bold;
@@ -157,41 +177,36 @@
         }
         .close-button:hover,
         .close-button:focus {
-            color: black;
+            color: #ffffff; /* Branco no hover */
             text-decoration: none;
             cursor: pointer;
         }
-        /* Fade-in animation for modals */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 
-        /* Custom Scrollbar for Webkit browsers (Chrome, Safari) */
+        /* Barras de rolagem personalizadas para navegadores Webkit (Chrome, Safari) */
         ::-webkit-scrollbar {
-            width: 8px; /* Make it slightly thinner */
+            width: 8px; /* Torna-o ligeiramente mais fino */
         }
 
         ::-webkit-scrollbar-track {
-            background: transparent; /* Changed to transparent to remove the visible track */
+            background: transparent; /* Alterado para transparente para remover a trilha visível */
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #b69260; /* Updated gold color for the scrollbar thumb */
-            border-radius: 10px; /* Keep rounded corners for the thumb */
+            background: #b69260; /* Cor dourada atualizada para o polegar da barra de rolagem */
+            border-radius: 10px; /* Mantém cantos arredondados para o polegar */
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #a08154; /* Darker gold on hover */
+            background: #a08154; /* Dourado mais escuro no hover */
         }
 
-        /* Tab styles for modal navigation */
+        /* Estilos de aba para navegação modal */
         .tab-header {
             display: flex;
             justify-content: space-around;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #4a5568; /* Borda mais escura para abas */
             margin-bottom: 20px;
-            font-family: 'Montserrat', sans-serif; /* Ensure consistent font for tabs */
+            font-family: 'Montserrat', sans-serif; /* Garante fonte consistente para abas */
         }
         .tab-button {
             padding: 10px 15px;
@@ -199,46 +214,53 @@
             border: none;
             background-color: transparent;
             font-weight: 600;
-            color: #888;
+            color: #a0aec0; /* Cor mais clara para abas inativas */
             transition: color 0.3s, border-bottom 0.3s;
-            font-size: 0.875rem; /* Smaller font for more tabs */
+            font-size: 0.875rem; /* Fonte menor para mais abas */
         }
         .tab-button.active {
             color: #b69260;
             border-bottom: 2px solid #b69260;
         }
+        /* Transição do conteúdo da aba */
         .tab-content {
-            display: none; /* Hidden by default, shown by JS */
-        }
-        .tab-content.active {
-            display: block;
+            display: none; /* Oculto por padrão */
+            opacity: 0;
+            transform: translateY(10px); /* Começa ligeiramente abaixo */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Transição suave */
         }
 
-        /* Custom styles for enhanced design */
+        .tab-content.active {
+            display: block; /* Mostra o conteúdo da aba ativa */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Estilos personalizados para design aprimorado */
         .navbar-scrolled {
-            background-color: rgba(26, 32, 44, 0.9); /* Darker, slightly transparent background */
-            backdrop-filter: blur(8px); /* Frosted glass effect */
+            background-color: rgba(26, 32, 44, 0.9); /* Fundo mais escuro, ligeiramente transparente */
+            backdrop-filter: blur(8px); /* Efeito de vidro fosco */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .plan-card {
-            border: 1px solid #e0e0e0; /* Subtle border for all cards */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Softer initial shadow */
+            border: 1px solid #2d3748; /* Borda sutil para todos os cartões, mais escura */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Sombra inicial mais suave */
         }
 
         .plan-card:hover {
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow on hover */
-            transform: translateY(-5px) scale(1.01); /* Slightly more lift and scale */
-            border-color: #b69260; /* Gold border on hover */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Sombra mais pronunciada no hover */
+            transform: translateY(-5px) scale(1.01); /* Levemente mais levantado e escalado */
+            border-color: #b69260; /* Borda dourada no hover */
         }
 
         .plan-card.popular {
-            border: 2px solid #b69260; /* Gold border for popular card */
-            box-shadow: 0 10px 20px rgba(182, 146, 96, 0.25); /* Gold-tinted shadow for popular */
+            border: 2px solid #b69260; /* Borda dourada para cartão popular */
+            box-shadow: 0 10px 20px rgba(182, 146, 96, 0.25); /* Sombra com tonalidade dourada para popular */
         }
 
         .plan-card.popular:hover {
-            box-shadow: 0 15px 30px rgba(182, 146, 96, 0.4); /* Stronger gold shadow on hover */
+            box-shadow: 0 15px 30px rgba(182, 146, 96, 0.4); /* Sombra dourada mais forte no hover */
         }
 
         .btn-primary {
@@ -248,19 +270,19 @@
         }
 
         .btn-primary:hover {
-            background-position: right center; /* Change gradient direction on hover */
+            background-position: right center; /* Altera a direção do gradiente no hover */
             box-shadow: 0 6px 15px rgba(182, 146, 96, 0.5);
             transform: translateY(-2px);
         }
 
         .btn-secondary {
-            background-color: #4a5568; /* Gray-800 */
+            background-color: #4a5568; /* Cinza-800 */
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         .btn-secondary:hover {
-            background-color: #2d3748; /* Gray-900 */
+            background-color: #2d3748; /* Cinza-900 */
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
             transform: translateY(-2px);
         }
@@ -277,16 +299,16 @@
             transform: translateY(-2px);
         }
 
-        /* Modal specific styles */
+        /* Estilos específicos do modal */
         .modal-content {
-            background-color: #ffffff; /* White background for modal */
-            border-radius: 16px; /* More rounded corners */
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25); /* Stronger, more modern shadow */
-            padding: 30px; /* More padding */
+            background-color: #1a202c; /* Fundo escuro para o conteúdo do modal */
+            border-radius: 16px; /* Cantos mais arredondados */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); /* Sombra mais forte e moderna */
+            padding: 30px; /* Mais preenchimento */
         }
 
         .modal-header {
-            border-bottom: 2px solid #f0f0f0; /* Subtle separator */
+            border-bottom: 2px solid #2d3748; /* Separador sutil, mais escuro */
             padding-bottom: 20px;
             margin-bottom: 20px;
             display: flex;
@@ -297,24 +319,24 @@
         .modal-title {
             font-size: 1.875rem; /* text-3xl */
             font-weight: 700; /* font-bold */
-            color: #1a202c; /* gray-900 */
+            color: #ffffff; /* Título branco para contraste */
         }
 
         .modal-close-button {
-            color: #718096; /* gray-500 */
+            color: #a0aec0; /* Cor mais clara do botão de fechar */
             font-size: 2.25rem; /* text-4xl */
             line-height: 1;
             transition: color 0.2s ease-in-out;
         }
 
         .modal-close-button:hover {
-            color: #4a5568; /* gray-700 */
+            color: #ffffff; /* Branco no hover */
         }
 
         .modal-tab-header {
-            border-bottom: none; /* Remove default border */
+            border-bottom: none; /* Remove a borda padrão */
             margin-bottom: 25px;
-            background-color: #f7fafc; /* Light background for tabs */
+            background-color: #2d3748; /* Fundo escuro para abas */
             border-radius: 10px;
             padding: 5px;
         }
@@ -322,25 +344,25 @@
         .modal-tab-button {
             flex: 1;
             padding: 12px 15px;
-            border-radius: 8px; /* Rounded tab buttons */
-            font-size: 1rem; /* Base font size */
+            border-radius: 8px; /* Botões de aba arredondados */
+            font-size: 1rem; /* Tamanho base da fonte */
             font-weight: 600;
-            color: #718096; /* gray-500 */
+            color: #a0aec0; /* Cor mais clara para abas inativas */
             transition: all 0.3s ease;
             position: relative;
             z-index: 1;
         }
 
         .modal-tab-button.active {
-            color: #ffffff; /* White text for active tab */
-            background-color: #b69260; /* Gold background for active tab */
+            color: #ffffff; /* Texto branco para aba ativa */
+            background-color: #b69260; /* Fundo dourado para aba ativa */
             box-shadow: 0 4px 10px rgba(182, 146, 96, 0.2);
             transform: translateY(-2px);
         }
 
         .modal-input-group label {
             font-size: 0.95rem;
-            color: #2d3748; /* gray-800 */
+            color: #e2e8f0; /* Texto mais claro para rótulos */
             margin-bottom: 8px;
         }
 
@@ -348,31 +370,33 @@
         .modal-input-group input[type="date"],
         .modal-input-group input[type="time"],
         .modal-input-group select {
-            border: 1px solid #cbd5e0; /* light gray border */
+            border: 1px solid #4a5568; /* Borda mais escura */
             border-radius: 8px;
             padding: 10px 15px;
             font-size: 1rem;
-            color: #4a5568; /* gray-700 */
+            background-color: #2d3748; /* Fundo de entrada mais escuro */
+            color: #e2e8f0; /* Texto de entrada mais claro */
             transition: all 0.2s ease-in-out;
         }
 
         .modal-input-group input:focus,
         .modal-input-group select:focus {
             border-color: #b69260;
-            box-shadow: 0 0 0 3px rgba(182, 146, 96, 0.2);
+            box-shadow: 0 0 0 3px rgba(182, 146, 96, 0.3); /* Sombra dourada mais forte */
             outline: none;
         }
 
         .modal-radio-label {
             padding: 12px 15px;
-            border: 1px solid #e2e8f0; /* light border */
+            border: 1px solid #4a5568; /* Borda mais escura */
             border-radius: 8px;
-            background-color: #f7fafc; /* very light gray */
+            background-color: #2d3748; /* Fundo mais escuro */
             transition: all 0.2s ease-in-out;
+            color: #e2e8f0; /* Texto mais claro para rótulos de rádio */
         }
 
         .modal-radio-label:hover {
-            background-color: #edf2f7; /* slightly darker on hover */
+            background-color: #4a5568; /* Escuro ligeiramente mais claro no hover */
             border-color: #b69260;
         }
 
@@ -382,20 +406,20 @@
         }
 
         .modal-summary-box {
-            background-color: #f0f4f8; /* Light blue-gray for summary */
+            background-color: #2d3748; /* Cinza-azulado mais escuro para o resumo */
             border-radius: 12px;
             padding: 25px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #4a5568; /* Borda mais escura */
         }
 
         .modal-summary-item {
-            color: #4a5568; /* Darker gray for text */
+            color: #e2e8f0; /* Texto mais claro para o resumo */
             font-size: 1rem;
             margin-bottom: 8px;
         }
 
         .modal-summary-item strong {
-            color: #2d3748; /* Even darker for strong text */
+            color: #ffffff; /* Branco para texto em negrito */
         }
 
         .modal-footer-buttons {
@@ -411,41 +435,51 @@
             border-radius: 10px;
         }
 
-        /* Notification Modals */
+        /* Modais de Notificação */
         .notification-modal-content {
-            background-color: #ffffff;
+            background-color: #1a202c; /* Fundo escuro para o conteúdo da notificação */
             border-radius: 16px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4); /* Sombras mais escuras */
             padding: 30px;
-            max-width: 450px; /* Slightly smaller for notifications */
+            max-width: 450px; /* Ligeiramente menor para notificações */
             text-align: center;
+            color: #e2e8f0; /* Texto mais claro para notificações */
+            /* Animação para o próprio conteúdo da notificação */
+            opacity: 0; /* Começa invisível */
+            transform: translateY(-20px); /* Começa ligeiramente acima */
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out; /* Transição suave */
+        }
+        /* O modal pai .show aplicará também ao .notification-modal-content */
+        .modal.show .notification-modal-content {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .notification-modal-title {
             font-size: 1.75rem; /* text-2xl */
             font-weight: 700;
-            color: #1a202c;
+            color: #ffffff; /* Título branco para notificações */
             margin-bottom: 15px;
-            display: flex; /* Make it a flex container to align icon and text */
-            align-items: center; /* Vertically center items */
-            justify-content: center; /* Horizontally center items */
-            gap: 10px; /* Space between icon and text */
+            display: flex; /* Torna-o um contêiner flex para alinhar ícone e texto */
+            align-items: center; /* Centraliza itens verticalmente */
+            justify-content: center; /* Centraliza itens horizontalmente */
+            gap: 10px; /* Espaço entre ícone e texto */
         }
 
         .notification-modal-title .icon {
-            font-size: 2rem; /* Adjust icon size */
+            font-size: 2rem; /* Ajusta o tamanho do ícone */
         }
 
         .notification-modal-title.info .icon {
-            color: #b69260; /* Gold color for info icon */
+            color: #b69260; /* Cor dourada para o ícone de informação */
         }
 
         .notification-modal-title.warning .icon {
-            color: #dc2626; /* Red color for warning icon */
+            color: #dc2626; /* Cor vermelha para o ícone de aviso */
         }
 
         .notification-modal-text {
-            color: #4a5568;
+            color: #a0aec0; /* Cinza mais claro para o texto da notificação */
             line-height: 1.6;
             margin-bottom: 25px;
         }
@@ -458,7 +492,7 @@
             transition: all 0.3s ease;
         }
         .notification-modal-button.red {
-            background-image: linear-gradient(to right, #ef4444 0%, #dc2626 100%); /* Red gradient */
+            background-image: linear-gradient(to right, #ef4444 0%, #dc2626 100%); /* Gradiente vermelho */
             box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
         }
         .notification-modal-button.red:hover {
@@ -467,50 +501,50 @@
             transform: translateY(-2px);
         }
 
-        /* Custom Plan Builder Checkbox Styling */
+        /* Estilo de checkbox personalizado para o construtor de planos */
         .custom-plan-checkbox-label {
             display: flex;
             align-items: center;
-            gap: 16px; /* Increased gap for better spacing */
+            gap: 16px; /* Espaço aumentado para melhor espaçamento */
             cursor: pointer;
-            padding: 16px; /* Increased padding */
-            background-color: #ffffff; /* White background */
-            border: 1px solid #e2e8f0; /* Light border */
-            border-radius: 12px; /* More rounded */
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            padding: 16px; /* Preenchimento aumentado */
+            background-color: #2d3748; /* Fundo mais escuro para checkboxes */
+            border: 1px solid #4a5568; /* Borda mais escura */
+            border-radius: 12px; /* Mais arredondado */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
             transition: all 0.2s ease-in-out;
         }
 
         .custom-plan-checkbox-label:hover {
-            background-color: #f7fafc; /* Very light gray on hover */
-            border-color: #b69260; /* Gold border on hover */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slightly more pronounced shadow */
-            transform: translateY(-2px); /* Slight lift */
+            background-color: #4a5568; /* Escuro ligeiramente mais claro no hover */
+            border-color: #b69260; /* Borda dourada no hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra ligeiramente mais pronunciada */
+            transform: translateY(-2px); /* Leve levantamento */
         }
 
         .custom-plan-checkbox-label input[type="checkbox"] {
-            -webkit-appearance: none; /* Hide default checkbox */
+            -webkit-appearance: none; /* Oculta o checkbox padrão */
             -moz-appearance: none;
             appearance: none;
-            width: 24px; /* Larger checkbox */
+            width: 24px; /* Checkbox maior */
             height: 24px;
-            border: 2px solid #cbd5e0; /* Light gray border */
-            border-radius: 6px; /* Rounded corners for checkbox */
+            border: 2px solid #a0aec0; /* Borda cinza claro para checkbox */
+            border-radius: 6px; /* Cantos arredondados para checkbox */
             background-color: #ffffff;
             transition: all 0.2s ease-in-out;
             position: relative;
-            flex-shrink: 0; /* Prevent shrinking */
+            flex-shrink: 0; /* Evita encolhimento */
         }
 
         .custom-plan-checkbox-label input[type="checkbox"]:checked {
-            background-color: #b69260; /* Gold background when checked */
+            background-color: #b69260; /* Fundo dourado quando marcado */
             border-color: #b69260;
         }
 
         .custom-plan-checkbox-label input[type="checkbox"]:checked::after {
-            content: '\2713'; /* Checkmark character */
+            content: '\2713'; /* Caractere de marca de verificação */
             color: white;
-            font-size: 16px; /* Size of checkmark */
+            font-size: 16px; /* Tamanho da marca de verificação */
             position: absolute;
             top: 50%;
             left: 50%;
@@ -519,52 +553,54 @@
         }
 
         .custom-plan-checkbox-label span {
-            font-size: 1.05rem; /* Slightly larger text */
-            color: #2d3748; /* Darker text */
+            font-size: 1.05rem; /* Texto ligeiramente maior */
+            color: #e2e8f0; /* Texto mais claro para fundo escuro */
             transition: color 0.2s ease-in-out;
         }
 
         .custom-plan-checkbox-label input[type="checkbox"]:checked + span {
-            color: #b69260; /* Gold text when checked */
-            font-weight: 700; /* Bolder text when checked */
+            color: #b69260; /* Texto dourado quando marcado */
+            font-weight: 700; /* Texto mais em negrito quando marcado */
         }
 
-        /* Plan Card Instrument List Styling */
+        /* Estilo da lista de instrumentos do cartão de plano */
         .plan-instrument-item {
             display: flex;
             align-items: center;
-            gap: 8px; /* Space between icon and text */
-            color: #4a5568; /* Darker text for readability */
-            font-size: 1rem; /* Base font size */
+            gap: 8px; /* Espaço entre ícone e texto */
+            color: #cbd5e0; /* Texto mais claro para legibilidade em cartões escuros */
+            font-size: 1rem; /* Tamanho base da fonte */
         }
         .plan-instrument-item i {
-            color: #b69260; /* Gold color for icons */
-            font-size: 1.1rem; /* Slightly larger icon */
+            color: #b69260; /* Cor dourada para ícones */
+            font-size: 1.1rem; /* Ícone ligeiramente maior */
         }
     </style>
 </head>
-<body class="text-gray-800">
-    <!-- Script to hide modals immediately on page load to prevent FOUC -->
+<body class="text-gray-200">
+    <!-- Script para ocultar modais imediatamente no carregamento da página para evitar FOUC -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Select all elements with the class 'modal'
+            // Seleciona todos os elementos com a classe 'modal'
             const modals = document.querySelectorAll('.modal');
-            // Iterate over each modal and define its display style as 'none'
+            // Itera sobre cada modal e define seu estilo de exibição como 'none'
             modals.forEach(modal => {
                 modal.style.display = 'none';
+                // Também garante que eles não tenham a classe 'show' inicialmente
+                modal.classList.remove('show');
             });
         });
     </script>
 
-    <!-- Navigation Bar -->
+    <!-- Barra de Navegação -->
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4">
         <div class="container mx-auto px-6 flex justify-between items-center">
-            <!-- Logo and Site Title -->
+            <!-- Logo e Título do Site -->
             <a href="#" class="text-white text-2xl md:text-3xl font-bold font-playfair flex items-center">
                 <img src="H.png" alt="Logo Harmonia do Altar" class="h-10 md:h-12 mr-3 inline-block" onerror="this.onerror=null; this.src='https://placehold.co/48x48/ffffff/b69260?text=H'">armonia do Altar
             </a>
             
-            <!-- Desktop Navigation Links -->
+            <!-- Links de Navegação Desktop -->
             <div class="hidden md:flex space-x-10">
                 <a href="#sobre" class="nav-link text-lg">Sobre</a>
                 <a href="#galeria" class="nav-link text-lg">Galeria</a>
@@ -572,14 +608,14 @@
                 <a href="#contato" class="nav-link text-lg">Contato</a>
             </div>
 
-            <!-- Mobile Menu Button -->
+            <!-- Botão do Menu Mobile -->
             <div class="md:hidden">
                 <button id="mobile-menu-button" class="text-white focus:outline-none" aria-label="Toggle mobile menu">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                 </button>
             </div>
         </div>
-        <!-- Mobile Navigation Menu -->
+        <!-- Menu de Navegação Mobile -->
         <div id="mobile-menu" class="hidden md:hidden bg-gray-800 bg-opacity-95">
             <a href="#sobre" class="nav-link-mobile block py-3 px-6 text-base text-white hover:bg-gold transition-colors">Sobre</a>
             <a href="#galeria" class="nav-link-mobile block py-3 px-6 text-base text-white hover:bg-gold transition-colors">Galeria</a>
@@ -588,7 +624,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Seção Hero -->
     <header class="hero-bg text-white shadow-lg h-screen flex items-center justify-center">
         <div class="text-center px-4">
             <h1 class="text-5xl md:text-7xl font-bold mb-4 animated-item">
@@ -600,16 +636,16 @@
 
     <main class="container mx-auto px-6 py-16 md:py-24">
         
-        <!-- About Section -->
+        <!-- Seção Sobre -->
         <section id="sobre" class="text-center max-w-4xl mx-auto mb-20 md:mb-32 animated-item">
             <h2 class="text-4xl md:text-5xl font-bold mb-4">Música que Conta a Sua História</h2>
             <div class="w-24 h-1.5 bg-gold mx-auto mb-8 rounded-full"></div>
-            <p class="text-gray-600 leading-relaxed text-lg md:text-xl">
+            <p class="text-gray-300 leading-relaxed text-lg md:text-xl">
                 Para nós, cada casamento é a celebração de uma história de amor única. E toda grande história merece uma trilha sonora inesquecível. Somos o Harmonia do Altar, um grupo de músicos apaixonados por transformar cerimônias em eventos memoráveis. Nosso propósito é ir além da música: queremos tocar o coração de cada convidado e, principalmente, o de vocês, com arranjos que capturam a essência do seu amor e a solenidade do seu grande dia.
             </p>
         </section>
         
-        <!-- Gallery Section -->
+        <!-- Seção Galeria -->
         <section id="galeria" class="mb-20 md:mb-32">
             <div class="animated-item">
                 <h2 class="text-4xl md:text-5xl font-bold text-center mb-4">Sinta a Nossa Harmonia</h2>
@@ -618,7 +654,7 @@
             
             <div class="text-center max-w-3xl mx-auto animated-item">
                 <h3 class="text-3xl font-bold text-gold mb-4">A Emoção em Cada Nota</h3>
-                <p class="text-gray-600 mb-10 text-lg">A música tem o poder de evocar sentimentos profundos. Imagine a entrada da noiva ao som de um violino emocionante, ou a troca de alianças embalada por um piano suave e vozes que se entrelaçam. É essa atmosfera que criamos.</p>
+                <p class="text-gray-300 mb-10 text-lg">A música tem o poder de evocar sentimentos profundos. Imagine a entrada da noiva ao som de um violino emocionante, ou a troca de alianças embalada por um piano suave e vozes que se entrelaçam. É essa atmosfera que criamos.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
                 <!-- Instagram Embed 1 -->
@@ -633,7 +669,7 @@
 
             <div class="text-center max-w-3xl mx-auto mt-24 animated-item">
                 <h3 class="text-3xl font-bold text-gold mb-4">Elegância e Profissionalismo</h3>
-                <p class="text-gray-600 mb-10 text-lg">Acreditamos que a beleza está na harmonia, não só musical, mas também visual. Nossos músicos se apresentam com a sofisticação que a sua cerimônia merece, e nossas performances são um reflexo do nosso compromisso com a excelência.</p>
+                <p class="text-gray-300 mb-10 text-lg">Acreditamos que a beleza está na harmonia, não só musical, mas também visual. Nossos músicos se apresentam com a sofisticação que a sua cerimônia merece, e nossas performances são um reflexo do nosso compromisso com a excelência.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
                 <!-- Instagram Embed 3 -->
@@ -648,7 +684,7 @@
 
             <div class="text-center max-w-3xl mx-auto mt-24 animated-item">
                 <h3 class="text-3xl font-bold text-gold mb-4">Alegria e Versatilidade</h3>
-                <p class="text-gray-600 mb-10 text-lg">Seu casamento deve refletir sua personalidade. Do clássico ao popular, do sacro ao contemporâneo, nosso repertório é vasto e adaptável. Celebramos o amor em todos os ritmos, garantindo momentos de pura alegria e emoção.</p>
+                <p class="text-gray-300 mb-10 text-lg">Seu casamento deve refletir sua personalidade. Do clássico ao popular, do sacro ao contemporâneo, nosso repertório é vasto e adaptável. Celebramos o amor em todos os ritmos, garantindo momentos de pura alegria e emoção.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <!-- Instagram Embed 5 -->
@@ -662,142 +698,142 @@
             </div>
         </section>
 
-        <!-- Plans Section -->
-        <section id="planos" class="py-20 md:py-32 bg-white rounded-3xl shadow-xl">
+        <!-- Seção de Planos -->
+        <section id="planos" class="py-20 md:py-32 bg-gray-800 rounded-3xl shadow-xl">
             <div class="text-center max-w-4xl mx-auto mb-16 md:mb-20 animated-item">
                 <h2 class="text-4xl md:text-5xl font-bold mb-4">Nossas Configurações Sugeridas</h2>
                 <div class="w-24 h-1.5 bg-gold mx-auto mb-8 rounded-full"></div>
-                <p class="text-gray-600 leading-relaxed text-lg md:text-xl mb-8">
+                <p class="text-gray-300 leading-relaxed text-lg md:text-xl mb-8">
                     Nossa formação padrão inclui <strong>3 vozes e teclado</strong>, com a flexibilidade de adicionar outros instrumentos para personalizar sua sonoridade. O deslocamento tem tarifa fixa para <strong>Angélica/Ivinhema (MS) e valor por km para outras localidades (com um valor base).</strong> Taxas de processamento bancário aplicam-se a pagamentos via boleto e cartão (incluindo deslocamentos especiais), não sendo retidas pela Harmonia do Altar. <strong>Pix e dinheiro são isentos de taxas bancárias.</strong>
                 </p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-center px-4">
                 
-                <!-- Plan Card 1: Essência Clássica e Sublime -->
-                <div class="bg-gray-50 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item">
+                <!-- Cartão de Plano 1: Essência Clássica e Sublime -->
+                <div class="bg-gray-900 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item">
                     <div class="p-8 flex-grow">
                         <i class="fas fa-music text-gold text-4xl mb-6"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Essência Clássica e Sublime</h3>
-                        <p class="text-gray-600 mb-8 text-base">A nossa formação padrão, com as <strong>3 vozes e o teclado</strong>. Perfeita para quem busca a elegância atemporal e a emoção pura.</p>
-                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <h3 class="text-2xl font-bold text-white mb-3">Essência Clássica e Sublime</h3>
+                        <p class="text-gray-400 mb-8 text-base">A nossa formação padrão, com as <strong>3 vozes e o teclado</strong>. Perfeita para quem busca a elegância atemporal e a emoção pura.</p>
+                        <h4 class="font-bold mb-3 text-gray-300 text-base">Instrumentos:</h4>
                         <div class="space-y-2">
                             <div class="plan-instrument-item">
-                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <i class="fas fa-microphone-alt"></i> <!-- Ícone alterado -->
                                 <span>3 Vozes + Teclado/Piano</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                    <div class="p-6 border-t border-gray-700 bg-gray-800 flex justify-between items-center">
                         <div class="text-3xl font-bold text-gold">R$ 1.400</div>
                         <button onclick="handleSimular('Essência Clássica e Sublime', ['3 Vozes + Teclado/Piano'], 1400)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
                 </div>
 
-                <!-- Plan Card 2: Harmonia Delicada e Acústica (Most Popular) -->
-                <div class="bg-gray-50 rounded-2xl plan-card popular overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item delay-1 relative">
+                <!-- Cartão de Plano 2: Harmonia Delicada e Acústica (Mais Popular) -->
+                <div class="bg-gray-900 rounded-2xl plan-card popular overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item delay-1 relative">
                     <div class="absolute top-0 right-0 bg-gold text-white text-sm font-bold px-4 py-1.5 rounded-bl-xl">MAIS POPULAR</div>
                     <div class="p-8 flex-grow">
                         <i class="fas fa-guitar text-gold text-4xl mb-6"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Harmonia Delicada e Acústica</h3>
-                        <p class="text-gray-600 mb-8 text-base">A formação padrão com o acréscimo do <strong>violão</strong>. O som quente e dedilhado cria uma atmosfera romântica e acolhedora.</p>
-                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <h3 class="text-2xl font-bold text-white mb-3">Harmonia Delicada e Acústica</h3>
+                        <p class="text-gray-400 mb-8 text-base">A formação padrão com o acréscimo do <strong>violão</strong>. O som quente e dedilhado cria uma atmosfera romântica e acolhedora.</p>
+                        <h4 class="font-bold mb-3 text-gray-300 text-base">Instrumentos:</h4>
                         <div class="space-y-2">
                             <div class="plan-instrument-item">
-                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <i class="fas fa-microphone-alt"></i> <!-- Ícone alterado -->
                                 <span>3 Vozes + Teclado/Piano</span>
                             </div>
                             <div class="plan-instrument-item">
-                                <i class="fas fa-guitar"></i> <!-- Changed icon -->
+                                <i class="fas fa-guitar"></i> <!-- Ícone alterado -->
                                 <span>Violão</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                    <div class="p-6 border-t border-gray-700 bg-gray-800 flex justify-between items-center">
                         <div class="text-3xl font-bold text-gold">R$ 1.600</div>
                         <button onclick="handleSimular('Harmonia Delicada e Acústica', ['3 Vozes + Teclado/Piano', 'Violão'], 1600)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
                 </div>
                 
-                <!-- Plan Card 3: Sofisticação e Envolvimento -->
-                <div class="bg-gray-50 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item delay-2">
+                <!-- Cartão de Plano 3: Sofisticação e Envolvimento -->
+                <div class="bg-gray-900 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item delay-2">
                     <div class="p-8 flex-grow">
                         <i class="fas fa-layer-group text-gold text-4xl mb-6"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Sofisticação e Envolvimento</h3>
-                        <p class="text-gray-600 mb-8 text-base">Além da base, o <strong>contrabaixo</strong> adiciona uma sonoridade mais encorpada e um groove sutil, trazendo profundidade e elegância.</p>
-                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <h3 class="text-2xl font-bold text-white mb-3">Sofisticação e Envolvimento</h3>
+                        <p class="text-gray-400 mb-8 text-base">Além da base, o <strong>contrabaixo</strong> adiciona uma sonoridade mais encorpada e um groove sutil, trazendo profundidade e elegância.</p>
+                        <h4 class="font-bold mb-3 text-gray-300 text-base">Instrumentos:</h4>
                         <div class="space-y-2">
                             <div class="plan-instrument-item">
-                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <i class="fas fa-microphone-alt"></i> <!-- Ícone alterado -->
                                 <span>3 Vozes + Teclado/Piano</span>
                             </div>
                             <div class="plan-instrument-item">
-                                <i class="fas fa-volume-down"></i> <!-- Changed icon -->
+                                <i class="fas fa-volume-down"></i> <!-- Ícone alterado -->
                                 <span>Contrabaixo</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                    <div class="p-6 border-t border-gray-700 bg-gray-800 flex justify-between items-center">
                         <div class="text-3xl font-bold text-gold">R$ 1.600</div>
                         <button onclick="handleSimular('Sofisticação e Envolvimento', ['3 Vozes + Teclado/Piano', 'Contrabaixo'], 1600)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
                 </div>
 
-                <!-- Plan Card 4: Sonoridade Completa e Marcante -->
-                <div class="bg-gray-50 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item">
+                <!-- Cartão de Plano 4: Sonoridade Completa e Marcante -->
+                <div class="bg-gray-900 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item">
                     <div class="p-8 flex-grow">
                         <i class="fas fa-sliders-h text-gold text-4xl mb-6"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Sonoridade Completa e Marcante</h3>
-                        <p class="text-gray-600 mb-8 text-base">Com <strong>contrabaixo e violão</strong> somados à base, esta opção traz uma sonoridade grandiosa, preenchida e com uma textura rica.</p>
-                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <h3 class="text-2xl font-bold text-white mb-3">Sonoridade Completa e Marcante</h3>
+                        <p class="text-gray-400 mb-8 text-base">Com <strong>contrabaixo e violão</strong> somados à base, esta opção traz uma sonoridade grandiosa, preenchida e com uma textura rica.</p>
+                        <h4 class="font-bold mb-3 text-gray-300 text-base">Instrumentos:</h4>
                         <div class="space-y-2">
                             <div class="plan-instrument-item">
-                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <i class="fas fa-microphone-alt"></i> <!-- Ícone alterado -->
                                 <span>3 Vozes + Teclado/Piano</span>
                             </div>
                             <div class="plan-instrument-item">
-                                <i class="fas fa-volume-down"></i> <!-- Changed icon -->
+                                <i class="fas fa-volume-down"></i> <!-- Ícone alterado -->
                                 <span>Contrabaixo</span>
                             </div>
                             <div class="plan-instrument-item">
-                                <i class="fas fa-guitar"></i> <!-- Changed icon -->
+                                <i class="fas fa-guitar"></i> <!-- Ícone alterado -->
                                 <span>Violão</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                    <div class="p-6 border-t border-gray-700 bg-gray-800 flex justify-between items-center">
                         <div class="text-3xl font-bold text-gold">R$ 1.800</div>
                         <button onclick="handleSimular('Sonoridade Completa e Marcante', ['3 Vozes + Teclado/Piano', 'Violão', 'Contrabaixo'], 1800)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
                 </div>
 
-                <!-- Plan Card 5: Versatilidade e Brilho Acústico -->
-                <div class="bg-gray-50 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item delay-1">
+                <!-- Cartão de Plano 5: Versatilidade e Brilho Acústico -->
+                <div class="bg-gray-900 rounded-2xl plan-card overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col animated-item delay-1">
                     <div class="p-8 flex-grow">
                         <i class="fas fa-star text-gold text-4xl mb-6"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Versatilidade e Brilho Acústico</h3>
-                        <p class="text-gray-600 mb-8 text-base">A formação mais completa, com <strong>violão, guitarra e contrabaixo</strong>. Permite explorar diferentes estilos com arranjos modernos.</p>
-                        <h4 class="font-bold mb-3 text-base">Instrumentos:</h4>
+                        <h3 class="text-2xl font-bold text-white mb-3">Versatilidade e Brilho Acústico</h3>
+                        <p class="text-gray-400 mb-8 text-base">A formação mais completa, com <strong>violão, guitarra e contrabaixo</strong>. Permite explorar diferentes estilos com arranjos modernos.</p>
+                        <h4 class="font-bold mb-3 text-gray-300 text-base">Instrumentos:</h4>
                         <div class="space-y-2">
                             <div class="plan-instrument-item">
-                                <i class="fas fa-microphone-alt"></i> <!-- Changed icon -->
+                                <i class="fas fa-microphone-alt"></i> <!-- Ícone alterado -->
                                 <span>3 Vozes + Teclado/Piano</span>
                             </div>
                             <div class="plan-instrument-item">
-                                <i class="fas fa-guitar"></i> <!-- Changed icon -->
+                                <i class="fas fa-guitar"></i> <!-- Ícone alterado -->
                                 <span>Violão</span>
                             </div>
                             <div class="plan-instrument-item">
-                                <i class="fas fa-bolt"></i> <!-- Changed icon -->
+                                <i class="fas fa-bolt"></i> <!-- Ícone alterado -->
                                 <span>Guitarra</span>
                             </div>
                             <div class="plan-instrument-item">
-                                <i class="fas fa-volume-down"></i> <!-- Changed icon -->
+                                <i class="fas fa-volume-down"></i> <!-- Ícone alterado -->
                                 <span>Contrabaixo</span>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 border-t border-gray-200 bg-white flex justify-between items-center">
+                    <div class="p-6 border-t border-gray-700 bg-gray-800 flex justify-between items-center">
                         <div class="text-3xl font-bold text-gold">R$ 2.000</div>
                         <button onclick="handleSimular('Versatilidade e Brilho Acústica', ['3 Vozes + Teclado/Piano', 'Violão', 'Guitarra', 'Contrabaixo'], 2000)" class="btn-primary text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base">Simular Orçamento</button>
                     </div>
@@ -805,45 +841,45 @@
             </div>
         </section>
 
-        <!-- Custom Plan Builder Section -->
-        <section id="custom-plan-builder" class="bg-white rounded-3xl shadow-xl p-8 md:p-12 text-center mt-20 md:mt-32 animated-item">
+        <!-- Seção de Construtor de Planos Personalizados -->
+        <section id="custom-plan-builder" class="bg-gray-800 rounded-3xl shadow-xl p-8 md:p-12 text-center mt-20 md:mt-32 animated-item">
             <h2 class="text-4xl md:text-5xl font-bold mb-4">Crie o Seu Plano Personalizado</h2>
             <div class="w-24 h-1.5 bg-gold mx-auto mb-8 rounded-full"></div>
-            <p class="max-w-3xl mx-auto text-gray-600 text-lg mb-10">
+            <p class="max-w-3xl mx-auto text-gray-300 text-lg mb-10">
                 Adicione instrumentos à nossa formação padrão para criar a sonoridade perfeita para o seu dia.
             </p>
             <div class="max-w-2xl mx-auto text-left">
-                <div class="p-5 bg-gray-100 rounded-xl mb-6 flex justify-between items-center border border-gray-200">
-                    <span class="font-bold text-gray-700 text-lg">Formação Padrão (3 Vozes + Teclado)</span>
-                    <span class="font-bold text-gray-700 text-lg">R$ 1.400,00</span>
+                <div class="p-5 bg-gray-700 rounded-xl mb-6 flex justify-between items-center border border-gray-600">
+                    <span class="font-bold text-gray-200 text-lg">Formação Padrão (3 Vozes + Teclado)</span>
+                    <span class="font-bold text-gray-200 text-lg">R$ 1.400,00</span>
                 </div>
-                <h4 class="text-xl font-bold text-gray-800 mt-8 mb-4">Instrumentos da Banda:</h4>
+                <h4 class="text-xl font-bold text-white mt-8 mb-4">Instrumentos da Banda:</h4>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="band-instrument-options"></div>
                 
-                <h4 class="text-xl font-bold text-gray-800 mt-10 mb-4">Músicos Convidados: <span class="text-base font-normal text-gray-600">(Um toque de brilho)</span></h4>
-                <p class="text-base text-gray-600 mb-6">Para uma sonoridade ainda mais especial, adicione o romantismo do violino ou a sofisticação do saxofone.</p>
+                <h4 class="text-xl font-bold text-white mt-10 mb-4">Músicos Convidados: <span class="text-base font-normal text-gray-400">(Um toque de brilho)</span></h4>
+                <p class="text-base text-gray-300 mb-6">Para uma sonoridade ainda mais especial, adicione o romantismo do violino ou a sofisticação do saxofone.</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="guest-instrument-options"></div>
             </div>
 
-            <div class="mt-10 max-w-2xl mx-auto border-t border-gray-200 pt-8">
+            <div class="mt-10 max-w-2xl mx-auto border-t border-gray-700 pt-8">
                 <button id="simulate-btn-custom" class="w-full btn-primary text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg">Simular Plano Personalizado</button>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer Section -->
+    <!-- Seção Rodapé -->
     <footer id="contato" class="bg-gray-900 text-white mt-20 md:mt-32 py-16">
         <div class="container mx-auto px-6 py-12 text-center animated-item">
             <h2 class="text-4xl font-bold mb-6">Vamos Conversar?</h2>
             <p class="max-w-3xl mx-auto mb-8 text-gray-300 text-lg">
                 Estamos aqui para tirar todas as dúvidas e garantir que cada nota no seu grande dia seja exatamente como vocês sonham.
             </p>
-            <!-- WhatsApp Contact Button -->
+            <!-- Botão de Contato WhatsApp -->
             <a href="https://wa.me/5567996884226?text=Olá!%20Vi%20o%20site%20do%20Harmonia%20do%20Altar%20e%20gostaria%20de%20um%20orçamento." target="_blank" rel="noopener noreferrer" class="btn-whatsapp text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 inline-block text-lg">
                 <i class="fab fa-whatsapp mr-3"></i> Chamar no WhatsApp
             </a>
-            <!-- Social Media Links -->
+            <!-- Links de Mídias Sociais -->
             <div class="flex justify-center space-x-8 mt-10">
                 <a href="https://www.instagram.com/harmoniadoaltar?utm_source=qr&igsh=cXF5dGJ6cTFobmVr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="text-gray-400 hover:text-white transition-colors duration-300 transform hover:scale-110">
                     <i class="fab fa-instagram text-3xl"></i>
@@ -855,7 +891,7 @@
         </div>
     </footer>
 
-    <!-- Main Simulation Modal (Unified with Tabs) -->
+    <!-- Modal Principal de Simulação (Unificado com Abas) -->
     <div id="main-simulation-modal" class="modal fixed inset-0 flex items-center justify-center">
         <div class="modal-content w-full max-w-2xl">
             <div class="modal-header">
@@ -863,7 +899,7 @@
                 <span class="close-button modal-close-button" id="close-main-modal-button" aria-label="Close modal">&times;</span>
             </div>
 
-            <!-- Tab Navigation for the Modal -->
+            <!-- Navegação por Abas para o Modal -->
             <div class="tab-header modal-tab-header" role="tablist">
                 <button class="tab-button modal-tab-button active" data-tab="deslocamento-tab" role="tab" aria-controls="deslocamento-tab-content">Deslocamento</button>
                 <button class="tab-button modal-tab-button" data-tab="event-details-tab" role="tab" aria-controls="event-details-tab-content">Detalhes do Evento</button>
@@ -871,52 +907,52 @@
                 <button class="tab-button modal-tab-button" data-tab="summary-tab" role="tab" aria-controls="summary-tab-content">Resumo</button>
             </div>
 
-            <!-- TAB 1: DESLOCAMENTO -->
+            <!-- ABA 1: DESLOCAMENTO -->
             <div id="deslocamento-tab" class="tab-content active" role="tabpanel" aria-labelledby="deslocamento-tab">
-                <h4 class="text-xl font-bold text-gray-800 mb-4">Cálculo de Deslocamento</h4>
-                <p class="text-gray-600 mb-6">Informe o endereço do local da cerimônia para calcular o custo do deslocamento. <strong>Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.</strong></p>
+                <h4 class="text-xl font-bold text-white mb-4">Cálculo de Deslocamento</h4>
+                <p class="text-gray-300 mb-6">Informe o endereço do local da cerimônia para calcular o custo do deslocamento. <strong>Condições especiais se aplicam para Angélica, MS e Ivinhema, MS.</strong></p>
                 <div class="modal-input-group mb-4">
-                    <label for="modal-destination-address" class="block text-gray-700 text-sm font-bold mb-2">Endereço Completo (Rua, Número, Cidade, Estado):</label>
+                    <label for="modal-destination-address" class="block text-gray-300 text-sm font-bold mb-2">Endereço Completo (Rua, Número, Cidade, Estado):</label>
                     <div class="flex space-x-2">
-                        <input type="text" id="modal-destination-address" placeholder="Ex: Av. Brasil, 123, Ivinhema, MS" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                        <input type="text" id="modal-destination-address" placeholder="Ex: Av. Brasil, 123, Ivinhema, MS" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
                         <button type="button" id="open-map-selection-btn" class="btn-secondary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 text-sm flex-shrink-0">
                             <i class="fas fa-map-marker-alt mr-1"></i> Abrir Mapa
                         </button>
                     </div>
                     <p id="modal-deslocamento-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
                 </div>
-                <div id="modal-deslocamento-results" class="mt-6 p-4 bg-gray-100 rounded-lg hidden">
-                    <p class="text-gray-700">Distância: <span id="modal-distance-display" class="font-bold"></span></p>
-                    <p class="text-gray-700">Valor do Deslocamento: <span id="modal-calculated-deslocamento-display" class="font-bold text-gold"></span></p>
+                <div id="modal-deslocamento-results" class="mt-6 p-4 bg-gray-700 rounded-lg hidden">
+                    <p class="text-gray-200">Distância: <span id="modal-distance-display" class="font-bold"></span></p>
+                    <p class="text-gray-200">Valor do Deslocamento: <span id="modal-calculated-deslocamento-display" class="font-bold text-gold"></span></p>
                 </div>
                 <div class="modal-footer-buttons">
                     <button id="next-to-event-details-btn" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">Próximo</button>
                 </div>
             </div>
 
-            <!-- TAB 2: DETALHES DO EVENTO -->
+            <!-- ABA 2: DETALHES DO EVENTO -->
             <div id="event-details-tab" class="tab-content" role="tabpanel" aria-labelledby="event-details-tab">
-                <h4 class="text-xl font-bold text-gray-800 mb-4">Detalhes da Cerimônia</h4>
-                <p class="text-gray-600 mb-6">Por favor, preencha a data e o horário da sua cerimônia.</p>
+                <h4 class="text-xl font-bold text-white mb-4">Detalhes da Cerimônia</h4>
+                <p class="text-gray-300 mb-6">Por favor, preencha a data e o horário da sua cerimônia.</p>
                 
                 <div class="modal-input-group mb-4">
-                    <label for="ceremony-date" class="block text-gray-700 text-sm font-bold mb-2">Data da Cerimônia:</label>
-                    <input type="date" id="ceremony-date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                    <label for="ceremony-date" class="block text-gray-300 text-sm font-bold mb-2">Data da Cerimônia:</label>
+                    <input type="date" id="ceremony-date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
                 </div>
                 
                 <div class="modal-input-group mb-4">
-                    <label for="ceremony-time" class="block text-gray-700 text-sm font-bold mb-2">Horário da Cerimônia:</label>
-                    <input type="time" id="ceremony-time" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                    <label for="ceremony-time" class="block text-gray-300 text-sm font-bold mb-2">Horário da Cerimônia:</label>
+                    <input type="time" id="ceremony-time" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
                 </div>
 
-                <!-- New field for Reference Location -->
+                <!-- Novo campo para Local de Referência -->
                 <div class="modal-input-group mb-4">
-                    <label for="reference-location" class="block text-gray-700 text-sm font-bold mb-2">Local de Referência (Opcional):</label>
-                    <input type="text" id="reference-location" placeholder="Ex: Próximo à praça central" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                    <label for="reference-location" class="block text-gray-300 text-sm font-bold mb-2">Local de Referência (Opcional):</label>
+                    <input type="text" id="reference-location" placeholder="Ex: Próximo à praça central" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
                 </div>
 
-                <div class="mt-4 p-3 bg-gray-100 rounded-lg">
-                    <p class="text-sm text-gray-700"><strong>Endereço Confirmado:</strong> <span id="confirmed-address-display"></span></p>
+                <div class="mt-4 p-3 bg-gray-700 rounded-lg">
+                    <p class="text-gray-200"><strong>Endereço Confirmado:</strong> <span id="confirmed-address-display"></span></p>
                 </div>
                 <p id="modal-event-details-error" class="text-red-500 mt-2 hidden text-sm">Por favor, preencha a data e o horário.</p>
 
@@ -926,14 +962,14 @@
                 </div>
             </div>
 
-            <!-- TAB 3: FORMA DE PAGAMENTO -->
+            <!-- ABA 3: FORMA DE PAGAMENTO -->
             <div id="payment-method-tab" class="tab-content" role="tabpanel" aria-labelledby="payment-method-tab">
-                <h4 class="text-xl font-bold text-gray-800 mb-4">Forma de Pagamento</h4>
-                <div class="mb-4 text-gray-700">
+                <h4 class="text-xl font-bold text-white mb-4">Forma de Pagamento</h4>
+                <div class="mb-4 text-gray-200">
                     <p>Valor do Plano: <span id="modal-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
                     <p>Valor do Deslocamento: <span id="modal-freight-price" class="font-bold text-gold">R$ 0,00</span></p>
                     <p>Valor Total (Plano + Deslocamento): <span id="modal-total-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="mt-2 text-lg font-bold">Valor Total a Pagar<span id="fees-suffix" class="text-sm font-normal text-gray-600"> (com taxas)</span>: <span id="modal-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
+                    <p class="mt-2 text-lg font-bold">Valor Total a Pagar<span id="fees-suffix" class="text-sm font-normal text-gray-400"> (com taxas)</span>: <span id="modal-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
                 </div>
                 <div class="mb-6 space-y-3">
                     <label class="flex items-center space-x-3 cursor-pointer modal-radio-label">
@@ -955,21 +991,21 @@
                 </div>
 
                 <div id="installment-options" class="mb-6 hidden modal-input-group">
-                    <label for="installments" class="block text-gray-700 text-sm font-bold mb-2">Número de Parcelas:</label>
-                    <select id="installments" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold"></select>
-                    <p class="mt-2 text-gray-700">Valor por parcela: <span id="installment-value" class="font-bold text-gold">R$ 0,00</span></p>
+                    <label for="installments" class="block text-gray-300 text-sm font-bold mb-2">Número de Parcelas:</label>
+                    <select id="installments" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-gold"></select>
+                    <p class="mt-2 text-gray-200">Valor por parcela: <span id="installment-value" class="font-bold text-gold">R$ 0,00</span></p>
                 </div>
 
                 <div id="boleto-due-date-options" class="mb-6 hidden modal-input-group">
-                    <label for="boleto-due-date" class="block text-gray-700 text-sm font-bold mb-2">Melhor dia para vencimento do boleto:</label>
-                    <select id="boleto-due-date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
+                    <label for="boleto-due-date" class="block text-gray-300 text-sm font-bold mb-2">Melhor dia para vencimento do boleto:</label>
+                    <select id="boleto-due-date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline focus:border-gold">
                         <option value="5">Dia 5</option>
                         <option value="10">Dia 10</option>
                         <option value="15">Dia 15</option>
                         <option value="20">Dia 20</option>
                         <option value="25">Dia 25</option>
                     </select>
-                    <!-- This inline error message will now be hidden and replaced by a modal -->
+                    <!-- Esta mensagem de erro inline agora será ocultada e substituída por um modal -->
                     <p id="modal-boleto-date-error" class="text-red-500 mt-2 hidden text-sm">A data da última parcela não pode ser posterior à data da cerimônia. Por favor, ajuste as parcelas ou a data de vencimento.</p>
                 </div>
 
@@ -979,15 +1015,15 @@
                 </div>
             </div>
 
-            <!-- TAB 4: RESUMO E SIMULAR -->
+            <!-- ABA 4: RESUMO E SIMULAR -->
             <div id="summary-tab" class="tab-content" role="tabpanel" aria-labelledby="summary-tab">
-                <h4 class="text-xl font-bold text-gray-800 mb-4">Resumo do Orçamento</h4>
+                <h4 class="text-xl font-bold text-white mb-4">Resumo do Orçamento</h4>
                 <div class="modal-summary-box space-y-3">
-                    <p class="modal-summary-item"><strong>Plano:</strong> <span id="summary-plan-name" class="font-bold text-gray-800"></span></p>
-                    <p class="modal-summary-item"><strong>Data do Evento:</strong> <span id="summary-event-date" class="font-bold text-gray-800"></span></p>
-                    <p class="modal-summary-item"><strong>Endereço:</strong> <span id="summary-event-address" class="font-bold text-gray-800"></span></p>
-                    <p class="modal-summary-item" id="summary-reference-location-display"><strong>Local de Referência:</strong> <span id="summary-reference-location" class="font-bold text-gray-800"></span></p>
-                    <hr class="my-3 border-gray-300">
+                    <p class="modal-summary-item"><strong>Plano:</strong> <span id="summary-plan-name" class="font-bold text-white"></span></p>
+                    <p class="modal-summary-item"><strong>Data do Evento:</strong> <span id="summary-event-date" class="font-bold text-white"></span></p>
+                    <p class="modal-summary-item"><strong>Endereço:</strong> <span id="summary-event-address" class="font-bold text-white"></span></p>
+                    <p class="modal-summary-item" id="summary-reference-location-display"><strong>Local de Referência:</strong> <span id="summary-reference-location" class="font-bold text-white"></span></p>
+                    <hr class="my-3 border-gray-600">
                     <p class="modal-summary-item">Valor do Plano: <span id="summary-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
                     <p class="modal-summary-item">Valor do Deslocamento: <span id="summary-deslocamento-price" class="font-bold text-gold">R$ 0,00</span></p>
                     <p class="modal-summary-item">Valor Total (Plano + Deslocamento): <span id="summary-total-price" class="font-bold text-gold">R$ 0,00</span></p>
@@ -997,7 +1033,7 @@
                     <p class="modal-summary-item hidden" id="summary-boleto-due-date-details">Vencimento do Boleto: <span id="summary-boleto-due-date" class="font-bold text-gold"></span></p>
                 </div>
                 
-                <div id="fees-explanation" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg text-sm mt-6 hidden">
+                <div id="fees-explanation" class="bg-yellow-900 border-l-4 border-yellow-500 text-yellow-200 p-4 rounded-lg text-sm mt-6 hidden">
                     <p class="font-semibold mb-2">Informações sobre Taxas:</p>
                     <p>As taxas aplicadas em pagamentos via Boleto e Cartão de Crédito são referentes aos custos de processamento das operadoras financeiras e bancos. A Harmonia do Altar não retém qualquer valor sobre estas taxas, que são integralmente destinadas à viabilização do parcelamento e segurança da transação. Para pagamentos via Pix ou Dinheiro, não há incidência de taxas adicionais.</p>
                 </div>
@@ -1010,7 +1046,7 @@
         </div>
     </div>
 
-    <!-- Map Selection Modal -->
+    <!-- Modal de Seleção de Mapa -->
     <div id="map-selection-modal" class="modal fixed inset-0 flex items-center justify-center">
         <div class="notification-modal-content w-full h-3/4 flex flex-col">
             <span class="close-button modal-close-button" id="close-map-modal-button" aria-label="Close map modal">&times;</span>
@@ -1020,7 +1056,7 @@
         </div>
     </div>
 
-    <!-- Boleto Notification Modal -->
+    <!-- Modal de Notificação de Boleto -->
     <div id="boleto-notification-modal" class="modal fixed inset-0 flex items-center justify-center">
         <div class="notification-modal-content w-full">
             <span class="close-button modal-close-button" id="close-boleto-modal-button" aria-label="Close notification">&times;</span>
@@ -1036,7 +1072,7 @@
         </div>
     </div>
 
-    <!-- New: Boleto Date Validation Notification Modal -->
+    <!-- Novo: Modal de Notificação de Validação de Data de Boleto -->
     <div id="boleto-date-warning-modal" class="modal fixed inset-0 flex items-center justify-center">
         <div class="notification-modal-content w-full">
             <span class="close-button modal-close-button" id="close-boleto-date-warning-modal-button" aria-label="Close warning">&times;</span>
@@ -1052,40 +1088,40 @@
         </div>
     </div>
 
-    <!-- Instagram Embed Script -->
+    <!-- Script de Incorporação do Instagram -->
     <script async src="//www.instagram.com/embed.js"></script>
     
-    <!-- Google Maps API with Places library for autocomplete and distance matrix -->
+    <!-- Google Maps API com biblioteca Places para preenchimento automático e matriz de distância -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoL-Za52C0cbwOen71nbKqDpLKgBufd0Y&libraries=geometry,places&callback=initMap"></script>
 
     <script>
-        // --- GLOBAL VARIABLES & CONSTANTS ---
-        let mapsInitialized = false; // Flag to check if Google Maps API is loaded
-        let autocomplete; // Google Places Autocomplete instance
-        let currentPlanDetails = null; // Stores details of the selected plan
-        let currentFinalTotalPrice = 0; // Total price including plan and displacement
-        let currentPlanOnlyPrice = 0; // Price of the selected plan only
-        let currentDeslocamentoCost = 0; // Cost of displacement
-        let selectedPaymentMethod = 'pix'; // Default payment method
-        let selectedInstallments = 1; // Default number of installments
-        let ceremonyDate = null; // Date of the ceremony
-        let ceremonyTime = null; // Time of the ceremony
-        let selectedBoletoDueDate = 5; // Default day for boleto due date
-        let debounceTimer; // Timer for input debouncing
-        const whatsappNumber = '5567996884226'; // WhatsApp number for contact
+        // --- VARIÁVEIS GLOBAIS E CONSTANTES ---
+        let mapsInitialized = false; // Flag para verificar se a API do Google Maps foi carregada
+        let autocomplete; // Instância do Google Places Autocomplete
+        let currentPlanDetails = null; // Armazena detalhes do plano selecionado
+        let currentFinalTotalPrice = 0; // Preço total incluindo plano e deslocamento
+        let currentPlanOnlyPrice = 0; // Preço apenas do plano selecionado
+        let currentDeslocamentoCost = 0; // Custo do deslocamento
+        let selectedPaymentMethod = 'pix'; // Método de pagamento padrão
+        let selectedInstallments = 1; // Número de parcelas padrão
+        let ceremonyDate = null; // Data da cerimônia
+        let ceremonyTime = null; // Hora da cerimônia
+        let selectedBoletoDueDate = 5; // Dia padrão para vencimento do boleto
+        let debounceTimer; // Timer para debounce de entrada
+        const whatsappNumber = '5567996884226'; // Número do WhatsApp para contato
 
-        // Google Maps related variables
+        // Variáveis relacionadas ao Google Maps
         let selectedPlaceDetails = {
             address: '',
             lat: null,
             lng: null,
             googleMapsUrl: ''
         };
-        let map = null; // Google Map instance
-        let marker = null; // Google Map marker instance
-        let geocoder = null; // Google Maps Geocoder instance
+        let map = null; // Instância do Google Map
+        let marker = null; // Instância do marcador do Google Map
+        let geocoder = null; // Instância do Google Maps Geocoder
 
-        // DOM Element variables declared globally (assigned in DOMContentLoaded)
+        // Variáveis de Elementos DOM declaradas globalmente (atribuídas em DOMContentLoaded)
         let modalDestinationAddressInput;
         let modalDeslocamentoError;
         let modalDeslocamentoResultsDiv;
@@ -1097,7 +1133,7 @@
         let warningDueDateSpan;
         let warningCeremonyDateSpan;
 
-        // Element Getters for main modal
+        // Getters de Elementos para o modal principal
         let ceremonyDateInput;
         let ceremonyTimeInput;
         let confirmedAddressDisplay;
@@ -1115,7 +1151,7 @@
         let modalTotalPriceEl;
         let modalTotalPriceWithFeesEl;
 
-        // Element Getters for summary tab
+        // Getters de Elementos para a aba de resumo
         let summaryPlanNameEl;
         let summaryEventDateEl;
         let summaryEventAddressEl;
@@ -1133,31 +1169,31 @@
         let feesExplanationDiv;
         let summaryFeesSuffixSpan;
 
-        // Pricing constants
+        // Constantes de Preços
         const BASE_PLAN_PRICE = 1400;
         const BOLETO_PER_INSTALLMENT_FEE = 18;
         const FIXED_DESLOCAMENTO_AMOUNT = 70;
-        const PER_KM_DESLOCAMENTO_RATE = 1.80 * 2; // R$1.80 per km, multiplied by 2 for round trip
-        const originAddress = "Angélica, MS, Brazil"; // Origin for distance calculation
+        const PER_KM_DESLOCAMENTO_RATE = 1.80 * 2; // R$1.80 por km, multiplicado por 2 para ida e volta
+        const originAddress = "Angélica, MS, Brazil"; // Origem para cálculo de distância
 
-        // Instrument prices for custom plan builder
+        // Preços dos instrumentos para o construtor de planos personalizados
         const INSTRUMENT_PRICES = {
             'Violão': 200, 'Contrabaixo': 200, 'Guitarra': 200,
             'Saxofone': 500, 'Violino': 500, '3 Vozes + Teclado/Piano': BASE_PLAN_PRICE
         };
-        // Credit card fee percentages based on number of installments
+        // Percentagens de taxa de cartão de crédito com base no número de parcelas
         const CREDIT_CARD_TOTAL_PERCENTAGES = {
             1: 0.04980, 2: 0.04590 + 0.0531, 3: 0.05970 + 0.0531, 4: 0.07330 + 0.0531,
             5: 0.08660 + 0.0531, 6: 0.09960 + 0.0531, 7: 0.11240 + 0.0531, 8: 0.12500 + 0.0531,
             9: 0.13730 + 0.1531, 10: 0.14930 + 0.0531, 11: 0.16120 + 0.0531, 12: 0.17280 + 0.0531
         };
 
-        // --- GLOBAL FUNCTIONS ---
+        // --- FUNÇÕES GLOBAIS ---
 
         /**
-         * Formats a number as Brazilian currency (R$).
-         * @param {number} value - The number to format.
-         * @returns {string} The formatted currency string.
+         * Formata um número como moeda brasileira (R$).
+         * @param {number} value - O número a ser formatado.
+         * @returns {string} A string de moeda formatada.
          */
         function formatCurrency(value) {
             if (typeof value !== 'number' || isNaN(value)) return 'R$ 0,00';
@@ -1165,11 +1201,11 @@
         }
 
         /**
-         * Calculates the displacement cost based on destination.
-         * Can accept either a formatted address string or latitude/longitude coordinates.
-         * @param {string|number} destinationOrLat - The destination address string or latitude.
-         * @param {number|null} [destinationLng=null] - The longitude, if latitude is provided.
-         * @param {function} [callback] - Optional callback function to execute after calculation.
+         * Calcula o custo de deslocamento com base no destino.
+         * Pode aceitar uma string de endereço formatada ou coordenadas de latitude/longitude.
+         * @param {string|number} destinationOrLat - A string do endereço de destino ou latitude.
+         * @param {number|null} [destinationLng=null] - A longitude, se a latitude for fornecida.
+         * @param {function} [callback] - Função de callback opcional para executar após o cálculo.
          */
         function calculateDeslocamentoInModal(destinationOrLat, destinationLng = null, callback) {
             if (!mapsInitialized) {
@@ -1187,9 +1223,9 @@
             const service = new google.maps.DistanceMatrixService();
             let destinationsArray;
 
-            if (destinationLng !== null) { // If lat/lng are provided
+            if (destinationLng !== null) { // Se lat/lng forem fornecidos
                 destinationsArray = [new google.maps.LatLng(destinationOrLat, destinationLng)];
-            } else { // If address string is provided
+            } else { // Se a string do endereço for fornecida
                 destinationsArray = [destinationOrLat];
             }
 
@@ -1231,13 +1267,13 @@
         }
 
         /**
-         * Initializes the Google Maps API and Places Autocomplete.
-         * This function is called as a callback by the Google Maps script.
+         * Inicializa a API do Google Maps e o Places Autocomplete.
+         * Esta função é chamada como um callback pelo script do Google Maps.
          */
         function initMap() {
             mapsInitialized = true;
             console.log("Google Maps API carregada.");
-            geocoder = new google.maps.Geocoder(); // Initialize geocoder for reverse geocoding
+            geocoder = new google.maps.Geocoder(); // Inicializa o geocoder para geocodificação reversa
             const input = document.getElementById('modal-destination-address');
             if (input) {
                 autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], componentRestrictions: { country: 'br' } });
@@ -1248,37 +1284,37 @@
                         selectedPlaceDetails.lat = place.geometry.location.lat();
                         selectedPlaceDetails.lng = place.geometry.location.lng();
                         selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
-                        calculateDeslocamentoInModal(selectedPlaceDetails.lat, selectedPlaceDetails.lng); // Pass lat/lng for precise calculation
+                        calculateDeslocamentoInModal(selectedPlaceDetails.lat, selectedPlaceDetails.lng); // Passa lat/lng para cálculo preciso
                     } else {
-                        // If autocomplete doesn't provide full details, clear selectedPlaceDetails and use raw input
+                        // Se o preenchimento automático não fornecer detalhes completos, limpa selectedPlaceDetails e usa a entrada bruta
                         selectedPlaceDetails.address = input.value;
                         selectedPlaceDetails.lat = null;
                         selectedPlaceDetails.lng = null;
                         selectedPlaceDetails.googleMapsUrl = '';
-                        calculateDeslocamentoInModal(input.value); // Fallback to address string
+                        calculateDeslocamentoInModal(input.value); // Retorna para a string do endereço
                     }
                 });
             }
         }
 
         /**
-         * Opens the map selection modal and initializes/updates the map.
+         * Abre o modal de seleção de mapa e inicializa/atualiza o mapa.
          */
         function openMapSelectionModal() {
             const mapSelectionModal = document.getElementById('map-selection-modal');
-            mapSelectionModal.style.display = 'flex';
+            showAnimatedModal(mapSelectionModal); // Usa show animado
 
             if (!map) {
-                // Initialize map only once when the modal is opened for the first time
+                // Inicializa o mapa apenas uma vez quando o modal é aberto pela primeira vez
                 const mapCanvas = document.getElementById('map-canvas');
                 map = new google.maps.Map(mapCanvas, {
-                    center: { lat: -14.235, lng: -51.925 }, // Center of Brazil
+                    center: { lat: -14.235, lng: -51.925 }, // Centro do Brasil
                     zoom: 4,
                     fullscreenControl: false,  
-                    mapTypeControl: true, // Enable map type control
+                    mapTypeControl: true, // Habilita o controle de tipo de mapa
                     mapTypeControlOptions: {
-                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU, // Or HORIZONTAL_BAR
-                        position: google.maps.ControlPosition.TOP_RIGHT, // Position the control
+                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU, // Ou HORIZONTAL_BAR
+                        position: google.maps.ControlPosition.TOP_RIGHT, // Posiciona o controle
                     },
                     streetViewControl: false,  
                     zoomControl: true,  
@@ -1290,59 +1326,59 @@
                     animation: google.maps.Animation.DROP,
                 });
 
-                // Listen for map clicks to place the marker
+                // Ouve cliques no mapa para colocar o marcador
                 map.addListener('click', (e) => {
                     placeMarkerAndMapanTo(e.latLng, map);
                 });
 
-                // Listen for marker drag end to update location
+                // Ouve o fim do arrasto do marcador para atualizar a localização
                 marker.addListener('dragend', () => {
                     placeMarkerAndMapanTo(marker.getPosition(), map);
                 });
             }
 
-            // Attempt to set initial map center based on current address input or previous selection
+            // Tenta definir o centro inicial do mapa com base na entrada de endereço atual ou seleção anterior
             const currentAddress = modalDestinationAddressInput.value.trim();
             if (currentAddress && geocoder) {
                 geocoder.geocode({ 'address': currentAddress }, (results, status) => {
                     if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
                         map.setCenter(results[0].geometry.location);
-                        map.setZoom(15); // Zoom in on the specific address
+                        map.setZoom(15); // Zoom na endereço específico
                         placeMarkerAndMapanTo(results[0].geometry.location, map);
                     } else {
-                        // Fallback to default center if geocoding fails or no address
+                        // Retorna para o centro padrão se a geocodificação falhar ou não houver endereço
                         map.setCenter({ lat: -14.235, lng: -51.925 });
                         map.setZoom(4);
-                        marker.setMap(null); // Hide marker if no specific address to center on
+                        marker.setMap(null); // Oculta o marcador se não houver endereço específico para centralizar
                     }
                 });
             } else if (selectedPlaceDetails.lat && selectedPlaceDetails.lng) {
-                // If a location was previously selected from map, center on it
+                // Se uma localização foi previamente selecionada no mapa, centraliza nela
                 map.setCenter({ lat: selectedPlaceDetails.lat, lng: selectedPlaceDetails.lng });
                 map.setZoom(15);
                 placeMarkerAndMapanTo(new google.maps.LatLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng), map);
             } else {
-                // Default center if no address or previous selection
+                // Centro padrão se não houver endereço ou seleção anterior
                 map.setCenter({ lat: -14.235, lng: -51.925 });
                 map.setZoom(4);
-                marker.setMap(null); // Hide marker initially
+                marker.setMap(null); // Oculta o marcador inicialmente
             }
 
-            // This ensures the map resizes correctly if the modal was hidden
+            // Isso garante que o mapa seja redimensionado corretamente se o modal estiver oculto
             google.maps.event.trigger(map, 'resize');
         }
 
         /**
-         * Places a marker on the map and pans to its location, then reverse geocodes the address.
-         * @param {google.maps.LatLng} latLng - The latitude and longitude to place the marker.
-         * @param {google.maps.Map} mapInstance - The map instance.
+         * Coloca um marcador no mapa e move a visualização para sua localização, então geocodifica o endereço.
+         * @param {google.maps.LatLng} latLng - A latitude e longitude para colocar o marcador.
+         * @param {google.maps.Map} mapInstance - A instância do mapa.
          */
         function placeMarkerAndMapanTo(latLng, mapInstance) {
             marker.setPosition(latLng);
-            marker.setMap(mapInstance); // Ensure marker is visible
+            marker.setMap(mapInstance); // Garante que o marcador esteja visível
             mapInstance.panTo(latLng);
 
-            // Reverse geocode to get the human-readable address
+            // Geocodificação reversa para obter o endereço legível
             geocoder.geocode({ 'location': latLng }, (results, status) => {
                 if (status === 'OK' && results[0]) {
                     selectedPlaceDetails.address = results[0].formatted_address;
@@ -1353,38 +1389,38 @@
                     selectedPlaceDetails.address = `Coordenadas: ${latLng.lat().toFixed(4)}, ${latLng.lng().toFixed(4)}`;
                     selectedPlaceDetails.lat = latLng.lat();
                     selectedPlaceDetails.lng = latLng.lng();
-                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
-                    console.warn('No address found for selected coordinates, using lat/lng.');
+                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${latLng.lng()}`;
+                    console.warn('Nenhum endereço encontrado para as coordenadas selecionadas, usando lat/lng.');
                 }
             });
         }
 
         /**
-         * Confirms the location selected on the map and updates the main modal's address input.
+         * Confirma a localização selecionada no mapa e atualiza o campo de endereço do modal principal.
          */
         function confirmMapLocation() {
             if (selectedPlaceDetails.lat !== null && selectedPlaceDetails.lng !== null) {
                 modalDestinationAddressInput.value = selectedPlaceDetails.address;
-                // Trigger the distance calculation based on the precise lat/lng from map
+                // Aciona o cálculo de distância com base na lat/lng precisa do mapa
                 calculateDeslocamentoInModal(selectedPlaceDetails.lat, selectedPlaceDetails.lng);
             }
-            document.getElementById('map-selection-modal').style.display = 'none';
+            hideAnimatedModal(document.getElementById('map-selection-modal')); // Usa hide animado
         }
 
         /**
-         * Sends the formatted WhatsApp message with plan details and location.
-         * @param {object} plan - Details of the selected plan.
-         * @param {string} paymentMethod - Selected payment method.
-         * @param {number} installments - Number of installments.
-         * @param {number} totalAmountWithFees - Total amount including fees.
-         * @param {number} installmentValue - Value per installment.
+         * Envia a mensagem formatada do WhatsApp com detalhes do plano e localização.
+         * @param {object} plan - Detalhes do plano selecionado.
+         * @param {string} paymentMethod - Método de pagamento selecionado.
+         * @param {number} installments - Número de parcelas.
+         * @param {number} totalAmountWithFees - Valor total incluindo taxas.
+         * @param {number} installmentValue - Valor por parcela.
          */
         function sendWhatsAppMessage(plan, paymentMethod, installments, totalAmountWithFees, installmentValue) {
-            // Prefer the address and URL from map selection if available, otherwise fallback to input field
+            // Prefere o endereço e URL da seleção do mapa, caso contrário, retorna para o campo de entrada
             const destinationAddress = selectedPlaceDetails.address || modalDestinationAddressInput.value;
             const googleMapsLink = selectedPlaceDetails.googleMapsUrl;
             const distanceText = modalDistanceDisplay.textContent;
-            const referenceLocationText = referenceLocationInput.value.trim(); // Get reference location text
+            const referenceLocationText = referenceLocationInput.value.trim(); // Obtém o texto do local de referência
             
             let message = `*Solicitação de Orçamento - ${plan.type}*\n\n`;
             message += `Olá! Tenho interesse no plano *${plan.name}*.\n\n`;
@@ -1393,13 +1429,13 @@
             message += `• *Data:* ${day}/${month}/${year}\n`;
             message += `• *Horário:* ${ceremonyTime}\n`;
             message += `• *Endereço:* ${destinationAddress}\n`;
-            if (referenceLocationText) { // Add reference location if available
+            if (referenceLocationText) { // Adiciona o local de referência se disponível
                 message += `• *Local de Referência:* ${referenceLocationText}\n`;
             }
             if (googleMapsLink) {
-                message += `• *Localização no Mapa:* ${googleMapsLink}\n\n`; // Add the map link
+                message += `• *Localização no Mapa:* ${googleMapsLink}\n\n`; // Adiciona o link do mapa
             } else {
-                message += `\n`; // Add a newline even if no map link
+                message += `\n`; // Adiciona uma nova linha mesmo que não haja link do mapa
             }
             
             message += '*Detalhes do Plano:*\n';
@@ -1415,10 +1451,10 @@
             }
             if (paymentMethod === 'pix' || paymentMethod === 'dinheiro') {
                 message += `• *Valor Total a Pagar:* ${formatCurrency(totalAmountWithFees)}\n`;
-                message += `• *Pagamento:* À vista\n`; // Changed for Pix/Dinheiro
+                message += `• *Pagamento:* À vista\n`; // Alterado para Pix/Dinheiro
             } else {
                 message += `• *Valor Total a Pagar (com taxas):* ${formatCurrency(totalAmountWithFees)}\n`;
-                message += `• *Parcelamento:* ${installments}x de ${formatCurrency(installmentValue)}\n`; // Retained for Boleto/Cartão
+                message += `• *Parcelamento:* ${installments}x de ${formatCurrency(installmentValue)}\n`; // Mantido para Boleto/Cartão
             }
             
             message += `• *Forma de Pagamento:* ${paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}\n`;
@@ -1434,10 +1470,10 @@
             window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
         }
 
-        // --- SCRIPT EXECUTION ---
+        // --- EXECUÇÃO DO SCRIPT ---
         document.addEventListener('DOMContentLoaded', () => {
             try {
-                // Assign global DOM elements
+                // Atribui elementos DOM globais
                 modalDestinationAddressInput = document.getElementById('modal-destination-address');
                 modalDeslocamentoError = document.getElementById('modal-deslocamento-error');
                 modalDeslocamentoResultsDiv = document.getElementById('modal-deslocamento-results');
@@ -1449,7 +1485,7 @@
                 warningDueDateSpan = document.getElementById('warning-due-date');
                 warningCeremonyDateSpan = document.getElementById('warning-ceremony-date');
 
-                // Element Getters for main modal
+                // Getters de Elementos para o modal principal
                 ceremonyDateInput = document.getElementById('ceremony-date');
                 ceremonyTimeInput = document.getElementById('ceremony-time');
                 confirmedAddressDisplay = document.getElementById('confirmed-address-display');
@@ -1467,7 +1503,7 @@
                 modalTotalPriceEl = document.getElementById('modal-total-price');
                 modalTotalPriceWithFeesEl = document.getElementById('modal-total-price-with-fees');
 
-                // Element Getters for summary tab
+                // Getters de Elementos para a aba de resumo
                 summaryPlanNameEl = document.getElementById('summary-plan-name');
                 summaryEventDateEl = document.getElementById('summary-event-date');
                 summaryEventAddressEl = document.getElementById('summary-event-address');
@@ -1486,24 +1522,84 @@
                 summaryFeesSuffixSpan = document.getElementById('summary-fees-suffix');
 
 
-                // --- MODAL AND ANIMATION SETUP ---
-                // The 'hidden' attribute is now handled by CSS display: none.
-                // JavaScript will now only toggle style.display.
+                // --- CONFIGURAÇÃO DE MODAL E ANIMAÇÃO ---
+                // O atributo 'hidden' agora é tratado por CSS display: none.
+                // O JavaScript agora apenas alternará style.display.
 
                 const animatedItems = document.querySelectorAll('.animated-item');
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
-                        if (entry.isIntersecting) entry.target.classList.add('visible');
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible'); // Mantém para animação inicial
+                            // Adiciona uma flag para que o efeito de rolagem possa direcioná-lo
+                            entry.target.dataset.hasBeenVisible = 'true';
+                        } else {
+                            // Opcional: se você quiser que eles animem de volta ao rolar para fora
+                            // entry.target.classList.remove('visible');
+                            // entry.target.dataset.hasBeenVisible = 'false'; // Redefine a flag se necessário
+                        }
                     });
                 }, { threshold: 0.1 });
                 animatedItems.forEach(item => observer.observe(item));
 
-                // --- NAVBAR & MOBILE MENU ---
+                // Nova função de animação de rolagem dinâmica
+                function applyDynamicScrollEffects() {
+                    animatedItems.forEach(element => {
+                        // Aplica efeitos dinâmicos apenas a elementos que já estão visíveis (após a animação inicial)
+                        if (element.classList.contains('visible')) {
+                            const rect = element.getBoundingClientRect();
+                            const viewportHeight = window.innerHeight;
+
+                            // Calcula o centro do elemento em relação à viewport
+                            const elementCenter = rect.top + rect.height / 2;
+                            const viewportCenter = viewportHeight / 2;
+
+                            // Define a "zona ativa" (onde a escala/opacidade é 1)
+                            // Por exemplo, quando o elemento está dentro de 20% das bordas superior/inferior da viewport.
+                            const activeZoneStart = viewportHeight * 0.2; // 20% do topo
+                            const activeZoneEnd = viewportHeight * 0.8;   // 80% do topo
+
+                            let scale = 1;
+                            let opacity = 1;
+                            let translateY = 0; // Este translateY é relativo à posição natural do elemento (após a entrada inicial)
+
+                            if (elementCenter < activeZoneStart) { // Elemento está subindo, passando da zona ativa superior
+                                // Calcula o progresso à medida que ele se move de activeZoneStart para o topo da viewport
+                                let progressOutOfView = 1 - (elementCenter / activeZoneStart); // 0 em activeZoneStart, 1 na borda superior (aprox)
+                                progressOutOfView = Math.min(1, Math.max(0, progressOutOfView));
+
+                                scale = 1 - (progressOutOfView * 0.2); // Diminui em até 20%
+                                opacity = 1 - (progressOutOfView * 0.7); // Desaparece em até 70%
+                                translateY = -50 * progressOutOfView; // Move ligeiramente para cima
+                            } else if (elementCenter > activeZoneEnd) { // Elemento está descendo, passando da zona ativa inferior
+                                // Calcula o progresso à medida que ele se move de activeZoneEnd para o fundo da viewport
+                                let progressOutOfView = (elementCenter - activeZoneEnd) / (viewportHeight - activeZoneEnd); // 0 em activeZoneEnd, 1 na borda inferior (aprox)
+                                progressOutOfView = Math.min(1, Math.max(0, progressOutOfView));
+
+                                scale = 1 - (progressOutOfView * 0.2); // Diminui em até 20%
+                                opacity = 1 - (progressOutOfView * 0.7); // Desaparece em até 70%
+                                translateY = 50 * progressOutOfView; // Move ligeiramente para baixo
+                            }
+
+                            // Aplica os estilos dinâmicos diretamente. Isso substituirá o transform/opacity da classe .visible.
+                            // A propriedade de transição em .animated-item tornará essas mudanças suaves.
+                            element.style.transform = `translateY(${translateY}px) scale(${scale})`;
+                            element.style.opacity = opacity;
+                        }
+                    });
+                }
+
+                window.addEventListener('scroll', applyDynamicScrollEffects);
+                // Chamada inicial para definir estados no carregamento para elementos já visíveis
+                applyDynamicScrollEffects();
+
+
+                // --- BARRA DE NAVEGAÇÃO E MENU MOBILE ---
                 const navbar = document.getElementById('navbar');
                 const mobileMenuButton = document.getElementById('mobile-menu-button');
                 const mobileMenu = document.getElementById('mobile-menu');
                 if (navbar && mobileMenuButton && mobileMenu) {
-                    // Add/remove 'navbar-scrolled' class based on scroll position
+                    // Adiciona/remove a classe 'navbar-scrolled' com base na posição de rolagem
                     window.onscroll = () => {
                         if (window.scrollY > 50) {
                             navbar.classList.add('navbar-scrolled');
@@ -1517,7 +1613,7 @@
                     });
                 }
                 
-                // --- CUSTOM PLAN BUILDER ---
+                // --- CONSTRUTOR DE PLANOS PERSONALIZADOS ---
                 const bandInstruments = [
                     { name: 'Violão', price: 200 }, { name: 'Contrabaixo', price: 200 }, { name: 'Guitarra', price: 200 },
                 ];
@@ -1526,12 +1622,12 @@
                 ];
                 const bandOptionsContainer = document.getElementById('band-instrument-options');
                 const guestOptionsContainer = document.getElementById('guest-instrument-options');
-                const simulateBtnCustom = document.getElementById('simulate-btn-custom'); // Changed ID
+                const simulateBtnCustom = document.getElementById('simulate-btn-custom');
                 const selectedInstruments = new Set();
 
                 /**
-                 * Calculates the total price for the custom plan based on selected instruments.
-                 * @returns {number} The calculated price.
+                 * Calcula o preço total para o plano personalizado com base nos instrumentos selecionados.
+                 * @returns {number} O preço calculado.
                  */
                 function calculateCustomPlanPrice() {
                     let price = BASE_PLAN_PRICE;
@@ -1543,19 +1639,19 @@
                 }
 
                 /**
-                 * Creates a checkbox element for an instrument and appends it to the container.
-                 * @param {object} instrument - The instrument object with name and price.
-                 * @param {HTMLElement} container - The DOM element to append the checkbox to.
+                 * Cria um elemento de checkbox para um instrumento e o anexa ao contêiner.
+                 * @param {object} instrument - O objeto do instrumento com nome e preço.
+                 * @param {HTMLElement} container - O elemento DOM ao qual anexar o checkbox.
                  */
                 function createCheckbox(instrument, container) {
                     const label = document.createElement('label');
-                    label.className = 'custom-plan-checkbox-label'; /* Apply new custom class */
+                    label.className = 'custom-plan-checkbox-label'; /* Aplica a nova classe personalizada */
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
                     checkbox.dataset.name = instrument.name;
                     checkbox.className = 'form-checkbox h-5 w-5 rounded custom-checkbox focus:ring-gold';
                     const span = document.createElement('span');
-                    span.className = 'text-gray-700 transition-colors duration-200';
+                    span.className = 'text-gray-200 transition-colors duration-200'; /* Cor do texto ajustada para tema escuro */
                     span.textContent = `${instrument.name} (+ ${formatCurrency(instrument.price)})`;
                     label.appendChild(checkbox);
                     label.appendChild(span);
@@ -1570,22 +1666,38 @@
                     guestInstruments.forEach(inst => createCheckbox(inst, guestOptionsContainer));
                 }
 
-                // --- MAIN MODAL LOGIC ---
-                const mainSimulationModal = document.getElementById('main-simulation-modal'); // Changed ID
+                // --- LÓGICA DO MODAL PRINCIPAL ---
+                const mainSimulationModal = document.getElementById('main-simulation-modal');
                 const closeMainModalButton = document.getElementById('close-main-modal-button');
                 const tabButtons = document.querySelectorAll('.tab-button');
                 const tabContents = document.querySelectorAll('.tab-content');
-                let unlockedTabs = ['deslocamento-tab']; // Initially, only the first tab is unlocked
+                let unlockedTabs = ['deslocamento-tab']; // Inicialmente, apenas a primeira aba é desbloqueada
 
                 /**
-                 * Shows a specific tab within the main simulation modal.
-                 * @param {string} tabId - The ID of the tab to show.
+                 * Mostra uma aba específica dentro do modal de simulação principal.
+                 * @param {string} tabId - O ID da aba a ser mostrada.
                  */
                 function showTab(tabId) {
-                    tabContents.forEach(content => content.style.display = 'none');
-                    tabButtons.forEach(button => button.classList.remove('active'));
-                    document.getElementById(tabId).style.display = 'block';
-                    document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+                    tabContents.forEach(content => {
+                        if (content.id === tabId) {
+                            content.style.display = 'block'; // Torna-o visível para transição
+                            content.offsetWidth; // Força o reflow
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                            setTimeout(() => {
+                                content.style.display = 'none';
+                            }, 300); // Corresponde à duração da transição CSS
+                        }
+                    });
+
+                    tabButtons.forEach(button => {
+                        if (button.dataset.tab === tabId) {
+                            button.classList.add('active');
+                        } else {
+                            button.classList.remove('active');
+                        }
+                    });
                     
                     if (tabId === 'event-details-tab') {
                         confirmedAddressDisplay.textContent = modalDestinationAddressInput.value || 'Endereço não informado.';
@@ -1597,8 +1709,8 @@
                 }
 
                 /**
-                 * Navigates to a specific tab, unlocking it if necessary.
-                 * @param {string} targetTab - The ID of the tab to navigate to.
+                 * Navega para uma aba específica, desbloqueando-a se necessário.
+                 * @param {string} targetTab - O ID da aba para a qual navegar.
                  */
                 function navigateToTab(targetTab) {
                     if (!unlockedTabs.includes(targetTab)) {
@@ -1607,7 +1719,7 @@
                     showTab(targetTab);
                 }
 
-                // Event listeners for tab buttons
+                // Listeners de eventos para botões de aba
                 tabButtons.forEach(button => {
                     button.addEventListener('click', (e) => {
                         const targetTab = e.target.dataset.tab;
@@ -1617,12 +1729,12 @@
                     });
                 });
                 
-                // Event listeners for "Voltar" buttons
+                // Listeners de eventos para botões "Voltar"
                 document.querySelectorAll('[data-navigate-tab]').forEach(button => {
                     button.addEventListener('click', (e) => showTab(e.target.dataset.navigateTab));
                 });
 
-                // Navigation to Event Details tab
+                // Navegação para a aba Detalhes do Evento
                 document.getElementById('next-to-event-details-btn').addEventListener('click', () => {
                     const address = modalDestinationAddressInput.value.trim();
                     if (!address || modalDeslocamentoResultsDiv.classList.contains('hidden')) {
@@ -1633,7 +1745,7 @@
                     navigateToTab('event-details-tab');
                 });
 
-                // Navigation to Payment Method tab
+                // Navegação para a aba Método de Pagamento
                 document.getElementById('next-to-payment-method-btn').addEventListener('click', () => {
                     ceremonyDate = ceremonyDateInput.value;
                     ceremonyTime = ceremonyTimeInput.value;
@@ -1646,122 +1758,146 @@
                     navigateToTab('payment-method-tab');
                 });
 
-                // Navigation to Summary tab
+                // Navegação para a aba Resumo
                 document.getElementById('next-to-summary-btn').addEventListener('click', () => {
-                    if (validateBoletoDueDate()) { // Validate boleto date before proceeding
+                    if (validateBoletoDueDate()) { // Valida a data do boleto antes de prosseguir
                         navigateToTab('summary-tab');
                     }
                 });
 
-                // --- MODAL OPEN/CLOSE ---
+                // --- ABRIR/FECHAR MODAL ---
                 /**
-                 * Displays the main simulation modal with initial plan details.
-                 * @param {number} planPrice - The base price of the selected plan.
-                 * @param {object} planDetails - Detailed information about the plan.
+                 * Função para mostrar qualquer modal com animação
+                 * @param {HTMLElement} modalElement - O elemento DOM do modal.
                  */
-                function showMainSimulationModal(planPrice, planDetails) { // Changed function name
-                    mainSimulationModal.style.display = 'flex'; // Changed ID
+                function showAnimatedModal(modalElement) {
+                    if (!modalElement) return;
+                    modalElement.style.display = 'flex'; // Torna-o visível para transição
+                    // Força o reflow para garantir que a transição seja reproduzida
+                    modalElement.offsetWidth;
+                    modalElement.classList.add('show');
+                }
+
+                /**
+                 * Função para ocultar qualquer modal com animação
+                 * @param {HTMLElement} modalElement - O elemento DOM do modal.
+                 */
+                function hideAnimatedModal(modalElement) {
+                    if (!modalElement) return;
+                    modalElement.classList.remove('show');
+                    // Após a transição, define o display como none
+                    setTimeout(() => {
+                        modalElement.style.display = 'none';
+                    }, 400); // Corresponde à duração da transição CSS
+                }
+
+                /**
+                 * Exibe o modal de simulação principal com os detalhes do plano inicial.
+                 * @param {number} planPrice - O preço base do plano selecionado.
+                 * @param {object} planDetails - Informações detalhadas sobre o plano.
+                 */
+                function showMainSimulationModal(planPrice, planDetails) {
+                    showAnimatedModal(mainSimulationModal); // Usa show animado
                     currentPlanDetails = planDetails;
                     currentPlanOnlyPrice = planPrice;
-                    currentDeslocamentoCost = 0; // Reset displacement cost
-                    currentFinalTotalPrice = currentPlanOnlyPrice; // Reset total price
+                    currentDeslocamentoCost = 0; // Redefine o custo de deslocamento
+                    currentFinalTotalPrice = currentPlanOnlyPrice; // Redefine o preço total
 
-                    // Reset fields
+                    // Redefine os campos
                     modalDestinationAddressInput.value = '';
                     ceremonyDateInput.value = '';
                     ceremonyTimeInput.value = '';
-                    referenceLocationInput.value = ''; // Reset reference location input
-                    selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' }; // Reset map selection
+                    referenceLocationInput.value = ''; // Redefine a entrada de local de referência
+                    selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' }; // Redefine a seleção do mapa
                     const today = new Date().toISOString().split('T')[0];
-                    ceremonyDateInput.setAttribute('min', today); // Set minimum date for ceremony
+                    ceremonyDateInput.setAttribute('min', today); // Define a data mínima para a cerimônia
                     modalDeslocamentoResultsDiv.classList.add('hidden');
                     modalDeslocamentoError.classList.add('hidden');
                     
-                    // Reset tabs and show the first one
+                    // Redefine as abas e mostra a primeira
                     unlockedTabs = ['deslocamento-tab'];
                     showTab('deslocamento-tab');
                 }
 
-                // Close main modal button listener
+                // Listener do botão de fechar o modal principal
                 if (closeMainModalButton) {
                     closeMainModalButton.addEventListener('click', () => {
-                        mainSimulationModal.style.display = 'none'; // Changed ID
+                        hideAnimatedModal(mainSimulationModal); // Usa hide animado
                     });
                 }
-                // Close main modal when clicking outside
+                // Fecha o modal principal ao clicar fora
                 window.addEventListener('click', (event) => {
-                    if (event.target == mainSimulationModal) { // Changed ID
-                        mainSimulationModal.style.display = 'none'; // Changed ID
+                    if (event.target == mainSimulationModal) {
+                        hideAnimatedModal(mainSimulationModal); // Usa hide animado
                     }
                 });
 
-                // --- MAP SELECTION MODAL LISTENERS ---
+                // --- LISTENERS DO MODAL DE SELEÇÃO DE MAPA ---
                 document.getElementById('open-map-selection-btn').addEventListener('click', openMapSelectionModal);
                 document.getElementById('close-map-modal-button').addEventListener('click', () => {
-                    document.getElementById('map-selection-modal').style.display = 'none';
+                    hideAnimatedModal(document.getElementById('map-selection-modal'));
                 });
                 document.getElementById('confirm-map-location-btn').addEventListener('click', confirmMapLocation);
                 window.addEventListener('click', (event) => {
                     if (event.target == document.getElementById('map-selection-modal')) {
-                        document.getElementById('map-selection-modal').style.display = 'none';
+                        hideAnimatedModal(document.getElementById('map-selection-modal'));
                     }
                 });
 
-                // --- BOLETO NOTIFICATION MODAL ---
+                // --- MODAL DE NOTIFICAÇÃO DE BOLETO ---
                 const boletoNotificationModal = document.getElementById('boleto-notification-modal');
                 const closeBoletoModalButton = document.getElementById('close-boleto-modal-button');
                 const okBoletoModalButton = document.getElementById('ok-boleto-modal-button');
                 
-                // Modified logic for boleto notifications
+                // Lógica modificada para notificações de boleto
                 if (closeBoletoModalButton) {
                     closeBoletoModalButton.addEventListener('click', () => {
-                        boletoNotificationModal.style.display = 'none';
-                        // After closing the first notification, check for date warning
+                        hideAnimatedModal(boletoNotificationModal);
+                        // Após fechar a primeira notificação, verifica o aviso de data
                         validateBoletoDueDate();  
                     });
                 }
                 if (okBoletoModalButton) {
                     okBoletoModalButton.addEventListener('click', () => {
-                        boletoNotificationModal.style.display = 'none';
-                        // After acknowledging the first notification, check for date warning
+                        hideAnimatedModal(boletoNotificationModal);
+                        // Após reconhecer a primeira notificação, verifica o aviso de data
                         validateBoletoDueDate();
                     });
                 }
                 window.addEventListener('click', (event) => {
                     if (event.target == boletoNotificationModal) {
-                        boletoNotificationModal.style.display = 'none';
-                        // After clicking outside the first notification, check for date warning
+                        hideAnimatedModal(boletoNotificationModal);
                         validateBoletoDueDate();
                     }
                 });
 
-                // --- NEW: BOLETO DATE WARNING MODAL LISTENERS ---
+                // --- NOVO: LISTENERS DO MODAL DE AVISO DE DATA DE BOLETO ---
                 document.getElementById('close-boleto-date-warning-modal-button').addEventListener('click', () => {
-                    boletoDateWarningModal.style.display = 'none';
+                    hideAnimatedModal(boletoDateWarningModal);
                 });
                 document.getElementById('ok-boleto-date-warning-modal-button').addEventListener('click', () => {
-                    boletoDateWarningModal.style.display = 'none';
+                    hideAnimatedModal(boletoDateWarningModal);
                 });
                 window.addEventListener('click', (event) => {
                     if (event.target == boletoDateWarningModal) {
-                        boletoDateWarningModal.style.display = 'none';
+                        hideAnimatedModal(boletoDateWarningModal);
                     }
                 });
 
-                // --- PAYMENT LOGIC ---
+                // --- LÓGICA DE PAGAMENTO ---
                 paymentMethodRadios.forEach(radio => {
                     radio.addEventListener('change', () => {
                         selectedPaymentMethod = radio.value;
-                        selectedInstallments = 1; // Reset installments on method change
+                        selectedInstallments = 1; // Redefine as parcelas na mudança de método
                         updateInstallmentOptions();
                         updatePaymentDetailsDisplay();
-                        // Only show the first boleto notification here.
-                        // The date warning will be triggered after this one is closed.
+                        // Mostra apenas a primeira notificação de boleto aqui.
+                        // O aviso de data será acionado depois que este for fechado.
                         if (selectedPaymentMethod === 'boleto') {
-                            boletoNotificationModal.style.display = 'flex';
+                            showAnimatedModal(boletoNotificationModal);
                         } else {
-                            boletoNotificationModal.style.display = 'none'; // Ensure it's hidden if not boleto
-                            boletoDateWarningModal.style.display = 'none'; // Ensure date warning is also hidden
+                            hideAnimatedModal(boletoNotificationModal); // Garante que esteja oculto se não for boleto
+                            hideAnimatedModal(boletoDateWarningModal); // Garante que o aviso de data também esteja oculto
                         }
                     });
                 });
@@ -1777,7 +1913,7 @@
                 });
 
                 /**
-                 * Updates the installment options dropdown based on the selected payment method.
+                 * Atualiza as opções de parcelamento suspensas com base no método de pagamento selecionado.
                  */
                 function updateInstallmentOptions() {
                     installmentsSelect.innerHTML = '';
@@ -1795,7 +1931,7 @@
                 }
 
                 /**
-                 * Updates the payment details display in the modal based on selected options.
+                 * Atualiza a exibição dos detalhes de pagamento no modal com base nas opções selecionadas.
                  */
                 function updatePaymentDetailsDisplay() {
                     let calculatedTotalForPayment = currentFinalTotalPrice;
@@ -1824,32 +1960,32 @@
                     modalTotalPriceWithFeesEl.textContent = formatCurrency(calculatedTotalForPayment);
                     installmentValueEl.textContent = formatCurrency(finalInstallmentValue);
 
-                    // Do NOT call validateBoletoDueDate here directly if selectedPaymentMethod is boleto
-                    // It will be called after the first notification is closed.
+                    // NÃO chame validateBoletoDueDate aqui diretamente se selectedPaymentMethod for boleto
+                    // Será chamado depois que a primeira notificação for fechada.
                     if (selectedPaymentMethod !== 'boleto') {
                         validateBoletoDueDate();
                     }
                 }
                 
                 /**
-                 * Validates if the last boleto installment date is before the ceremony date.
-                 * Displays a warning modal if not.
-                 * @returns {boolean} True if validation passes, false otherwise.
+                 * Valida se a data da última parcela do boleto é anterior à data da cerimônia.
+                 * Exibe um modal de aviso se não for.
+                 * @returns {boolean} True se a validação passar, false caso contrário.
                  */
                 function validateBoletoDueDate() {
-                    // Only perform validation if the payment method is boleto and a ceremony date is set
+                    // Realiza a validação apenas se o método de pagamento for boleto e uma data de cerimônia for definida
                     if (selectedPaymentMethod !== 'boleto' || !ceremonyDate) {
-                        modalBoletoDateError.classList.add('hidden'); // Hide inline error
-                        boletoDateWarningModal.style.display = 'none'; // Hide warning modal
+                        modalBoletoDateError.classList.add('hidden'); // Oculta o erro inline
+                        hideAnimatedModal(boletoDateWarningModal); // Oculta o modal de aviso
                         if (nextToSummaryBtn) nextToSummaryBtn.disabled = false;
                         return true;
                     }
 
                     const today = new Date();
-                    const ceremony = new Date(ceremonyDate + 'T23:59:59'); // End of ceremony day
+                    const ceremony = new Date(ceremonyDate + 'T23:59:59'); // Fim do dia da cerimônia
                     
                     let firstPaymentDate = new Date(today.getFullYear(), today.getMonth(), selectedBoletoDueDate);
-                    // If the first payment date is in the past or today, set it to next month
+                    // Se a data do primeiro pagamento estiver no passado ou hoje, define-a para o próximo mês
                     if (firstPaymentDate <= today) {
                         firstPaymentDate.setMonth(firstPaymentDate.getMonth() + 1);
                     }
@@ -1858,26 +1994,27 @@
                     lastPaymentDate.setMonth(lastPaymentDate.getMonth() + selectedInstallments - 1);
 
                     if (lastPaymentDate > ceremony) {
-                        // Display the elaborate warning modal
+                        // Exibe o modal de aviso elaborado
                         warningDueDateSpan.textContent = selectedBoletoDueDate;
                         const [year, month, day] = ceremonyDate.split('-');
                         warningCeremonyDateSpan.textContent = `${day}/${month}/${year}`;
-                        boletoDateWarningModal.style.display = 'flex';
+                        showAnimatedModal(boletoDateWarningModal);
                         
-                        modalBoletoDateError.classList.remove('hidden'); // Keep inline error for consistency, though modal is primary
+                        modalBoletoDateError.textContent = "A data da última parcela não pode ser posterior à data da cerimônia. Por favor, ajuste as parcelas ou a data de vencimento.";
+                        modalBoletoDateError.classList.remove('hidden'); // Mantém o erro inline para consistência, embora o modal seja primário
                         if (nextToSummaryBtn) nextToSummaryBtn.disabled = true;
                         return false;
                     } else {
-                        modalBoletoDateError.classList.add('hidden'); // Hide inline error
-                        boletoDateWarningModal.style.display = 'none'; // Hide modal warning
+                        modalBoletoDateError.classList.add('hidden'); // Oculta o erro inline
+                        hideAnimatedModal(boletoDateWarningModal); // Oculta o aviso do modal
                         if (nextToSummaryBtn) nextToSummaryBtn.disabled = false;
                         return true;
                     }
                 }
 
-                // --- SUMMARY LOGIC ---
+                // --- LÓGICA DO RESUMO ---
                 /**
-                 * Updates the summary display in the modal with all selected details.
+                 * Atualiza a exibição do resumo no modal com todos os detalhes selecionados.
                  */
                 function updateSummaryDisplay() {
                     let calculatedTotalForSummary = currentFinalTotalPrice;
@@ -1912,9 +2049,9 @@
                     summaryPlanNameEl.textContent = currentPlanDetails.name;
                     const [year, month, day] = ceremonyDate.split('-');
                     summaryEventDateEl.textContent = `${day}/${month}/${year} às ${ceremonyTime}`;
-                    summaryEventAddressEl.textContent = selectedPlaceDetails.address || modalDestinationAddressInput.value; // Use selected address or input
+                    summaryEventAddressEl.textContent = selectedPlaceDetails.address || modalDestinationAddressInput.value; // Usa o endereço selecionado ou a entrada
                     
-                    // Update and show/hide reference location in summary
+                    // Atualiza e mostra/oculta o local de referência no resumo
                     if (referenceLocationInput.value.trim()) {
                         summaryReferenceLocationEl.textContent = referenceLocationInput.value.trim();
                         summaryReferenceLocationDisplay.style.display = 'block';
@@ -1928,7 +2065,7 @@
                     summaryTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice);
                     summaryTotalWithFeesEl.textContent = formatCurrency(calculatedTotalForSummary);
                     summaryPaymentMethodEl.textContent = paymentMethodText;
-                    // Conditionally display "Pagamento à vista" or "Parcelamento"
+                    // Exibe condicionalmente "Pagamento à vista" ou "Parcelamento"
                     if (selectedPaymentMethod === 'pix' || selectedPaymentMethod === 'dinheiro') {
                         summaryInstallmentDetailsDiv.innerHTML = `Pagamento: <span class="font-bold text-gold">À vista</span>`;
                     } else {
@@ -1936,51 +2073,51 @@
                     }
                 }
 
-                // --- WHATSAPP & SIMULATION ---
-                document.getElementById('confirm-simulation-btn').addEventListener('click', () => { // Changed ID
+                // --- WHATSAPP E SIMULAÇÃO ---
+                document.getElementById('confirm-simulation-btn').addEventListener('click', () => {
                     const totalAmountWithFees = parseFloat(summaryTotalWithFeesEl.textContent.replace('R$', '').replace(',', '.'));
-                    // Safely get installment value, defaulting to total if not applicable (e.g., Pix/Dinheiro)
+                    // Obtém com segurança o valor da parcela, padronizando para o total se não aplicável (ex: Pix/Dinheiro)
                     const installmentValuePerInstallment = parseFloat(summaryInstallmentDetailsDiv.textContent.split('de ')[1]?.replace('R$', '').replace(',', '.') || totalAmountWithFees);
                     sendWhatsAppMessage(currentPlanDetails, selectedPaymentMethod, selectedInstallments, totalAmountWithFees, installmentValuePerInstallment);
-                    mainSimulationModal.style.display = 'none'; // Changed ID
+                    hideAnimatedModal(mainSimulationModal); // Usa hide animado
                 });
 
                 /**
-                 * Global function to handle "Simular" button clicks for predefined plans.
-                 * @param {string} planName - The name of the plan.
-                 * @param {string[]} instruments - An array of instruments included in the plan.
-                 * @param {number} price - The price of the plan.
+                 * Função global para lidar com cliques nos botões "Simular" para planos predefinidos.
+                 * @param {string} planName - O nome do plano.
+                 * @param {string[]} instruments - Um array de instrumentos incluídos no plano.
+                 * @param {number} price - O preço do plano.
                  */
-                window.handleSimular = function(planName, instruments, price) { // Changed function name
+                window.handleSimular = function(planName, instruments, price) {
                     const planDetails = {
                         type: 'Plano Pronto', name: planName, instruments: instruments, price: price
                     };
-                    showMainSimulationModal(price, planDetails); // Changed function call
+                    showMainSimulationModal(price, planDetails); // Chama a função show
                 };
 
-                // Event listener for the custom plan "Simular" button
-                if(simulateBtnCustom){ // Changed ID
-                    simulateBtnCustom.addEventListener('click', () => { // Changed ID
+                // Listener de evento para o botão "Simular" do plano personalizado
+                if(simulateBtnCustom){
+                    simulateBtnCustom.addEventListener('click', () => {
                         const customPlanPrice = calculateCustomPlanPrice();
                         const planDetails = {
                             type: 'Plano Personalizado', name: 'Plano Personalizado',
                             instruments: ['3 Vozes + Teclado/Piano', ...Array.from(selectedInstruments)],
                             price: customPlanPrice
                         };
-                        showMainSimulationModal(customPlanPrice, planDetails); // Changed function call
+                        showMainSimulationModal(customPlanPrice, planDetails); // Chama a função show
                     });
                 }
 
-                // --- DESLOCAMENTO CALCULATION ---
-                // Debounce input for address calculation to prevent excessive API calls
+                // --- CÁLCULO DE DESLOCAMENTO ---
+                // Debounce de entrada para cálculo de endereço para evitar chamadas excessivas à API
                 modalDestinationAddressInput.addEventListener('input', () => {
                     clearTimeout(debounceTimer);
                     const address = modalDestinationAddressInput.value.trim();
                     if (address.length > 3) {
                         debounceTimer = setTimeout(() => {
-                            // When typing, use the address string for calculation
+                            // Ao digitar, usa a string do endereço para cálculo
                             calculateDeslocamentoInModal(address);
-                            // Also try to geocode and store lat/lng for WhatsApp link, but don't force map selection
+                            // Também tenta geocodificar e armazenar lat/lng para o link do WhatsApp, mas não força a seleção do mapa
                             if (geocoder) {
                                 geocoder.geocode({ 'address': address }, (results, status) => {
                                     if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
@@ -1995,29 +2132,29 @@
                                     }
                                 });
                             }
-                        }, 500); // 500ms delay
+                        }, 500); // Atraso de 500ms
                     } else {
                         modalDeslocamentoResultsDiv.classList.add('hidden');
                         modalDeslocamentoError.classList.add('hidden');
                         currentDeslocamentoCost = 0;
                         currentFinalTotalPrice = currentPlanOnlyPrice;
-                        selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' }; // Clear map data
+                        selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' }; // Limpa os dados do mapa
                     }
                 });
                 
-                // --- SECURITY MEASURES TO DETER INSPECTION ---
-                // Disable right-click context menu
+                // --- MEDIDAS DE SEGURANÇA PARA DIFICULTAR A INSPEÇÃO ---
+                // Desabilita o menu de contexto do botão direito
                 document.addEventListener('contextmenu', event => event.preventDefault());
 
-                // Disable specific keyboard shortcuts for developer tools and source view
+                // Desabilita atalhos de teclado específicos para ferramentas de desenvolvedor e visualização de código-fonte
                 document.addEventListener('keydown', event => {
-                    // F12 key
+                    // Tecla F12
                     if (event.key === 'F12') {
                         event.preventDefault();
                     }
-                    // Ctrl+Shift+I, Ctrl+Shift+J (Developer Tools)
-                    // Ctrl+U (View Source)
-                    // Ctrl+S (Save Page)
+                    // Ctrl+Shift+I, Ctrl+Shift+J (Ferramentas do Desenvolvedor)
+                    // Ctrl+U (Ver Código-Fonte)
+                    // Ctrl+S (Salvar Página)
                     if (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) {
                         event.preventDefault();
                     }
