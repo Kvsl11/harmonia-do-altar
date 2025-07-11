@@ -401,6 +401,13 @@
             outline: none;
         }
 
+        /* AJUSTE: Estilo para os ícones de data e hora */
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(65%) sepia(25%) saturate(856%) hue-rotate(359deg) brightness(91%) contrast(87%);
+            cursor: pointer;
+        }
+
         .modal-radio-label {
             padding: 12px 15px;
             border: 1px solid #4a5568; /* Borda mais escura */
