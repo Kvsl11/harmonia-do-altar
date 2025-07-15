@@ -1419,7 +1419,7 @@
                     selectedPlaceDetails.address = `Coordenadas: ${latLng.lat().toFixed(4)}, ${latLng.lng().toFixed(4)}`;
                     selectedPlaceDetails.lat = latLng.lat();
                     selectedPlaceDetails.lng = latLng.lng();
-                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${latLng.lng()}`;
+                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
                     console.warn('Nenhum endereço encontrado para as coordenadas selecionadas, usando lat/lng.');
                 }
             });
