@@ -4,33 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harmonia do Altar</title>
-    <!-- Favicon with fallback -->
+    <!-- Favicon com fallback -->
     <link rel="icon" href="H.png" type="image/png">
-    <!-- Tailwind CSS CDN for utility-first styling -->
+    <!-- Tailwind CSS CDN para estilização utility-first -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for custom typography -->
+    <!-- Google Fonts para tipografia personalizada -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for icons -->
+    <!-- Font Awesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Smooth scrolling for anchor links */
+        /* Smooth scrolling para links de âncora */
         html {
             scroll-behavior: smooth;
         }
-        /* Base font for the body */
+        /* Fonte base para o corpo */
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #1a202c; /* Fundo mais escuro para uma sensação mais cinematográfica */
             color: #e2e8f0; /* Texto mais claro para contraste em fundo escuro */
         }
-        /* Heading font for a more elegant look */
+        /* Fonte de cabeçalho para um visual mais elegante */
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Playfair Display', serif;
             color: #ffffff; /* Títulos brancos para forte contraste */
         }
-        /* Custom gold color for branding consistency */
+        /* Cor dourada personalizada para consistência da marca */
         .text-gold {
             color: #b69260;
         }
@@ -40,7 +40,7 @@
         .border-gold {
             border-color: #b69260;
         }
-        /* Hero section background with gradient overlay */
+        /* Fundo da seção Hero com sobreposição de gradiente */
         .hero-bg {
             background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
             background-position: center;
@@ -48,7 +48,7 @@
             background-size: cover;
         }
         
-        /* Media Cropper for Instagram videos to ensure square aspect ratio */
+        /* Media Cropper para vídeos do Instagram para garantir proporção quadrada */
         .media-cropper {
             position: relative;
             overflow: hidden;
@@ -1161,8 +1161,9 @@
     <!-- Script de Incorporação do Instagram -->
     <script async src="//www.instagram.com/embed.js"></script>
     
-    <!-- Google Maps API com bibliotecas Geometry e Places para preenchimento automático e matriz de distância -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoL-Za52C0cbwOen71nbKqDpLKgBufd0Y&libraries=geometry,places&callback=initMap"></script>
+    <!-- Google Maps API com biblioteca Places para preenchimento automático e matriz de distância -->
+    <!-- O script abaixo foi atualizado para incluir todas as bibliotecas e a versão beta, conforme solicitado. -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBks326M90m-Ud9AzFJBrigRbzTfcMNP34&callback=initMap&libraries=geometry,places,maps,marker&v=beta"></script>
 
     <script>
         // --- VARIÁVEIS GLOBAIS E CONSTANTES ---
@@ -1201,7 +1202,7 @@
         const CREDIT_CARD_TOTAL_PERCENTAGES = {
             1: 0.04980, 2: 0.04590 + 0.0531, 3: 0.05970 + 0.0531, 4: 0.07330 + 0.0531,
             5: 0.08660 + 0.0531, 6: 0.09960 + 0.0531, 7: 0.11240 + 0.0531, 8: 0.12500 + 0.0531,
-            9: 0.13730 + 0.0531, 10: 0.14930 + 0.0531, 11: 0.16120 + 0.0531, 12: 0.17280 + 0.0531
+            9: 0.13730 + 0.1531, 10: 0.14930 + 0.0531, 11: 0.16120 + 0.0531, 12: 0.17280 + 0.0531
         };
 
         // --- DEFINIÇÕES DE FUNÇÕES GLOBAIS ---
@@ -1223,10 +1224,10 @@
         function showAnimatedModal(modalElement) {
             if (!modalElement) return;
             modalElement.style.display = 'flex';
-            // Force a reflow to enable the transition
+            // Força um reflow para habilitar a transição
             modalElement.offsetWidth;
             modalElement.classList.add('show');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.style.overflow = 'hidden'; // Previne rolagem do fundo
         }
 
         /**
@@ -1238,8 +1239,8 @@
             modalElement.classList.remove('show');
             setTimeout(() => {
                 modalElement.style.display = 'none';
-                document.body.style.overflow = ''; // Restore background scrolling
-            }, 400); // Match transition duration
+                document.body.style.overflow = ''; // Restaura a rolagem do fundo
+            }, 400); // Corresponde à duração da transição
         }
 
         /**
@@ -1419,7 +1420,7 @@
                     selectedPlaceDetails.address = `Coordenadas: ${latLng.lat().toFixed(4)}, ${latLng.lng().toFixed(4)}`;
                     selectedPlaceDetails.lat = latLng.lat();
                     selectedPlaceDetails.lng = latLng.lng();
-                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
+                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${latLng.lng()}`;
                     console.warn('Nenhum endereço encontrado para as coordenadas selecionadas, usando lat/lng.');
                 }
             });
@@ -1560,7 +1561,7 @@
             tabContents.forEach(content => {
                 if (content.id === tabId) {
                     content.style.display = 'block';
-                    // Force a reflow for transition
+                    // Força um reflow para transição
                     content.offsetWidth;
                     content.classList.add('active');
                 } else {
@@ -1967,12 +1968,12 @@
                 installmentsSelect.addEventListener('change', (e) => {
                     selectedInstallments = parseInt(e.target.value);
                     updatePaymentDetailsDisplay();
-                    validateBoletoDueDate(); // Re-validate when installments change
+                    validateBoletoDueDate(); // Re-valida quando as parcelas mudam
                 });
                 boletoDueDateSelect.addEventListener('change', (e) => {
                     selectedBoletoDueDate = parseInt(e.target.value);
                     updatePaymentDetailsDisplay();
-                    validateBoletoDueDate(); // Re-validate when due date changes
+                    validateBoletoDueDate(); // Re-valida quando a data de vencimento muda
                 });
                 document.getElementById('confirm-simulation-btn').addEventListener('click', () => {
                     const totalAmountWithFees = parseFloat(summaryTotalWithFeesEl.textContent.replace('R$', '').replace(/\./g, '').replace(',', '.'));
