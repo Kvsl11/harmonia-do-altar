@@ -1185,6 +1185,9 @@
         let map = null;
         let marker = null;
         let geocoder = null;
+        let directionsService = null; // NOVO: Serviço de Direções
+        let directionsRenderer = null; // NOVO: Renderizador de Direções
+        let streetViewService = null; // NOVO: Serviço de Street View
 
         // Variáveis de Elementos DOM - declaradas globalmente, atribuídas em DOMContentLoaded
         let modalDestinationAddressInput, modalDeslocamentoError, modalDeslocamentoResultsDiv, modalDistanceDisplay, modalCalculatedDeslocamentoDisplay, referenceLocationInput, nextToSummaryBtn, boletoDateWarningModal, warningDueDateSpan, warningCeremonyDateSpan, ceremonyDateInput, ceremonyTimeInput, confirmedAddressDisplay, modalEventDetailsError, paymentMethodRadios, installmentOptionsDiv, installmentsSelect, installmentValueEl, boletoDueDateOptionsDiv, boletoDueDateSelect, modalBoletoDateError, feesSuffixSpan, modalPlanPriceEl, modalFreightPriceEl, modalTotalPriceEl, modalTotalPriceWithFeesEl, summaryPlanNameEl, summaryEventDateEl, summaryEventAddressEl, summaryReferenceLocationDisplay, summaryReferenceLocationEl, summaryPlanPriceEl, summaryDeslocamentoPriceEl, summaryTotalPriceEl, summaryTotalWithFeesEl, summaryPaymentMethodEl, summaryInstallmentDetailsDiv, summaryInstallmentsEl, summaryBoletoDueDateDetailsDiv, summaryBoletoDueDateEl, feesExplanationDiv, summaryFeesSuffixSpan, mainSimulationModal, closeMainModalButton, tabButtons, tabContents, simulateBtnCustom, bandOptionsContainer, guestOptionsContainer, boletoNotificationModal, closeBoletoModalButton, okBoletoModalButton, unlockedTabs;
@@ -1194,6 +1197,7 @@
         const FIXED_DESLOCAMENTO_AMOUNT = 70;
         const PER_KM_DESLOCAMENTO_RATE = 1.80 * 2;
         const originAddress = "Angélica, MS, Brazil";
+        const originLatLng = { lat: -22.6517, lng: -53.7744 }; // Coordenadas de Angélica, MS para rota
 
         const INSTRUMENT_PRICES = {
             'Violão': 200, 'Contrabaixo': 200, 'Guitarra': 200,
@@ -1244,7 +1248,7 @@
         }
 
         /**
-         * Calcula o custo de deslocamento com base no destino.
+         * Calcula o custo de deslocamento com base no destino e exibe a rota no mapa.
          * @param {string|number} destinationOrLat - A string do endereço de destino ou latitude.
          * @param {number|null} [destinationLng=null] - A longitude, se a latitude for fornecida.
          * @param {function} [callback] - Função de callback opcional para executar após o cálculo.
@@ -1258,15 +1262,18 @@
                 }
                 currentDeslocamentoCost = 0;
                 currentFinalTotalPrice = currentPlanOnlyPrice;
+                if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota anterior
                 if (callback) callback();
                 return;
             }
 
             const service = new google.maps.DistanceMatrixService();
             let destinationsArray;
+            let destinationLatLng = null;
 
             if (destinationLng !== null) {
-                destinationsArray = [new google.maps.LatLng(destinationOrLat, destinationLng)];
+                destinationLatLng = new google.maps.LatLng(destinationOrLat, destinationLng);
+                destinationsArray = [destinationLatLng];
             } else {
                 destinationsArray = [destinationOrLat];
             }
@@ -1297,12 +1304,28 @@
                     modalCalculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
                     modalDeslocamentoResultsDiv.classList.remove('hidden');
                     modalDeslocamentoError.classList.add('hidden');
+
+                    // NOVO: Calcular e exibir rota
+                    directionsService.route({
+                        origin: originLatLng, // Origem fixa para a rota
+                        destination: destinationFormattedAddress, // Destino do endereço formatado
+                        travelMode: google.maps.TravelMode.DRIVING
+                    }, (directionsResponse, directionsStatus) => {
+                        if (directionsStatus === 'OK') {
+                            directionsRenderer.setDirections(directionsResponse);
+                        } else {
+                            console.error('Erro ao calcular a rota:', directionsStatus);
+                            if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota em caso de erro
+                        }
+                    });
+
                 } else {
                     modalDeslocamentoError.textContent = "Não foi possível calcular o deslocamento para o endereço fornecido.";
                     modalDeslocamentoError.classList.remove('hidden');
                     modalDeslocamentoResultsDiv.classList.add('hidden');
                     currentDeslocamentoCost = 0;
                     currentFinalTotalPrice = currentPlanOnlyPrice;
+                    if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota anterior
                 }
                 if (callback) callback();
             });
@@ -1316,6 +1339,10 @@
             mapsInitialized = true;
             console.log("Google Maps API carregada.");
             geocoder = new google.maps.Geocoder();
+            directionsService = new google.maps.DirectionsService(); // Inicializa DirectionsService
+            directionsRenderer = new google.maps.DirectionsRenderer(); // Inicializa DirectionsRenderer
+            streetViewService = new google.maps.StreetViewService(); // Inicializa StreetViewService
+
             const input = document.getElementById('modal-destination-address');
             if (input) {
                 autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], componentRestrictions: { country: 'br' } });
@@ -1356,7 +1383,7 @@
                         style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
                         position: google.maps.ControlPosition.TOP_RIGHT,
                     },
-                    streetViewControl: false,  
+                    streetViewControl: true, // Habilita o Street View (Pegman)
                     zoomControl: true,  
                 });
 
@@ -1366,6 +1393,9 @@
                     animation: google.maps.Animation.DROP,
                 });
 
+                // Associa o DirectionsRenderer ao mapa
+                directionsRenderer.setMap(map);
+
                 map.addListener('click', (e) => {
                     placeMarkerAndPanTo(e.latLng, map);
                 });
@@ -1373,6 +1403,31 @@
                 marker.addListener('dragend', () => {
                     placeMarkerAndPanTo(marker.getPosition(), map);
                 });
+
+                // NOVO: Listener para o clique no marcador para abrir Street View
+                marker.addListener('click', () => {
+                    if (marker.getPosition()) {
+                        streetViewService.getPanorama({ location: marker.getPosition(), radius: 50 }, (data, status) => {
+                            if (status === 'OK' && data.location) {
+                                const panorama = new google.maps.StreetViewPanorama(
+                                    mapCanvas, {
+                                        pano: data.pano,
+                                        pov: {
+                                            heading: 270,
+                                            pitch: 0
+                                        },
+                                        zoom: 1
+                                    }
+                                );
+                                map.setStreetView(panorama);
+                            } else {
+                                console.warn('Street View não disponível para esta localização.');
+                                // Opcional: mostrar uma notificação ao usuário
+                            }
+                        });
+                    }
+                });
+
             }
 
             const currentAddress = modalDestinationAddressInput.value.trim();
@@ -1386,6 +1441,7 @@
                         map.setCenter({ lat: -14.235, lng: -51.925 });
                         map.setZoom(4);
                         marker.setMap(null);
+                        if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota
                     }
                 });
             } else if (selectedPlaceDetails.lat && selectedPlaceDetails.lng) {
@@ -1396,6 +1452,7 @@
                 map.setCenter({ lat: -14.235, lng: -51.925 });
                 map.setZoom(4);
                 marker.setMap(null);
+                if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota
             }
             google.maps.event.trigger(map, 'resize');
         }
@@ -1606,6 +1663,11 @@
             modalDeslocamentoResultsDiv.classList.add('hidden');
             modalDeslocamentoError.classList.add('hidden');
             
+            // Limpa a rota anterior ao abrir o modal
+            if (directionsRenderer) {
+                directionsRenderer.setDirections({routes: []});
+            }
+
             unlockedTabs = ['deslocamento-tab'];
             showTab('deslocamento-tab');
         }
@@ -2010,6 +2072,7 @@
                         currentDeslocamentoCost = 0;
                         currentFinalTotalPrice = currentPlanOnlyPrice;
                         selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' };
+                        if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota
                     }
                 });
                 
