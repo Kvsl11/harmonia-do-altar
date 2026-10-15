@@ -1364,6 +1364,25 @@
             .ig-card { width: 100%; max-width: 400px; }
             .ig-more { width: 100%; justify-content: center; }
         }
+        /* --- Transições suaves entre as seções (degradê em vez de corte seco) --- */
+        .reveal-media::after {
+            background: linear-gradient(180deg, var(--night) 0%, rgba(42, 27, 61, .45) 14%, rgba(109, 47, 87, .12) 45%, rgba(17, 13, 28, .55) 78%, var(--night) 100%);
+        }
+        .panel-shade {
+            background: linear-gradient(180deg, var(--night) 0%, rgba(17, 13, 28, .35) 16%, rgba(17, 13, 28, 0) 38%, rgba(17, 13, 28, .65) 78%, var(--night) 100%);
+        }
+        .pano-media::after {
+            background: linear-gradient(180deg, var(--night) 0%, rgba(17, 13, 28, 0) 22%, rgba(17, 13, 28, 0) 50%, var(--night) 100%);
+        }
+        .moments { background: linear-gradient(180deg, transparent 0, var(--night) 24vh); }
+        /* Brilho do rodapé: surge aos poucos, sem a linha no topo */
+        #contato::before {
+            top: 0; height: 100%; width: 140vw;
+            background: radial-gradient(45% 55% at 50% 42%, rgba(229, 143, 132, .16), rgba(109, 47, 87, .08) 45%, transparent 75%);
+            -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+        }
+        .builder-wrap { background: linear-gradient(180deg, var(--night) 0%, #140f22 55%, var(--night) 100%); }
     </style>
 </head>
 <body class="text-gray-200">
