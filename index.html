@@ -1270,6 +1270,69 @@
             background: linear-gradient(135deg, var(--champagne), var(--rose)); border: 2px solid #fff; box-shadow: 0 6px 14px rgba(0, 0, 0, .35);
         }
         .sim-pin.origin span { width: 20px; height: 20px; margin: 8px 0 0 4px; background: var(--plum); border-color: var(--champagne); }
+        /* --- Ajustes do simulador: uma única área de rolagem e mais espaço no celular --- */
+        html.modal-open, html.modal-open body { overflow: hidden !important; }
+        .modal.sim-modal { overflow: hidden; padding: clamp(.75rem, 2.5vw, 2rem); }
+        .sim-modal .modal-content.sim-panel { max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); }
+        .sim-main { max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent; }
+        .sim-main::-webkit-scrollbar { width: 6px; }
+        .sim-main::-webkit-scrollbar-thumb { background: rgba(241, 214, 164, .35); border-radius: 6px; }
+        .sim-aside-img { background: var(--plum); }
+        .sim-row > span:first-child { min-width: 0; }
+        .sim-row > span:last-child { overflow-wrap: anywhere; }
+        .sim-map-dialog { height: min(84vh, 760px); height: min(84dvh, 760px); }
+
+        @media (max-width: 860px) {
+            .modal.sim-modal { padding: 0; align-items: stretch; }
+            /* A janela ocupa a tela toda e rola como um todo */
+            .sim-modal .modal-content.sim-panel {
+                display: block; height: 100vh; height: 100dvh; max-height: none; border-radius: 0;
+                overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+            }
+            .sim-aside { position: relative; height: 168px; min-height: 0; }
+            .sim-aside-img { transform: none; }
+            .sim-aside-body { position: absolute; inset: auto 0 0 0; padding: 0 1.1rem 1rem; }
+            .sim-plan-name { font-size: 1.3rem; margin: .3rem 0 .35rem; padding-right: 3rem; }
+            .sim-plan-price small { display: none; }
+            .sim-plan-price span { font-size: 1.35rem; }
+            .sim-plan-instruments { display: flex; margin-top: .45rem; gap: .3rem; }
+            .sim-plan-instruments li { font-size: .62rem; padding: .22rem .5rem; }
+            .sim-main { max-height: none; overflow: visible; padding: 0 1.1rem 0; display: block; }
+            .sim-header.modal-header { position: fixed; top: .75rem; right: .75rem; z-index: 6; }
+            /* Etapas fixas no topo enquanto o conteúdo rola */
+            .sim-steps.modal-tab-header { position: sticky; top: 0; z-index: 4; margin: 0 -1.1rem 1.1rem; padding: .35rem 3.6rem 0 .6rem; background: var(--night-2); box-shadow: 0 10px 20px -14px rgba(0, 0, 0, .9); }
+            .sim-steps .modal-tab-button { padding: .45rem 0 .6rem; }
+            .sim-step-title { font-size: 1.45rem; }
+            .sim-step-text { font-size: .9rem; margin-bottom: 1.1rem; }
+            .sim-receipt { padding: .2rem .9rem; }
+            .sim-row { font-size: .86rem; padding: .6rem 0; }
+            .sim-row.total { flex-wrap: wrap; row-gap: .2rem; }
+            .sim-row.total > span:last-child { font-size: 1.3rem; margin-left: auto; }
+            .sim-grid-2 { grid-template-columns: 1fr; }
+            .sim-modal input[type="text"], .sim-modal input[type="date"], .sim-modal input[type="time"], .sim-modal select { font-size: 16px; }
+            .pay-option > span { padding: .85rem .9rem; }
+            /* Botões sempre à mão, presos ao rodapé */
+            .sim-modal .modal-footer-buttons {
+                position: sticky; bottom: 0; z-index: 4; margin: 1rem -1.1rem 0; padding: .9rem 1.1rem calc(.9rem + env(safe-area-inset-bottom));
+                background: linear-gradient(180deg, rgba(24, 18, 39, 0) 0%, var(--night-2) 28%);
+            }
+            .sim-modal .tab-content.active { padding-bottom: 0; }
+            .sim-map-dialog { height: 100vh; height: 100dvh; border-radius: 0 !important; max-width: none !important; }
+            .sim-modal .notification-modal-content.sim-dialog { align-self: flex-end; }
+        }
+        /* --- Ajustes de telas estreitas --- */
+        .strip-short { display: none; }
+        @media (max-width: 480px) {
+            .strip-long { display: none; }
+            .strip-short { display: inline; }
+            .builder-wrap { padding: 1rem .75rem 5rem; }
+            #custom-plan-builder { padding: 1.75rem 1rem; border-radius: 22px; }
+            #custom-plan-builder .base-row { padding: .9rem 1rem; font-size: .92rem; }
+            .custom-plan-checkbox-label { padding: .85rem 1rem !important; }
+            .custom-plan-checkbox-label span { font-size: .92rem; }
+            .contact-pill p { font-size: .9rem; }
+            .h-native .plan-slide { flex-basis: 86vw; }
+        }
     </style>
 </head>
 <body class="text-gray-200">
@@ -1340,7 +1403,7 @@
     </script>
 
     <!-- Faixa superior -->
-    <div class="top-strip" id="top-strip">Agenda aberta · Garanta a data do seu casamento</div>
+    <div class="top-strip" id="top-strip">Agenda aberta<span class="strip-long"> · Garanta a data do seu casamento</span><span class="strip-short"> · Reserve sua data</span></div>
 
     <!-- Barra de Navegação -->
     <nav id="navbar" class="with-strip" aria-label="Principal">
@@ -1668,7 +1731,7 @@
     </template>
 
     <!-- Modal Principal de Simulação (Unificado com Abas) -->
-    <div id="main-simulation-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="sim-plan-name">
+    <div id="main-simulation-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="sim-plan-name">
         <div class="modal-content sim-panel">
             <!-- Coluna visual: plano escolhido -->
             <aside class="sim-aside">
@@ -1833,7 +1896,7 @@
     </div>
 
     <!-- Modal de Seleção de Mapa -->
-    <div id="map-selection-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" role="dialog" aria-modal="true" aria-label="Selecionar local no mapa">
+    <div id="map-selection-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="dialog" aria-modal="true" aria-label="Selecionar local no mapa">
         <div class="notification-modal-content sim-dialog sim-map-dialog">
             <button type="button" class="close-button modal-close-button icon-btn" id="close-map-modal-button" aria-label="Fechar mapa"><i class="fas fa-times"></i></button>
             <span class="eyebrow">Local da cerimônia</span>
@@ -1845,7 +1908,7 @@
     </div>
 
     <!-- Modal de Notificação de Boleto -->
-    <div id="boleto-notification-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" role="alertdialog" aria-modal="true">
+    <div id="boleto-notification-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true">
         <div class="notification-modal-content sim-dialog">
             <button type="button" class="close-button modal-close-button icon-btn" id="close-boleto-modal-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
             <h3 class="notification-modal-title info">
@@ -1859,7 +1922,7 @@
     </div>
 
     <!-- Modal de Notificação de Validação de Data de Boleto -->
-    <div id="boleto-date-warning-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" role="alertdialog" aria-modal="true">
+    <div id="boleto-date-warning-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" data-lenis-prevent role="alertdialog" aria-modal="true">
         <div class="notification-modal-content sim-dialog">
             <button type="button" class="close-button modal-close-button icon-btn" id="close-boleto-date-warning-modal-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
             <h3 class="notification-modal-title warning">
@@ -1936,7 +1999,15 @@
             // Força um reflow para habilitar a transição
             modalElement.offsetWidth;
             modalElement.classList.add('show');
-            document.body.style.overflow = 'hidden'; // Previne rolagem do fundo
+            syncModalScrollLock();
+        }
+
+        // Trava a rolagem da página enquanto houver qualquer janela aberta.
+        // Esconder um aviso não pode destravar o fundo se o simulador continua aberto.
+        function syncModalScrollLock() {
+            const anyOpen = !!document.querySelector('.modal.show');
+            document.documentElement.classList.toggle('modal-open', anyOpen);
+            if (window.hdaScroll) anyOpen ? window.hdaScroll.stop() : window.hdaScroll.start();
         }
 
         /**
@@ -1945,10 +2016,11 @@
          */
         function hideAnimatedModal(modalElement) {
             if (!modalElement) return;
+            const wasOpen = modalElement.classList.contains('show');
             modalElement.classList.remove('show');
+            if (wasOpen) syncModalScrollLock();
             setTimeout(() => {
-                modalElement.style.display = 'none';
-                document.body.style.overflow = ''; // Restaura a rolagem do fundo
+                if (!modalElement.classList.contains('show')) modalElement.style.display = 'none';
             }, 400); // Corresponde à duração da transição
         }
 
@@ -2891,6 +2963,11 @@
             set(k, v) { try { window[storage].setItem(k, v); } catch (e) { /* sem persistência */ } }
         });
         const local = safe('localStorage');
+        // Usado pelo simulador para travar a rolagem suave enquanto uma janela está aberta
+        window.hdaScroll = {
+            stop() { if (lenis) lenis.stop(); },
+            start() { if (lenis && !document.documentElement.classList.contains('modal-open') && !document.body.classList.contains('menu-open')) lenis.start(); }
+        };
         const session = safe('sessionStorage');
 
         // ---------- Experiência: "movimento completo" (hifi) ou "simples" (lofi) ----------
