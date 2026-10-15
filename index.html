@@ -1075,6 +1075,173 @@
         @media (max-width: 860px) {
             .brand-word { display: none; }
         }
+        /* =====================================================================
+           SIMULADOR DE ORÇAMENTO — mesmo visual do site (golden hour)
+           ===================================================================== */
+        .modal.sim-modal {
+            z-index: 1000; padding: clamp(0px, 3vw, 2rem);
+            background: rgba(10, 7, 18, .72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            transform: none; transition: opacity .45s ease;
+        }
+        .modal.sim-modal.show { transform: none; }
+        .sim-modal .modal-content.sim-panel {
+            width: 100%; max-width: 1040px; max-height: min(92vh, 860px); margin: auto; padding: 0;
+            display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+            border-radius: 26px; overflow: hidden; color: var(--ink);
+            background: var(--night-2);
+            border: 1px solid rgba(241, 214, 164, .16);
+            box-shadow: 0 50px 120px -30px rgba(0, 0, 0, .85), 0 0 0 1px rgba(255, 255, 255, .03);
+            transform: translateY(24px) scale(.97); opacity: 0;
+            transition: transform .6s cubic-bezier(.2, .8, .2, 1), opacity .45s ease;
+        }
+        .sim-modal.show .modal-content.sim-panel { transform: none; opacity: 1; }
+
+        /* Coluna visual com o plano escolhido */
+        .sim-aside { position: relative; min-height: 100%; overflow: hidden; isolation: isolate; }
+        .sim-aside-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transform: scale(1.12); transition: transform 1.4s cubic-bezier(.2, .8, .2, 1); }
+        .sim-modal.show .sim-aside-img { transform: scale(1); }
+        .sim-aside::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(42, 27, 61, .25) 0%, rgba(42, 27, 61, .55) 45%, rgba(24, 18, 39, .97) 100%); }
+        .sim-aside-body { position: absolute; left: 0; right: 0; bottom: 0; padding: clamp(1.5rem, 3vw, 2.25rem); }
+        .sim-plan-name { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(1.7rem, 2.8vw, 2.5rem); line-height: .98; margin: .6rem 0 1rem; color: #fff; }
+        .sim-plan-price small { display: block; font-size: .65rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+        .sim-plan-price span { font-family: var(--font-display); font-size: 2.2rem; color: var(--champagne); }
+        .sim-plan-instruments { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+        .sim-plan-instruments li { font-size: .72rem; font-weight: 600; padding: .35rem .7rem; border-radius: 999px; background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .16); }
+
+        /* Coluna das etapas */
+        .sim-main { display: flex; flex-direction: column; min-height: 0; max-height: min(92vh, 860px); overflow-y: auto; overscroll-behavior: contain; padding: clamp(1.25rem, 3vw, 2.25rem); }
+        .sim-header.modal-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0; margin: 0 0 1.25rem; border: 0; }
+        .sim-header .modal-title { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .14em; font-size: .9rem; color: var(--muted); margin: 0; }
+        .sim-modal .close-button.icon-btn { position: static; float: none; font-size: 1rem; width: 2.5rem; height: 2.5rem; color: #fff; }
+        .sim-modal .sim-dialog .close-button.icon-btn { position: absolute; top: 1rem; right: 1rem; }
+
+        /* Barra de etapas */
+        .sim-steps.modal-tab-header { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin: 0 0 1.75rem; padding: 0; border: 0; background: none; }
+        .sim-steps .modal-tab-button {
+            display: flex; align-items: center; gap: .55rem; padding: .6rem .5rem .8rem; margin: 0;
+            background: none; border: 0; border-bottom: 2px solid rgba(255, 255, 255, .1); border-radius: 0;
+            color: var(--muted); font-size: .78rem; font-weight: 600; text-align: left; cursor: pointer;
+            transition: color .3s ease, border-color .3s ease;
+        }
+        .sim-steps .modal-tab-button .step-n {
+            flex-shrink: 0; width: 1.65rem; height: 1.65rem; border-radius: 999px; display: grid; place-items: center;
+            font-size: .75rem; font-weight: 700; border: 1px solid rgba(255, 255, 255, .22); color: var(--muted);
+            transition: background .3s ease, color .3s ease, border-color .3s ease;
+        }
+        .sim-steps .modal-tab-button.unlocked { color: var(--ink); border-bottom-color: rgba(241, 214, 164, .45); }
+        .sim-steps .modal-tab-button.unlocked .step-n { border-color: var(--champagne); color: var(--champagne); }
+        .sim-steps .modal-tab-button.active { color: #fff; border-bottom-color: var(--rose); background: none; }
+        .sim-steps .modal-tab-button.active .step-n { background: linear-gradient(135deg, var(--champagne), var(--rose)); border-color: transparent; color: #2a1325; }
+        .sim-steps .modal-tab-button:not(.unlocked):not(.active) { cursor: not-allowed; opacity: .7; }
+
+        /* Conteúdo das etapas */
+        .sim-modal .tab-content { animation: sim-step-in .5s cubic-bezier(.2, .8, .2, 1); }
+        @keyframes sim-step-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        .sim-step-title { font-family: var(--font-serif); font-size: clamp(1.5rem, 2.6vw, 2rem); color: #fff; margin: 0 0 .5rem; }
+        .sim-step-text { color: var(--muted); font-size: .95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+        .sim-modal .modal-input-group { margin-bottom: 1.1rem; }
+        .sim-modal .modal-input-group label { display: block; margin-bottom: .5rem; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; color: var(--champagne); }
+        .sim-modal .modal-input-group label em { font-style: normal; color: var(--muted); letter-spacing: .1em; text-transform: none; font-weight: 500; }
+        .sim-modal input[type="text"], .sim-modal input[type="date"], .sim-modal input[type="time"], .sim-modal select {
+            width: 100%; padding: .95rem 1.1rem; border-radius: 14px; font-size: .98rem; color: #fff;
+            background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14);
+            transition: border-color .3s ease, background .3s ease, box-shadow .3s ease; color-scheme: dark;
+        }
+        .sim-modal input::placeholder { color: #8d82a0; }
+        .sim-modal input:focus, .sim-modal select:focus { outline: none; border-color: var(--champagne); background: rgba(255, 255, 255, .08); box-shadow: 0 0 0 4px rgba(241, 214, 164, .12); }
+        .sim-modal select option { background: var(--night-2); color: #fff; }
+        .sim-input-row { display: flex; gap: .6rem; }
+        .sim-input-icon { position: relative; flex: 1; }
+        .sim-input-icon i { position: absolute; left: 1.05rem; top: 50%; translate: 0 -50%; color: var(--champagne); pointer-events: none; }
+        .sim-input-icon input[type="text"] { padding-left: 2.8rem; }
+        /* O Autocomplete do Google pinta ícones de erro no campo quando a chave é recusada */
+        #modal-destination-address, #modal-destination-address.gm-err-autocomplete { background-image: none !important; }
+        .sim-input-row .pill { flex-shrink: 0; }
+        .sim-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 .9rem; }
+        .sim-error { margin-top: .6rem; font-size: .85rem; color: #ff9a9a; }
+
+        /* "Recibo" com os valores */
+        .sim-receipt { margin: 1.25rem 0; padding: .4rem 1.2rem; border-radius: 18px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .09); }
+        .sim-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .7rem 0; font-size: .92rem; color: var(--muted); border-bottom: 1px dashed rgba(255, 255, 255, .1); margin: 0; }
+        .sim-row:last-child { border-bottom: 0; }
+        .sim-row > span:last-child { color: #fff; font-weight: 600; text-align: right; }
+        .sim-row.total > span:last-child, .sim-row > span[id$="-price"] { white-space: nowrap; }
+        .sim-row.total { padding: .95rem 0; color: #fff; font-weight: 700; }
+        .sim-row.total > span:last-child { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; color: var(--champagne); }
+        .sim-row .text-gold, .sim-gold { color: var(--champagne) !important; font-weight: 700; }
+        .sim-muted { color: var(--muted); font-weight: 400; font-size: .85em; }
+        .sim-divider { border: 0; border-top: 1px solid rgba(241, 214, 164, .2); margin: .3rem 0; }
+        .sim-note { display: flex; gap: .8rem; align-items: flex-start; padding: .9rem 1.1rem; border-radius: 14px; background: rgba(241, 214, 164, .07); border: 1px solid rgba(241, 214, 164, .18); font-size: .88rem; color: var(--ink); line-height: 1.5; }
+        .sim-note i { color: var(--champagne); margin-top: .2rem; }
+        .sim-note.warn { background: rgba(229, 143, 132, .1); border-color: rgba(229, 143, 132, .3); margin-top: 1rem; }
+        .sim-note.warn i { color: var(--rose); }
+
+        /* Formas de pagamento em cartões */
+        .sim-pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: 1.25rem; }
+        .sim-modal .pay-option.modal-radio-label { position: relative; display: block; padding: 0; margin: 0; background: none; border: 0; cursor: pointer; }
+        .pay-option input { position: absolute; opacity: 0; pointer-events: none; }
+        .pay-option > span {
+            display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: .8rem; align-items: center;
+            height: 100%; padding: 1rem 1.1rem; border-radius: 16px; border: 1px solid rgba(255, 255, 255, .12); background: rgba(255, 255, 255, .04);
+            transition: border-color .3s ease, background .3s ease, transform .3s ease;
+        }
+        .pay-option > span i { grid-row: span 2; width: 2.4rem; height: 2.4rem; border-radius: 12px; display: grid; place-items: center; background: rgba(241, 214, 164, .1); color: var(--champagne); }
+        .pay-option > span b { font-size: .95rem; color: #fff; }
+        .pay-option > span small { font-size: .75rem; color: var(--muted); }
+        .pay-option:hover > span { border-color: rgba(241, 214, 164, .35); transform: translateY(-2px); }
+        .sim-modal .modal-radio-label input[type="radio"]:checked + span { border-color: var(--champagne); background: linear-gradient(135deg, rgba(241, 214, 164, .14), rgba(229, 143, 132, .12)); color: inherit; }
+        .pay-option input:checked + span i { background: linear-gradient(135deg, var(--champagne), var(--rose)); color: #2a1325; }
+        .pay-option input:focus-visible + span { outline: 2px solid var(--champagne); outline-offset: 2px; }
+
+        /* Botões */
+        .sim-modal .modal-footer-buttons { display: flex; gap: .75rem; justify-content: flex-end; margin-top: auto; padding-top: 1.5rem; flex-direction: row; }
+        .sim-modal .modal-footer-buttons .pill { flex: 1; justify-content: center; max-width: 280px; }
+        .sim-modal .modal-footer-buttons .btn-secondary { max-width: 180px; }
+        .sim-modal .btn-primary.pill, .sim-modal .btn-secondary.pill { width: auto; margin: 0; }
+        .sim-modal .btn-primary.pill:hover { background: linear-gradient(90deg, var(--champagne), var(--rose)); }
+        .sim-modal .pill:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+        .sim-modal .tab-content { display: none; }
+        .sim-modal .tab-content.active { display: flex; flex-direction: column; flex: 1; }
+
+        /* Diálogos menores (mapa e avisos) */
+        .sim-modal .notification-modal-content.sim-dialog {
+            position: relative; width: 100%; max-width: 520px; margin: auto; padding: 2.25rem 2rem 2rem; border-radius: 24px; text-align: left; color: var(--ink);
+            background: radial-gradient(120% 80% at 100% 0%, rgba(229, 143, 132, .16), transparent 55%), var(--night-2);
+            border: 1px solid rgba(241, 214, 164, .18); box-shadow: 0 40px 100px -30px rgba(0, 0, 0, .85);
+            transform: translateY(20px) scale(.97); opacity: 0; transition: transform .5s cubic-bezier(.2, .8, .2, 1), opacity .4s ease;
+        }
+        .sim-modal.show .notification-modal-content.sim-dialog { transform: none; opacity: 1; }
+        .sim-dialog .notification-modal-title { display: flex; align-items: center; gap: .8rem; font-family: var(--font-serif); font-size: 1.5rem; color: #fff; margin: .4rem 2.5rem 1rem 0; text-align: left; justify-content: flex-start; }
+        .sim-dialog-icon { flex-shrink: 0; width: 2.6rem; height: 2.6rem; border-radius: 999px; display: grid; place-items: center; font-size: 1rem; background: linear-gradient(135deg, var(--champagne), var(--rose)); color: #2a1325; }
+        .sim-dialog-icon.warn { background: linear-gradient(135deg, #f3b98a, #e06b6b); }
+        .sim-dialog .notification-modal-text { color: var(--muted); font-size: .95rem; line-height: 1.65; margin-bottom: 1.5rem; text-align: left; }
+        .sim-dialog .notification-modal-button { width: 100%; justify-content: center; }
+        .sim-map-dialog { max-width: 920px !important; height: min(84vh, 760px); display: flex; flex-direction: column; }
+        .sim-map-canvas { flex: 1; min-height: 280px; border-radius: 16px; overflow: hidden; margin-bottom: 1.25rem; border: 1px solid rgba(255, 255, 255, .1); }
+
+        @media (max-width: 860px) {
+            .modal.sim-modal { padding: 0; align-items: flex-end; }
+            .sim-modal .modal-content.sim-panel { grid-template-columns: 1fr; max-height: 94vh; border-radius: 24px 24px 0 0; grid-template-rows: auto minmax(0, 1fr); }
+            .sim-aside { min-height: 150px; }
+            .sim-aside-body { position: relative; padding: 4.5rem 1.25rem 1.1rem; }
+            .sim-plan-name { font-size: 1.5rem; margin: .4rem 0 .5rem; }
+            .sim-plan-price span { font-size: 1.6rem; }
+            .sim-plan-instruments { display: none; }
+            .sim-main { max-height: none; padding: 1.1rem 1.1rem 1.5rem; }
+            .sim-header.modal-header { position: absolute; top: .9rem; right: .9rem; margin: 0; z-index: 2; }
+            .sim-header .modal-title { display: none; }
+            .sim-steps .modal-tab-button { flex-direction: column; align-items: center; text-align: center; font-size: .66rem; gap: .35rem; padding-inline: 0; }
+            .sim-input-row { flex-direction: column; }
+            .sim-pay-grid { grid-template-columns: 1fr; }
+            .sim-modal .modal-footer-buttons { flex-direction: column-reverse; gap: .6rem; }
+            .sim-modal .modal-footer-buttons .pill, .sim-modal .modal-footer-buttons .btn-secondary { max-width: none; width: 100%; flex: none; }
+            .sim-row.total > span:last-child { font-size: 1.35rem; }
+            .sim-modal .notification-modal-content.sim-dialog { border-radius: 24px 24px 0 0; padding: 2rem 1.25rem 1.5rem; }
+            .sim-map-dialog { height: 88vh; }
+        }
+        @media (max-width: 380px) {
+            .sim-grid-2 { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body class="text-gray-200">
@@ -1473,199 +1640,195 @@
     </template>
 
     <!-- Modal Principal de Simulação (Unificado com Abas) -->
-    <div id="main-simulation-modal" class="modal fixed inset-0 flex items-center justify-center">
-        <div class="modal-content w-full max-w-2xl">
-            <div class="modal-header">
-                <h3 class="modal-title">Simulação de Orçamento</h3>
-                <span class="close-button modal-close-button" id="close-main-modal-button" aria-label="Close modal">&times;</span>
-            </div>
+    <div id="main-simulation-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="sim-plan-name">
+        <div class="modal-content sim-panel">
+            <!-- Coluna visual: plano escolhido -->
+            <aside class="sim-aside">
+                <img src="img/igreja-corredor-altar.jpg" alt="" class="sim-aside-img">
+                <div class="sim-aside-body">
+                    <span class="eyebrow">Simulação de orçamento</span>
+                    <h3 class="sim-plan-name" id="sim-plan-name">Seu plano</h3>
+                    <div class="sim-plan-price"><small>Valor do plano</small><span id="sim-plan-price">R$ 0,00</span></div>
+                    <ul class="sim-plan-instruments" id="sim-plan-instruments"></ul>
+                </div>
+            </aside>
 
-            <!-- Navegação por Abas para o Modal -->
-            <div class="tab-header modal-tab-header" role="tablist">
-                <button class="tab-button modal-tab-button active" data-tab="deslocamento-tab" role="tab" aria-controls="deslocamento-tab-content">Deslocamento</button>
-                <button class="tab-button modal-tab-button" data-tab="event-details-tab" role="tab" aria-controls="event-details-tab-content">Detalhes</button>
-                <button class="tab-button modal-tab-button" data-tab="payment-method-tab" role="tab" aria-controls="payment-method-tab-content">Pagamento</button>
-                <button class="tab-button modal-tab-button" data-tab="summary-tab" role="tab" aria-controls="summary-tab-content">Resumo</button>
-            </div>
+            <div class="sim-main">
+                <div class="modal-header sim-header">
+                    <h3 class="modal-title">Simulação de Orçamento</h3>
+                    <button type="button" class="close-button modal-close-button icon-btn" id="close-main-modal-button" aria-label="Fechar simulação"><i class="fas fa-times"></i></button>
+                </div>
 
-            <!-- ABA 1: DESLOCAMENTO -->
-            <div id="deslocamento-tab" class="tab-content active" role="tabpanel" aria-labelledby="deslocamento-tab">
-                <h4 class="text-xl font-bold text-white mb-4">Cálculo de Deslocamento</h4>
-                <p class="text-gray-300 mb-6 text-sm">Informe o endereço da cerimônia para calcular o custo. Condições especiais para Angélica e Ivinhema, MS.</p>
-                <div class="modal-input-group mb-4">
-                    <label for="modal-destination-address" class="block text-gray-300 text-sm font-bold mb-2">Endereço Completo:</label>
-                    <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-                        <input type="text" id="modal-destination-address" placeholder="Ex: Av. Brasil, 123, Ivinhema, MS" class="w-full">
-                        <button type="button" id="open-map-selection-btn" class="btn-outline-gold font-bold py-2 px-4 rounded-lg text-sm flex-shrink-0 flex items-center justify-center w-full md:w-auto">
-                            <i class="fas fa-map-marker-alt mr-2"></i>Abrir Mapa
-                        </button>
+                <!-- Etapas -->
+                <div class="tab-header modal-tab-header sim-steps" role="tablist">
+                    <button class="tab-button modal-tab-button active" data-tab="deslocamento-tab" role="tab" aria-controls="deslocamento-tab"><span class="step-n">1</span><span class="step-l">Deslocamento</span></button>
+                    <button class="tab-button modal-tab-button" data-tab="event-details-tab" role="tab" aria-controls="event-details-tab"><span class="step-n">2</span><span class="step-l">Detalhes</span></button>
+                    <button class="tab-button modal-tab-button" data-tab="payment-method-tab" role="tab" aria-controls="payment-method-tab"><span class="step-n">3</span><span class="step-l">Pagamento</span></button>
+                    <button class="tab-button modal-tab-button" data-tab="summary-tab" role="tab" aria-controls="summary-tab"><span class="step-n">4</span><span class="step-l">Resumo</span></button>
+                </div>
+
+                <!-- ABA 1: DESLOCAMENTO -->
+                <div id="deslocamento-tab" class="tab-content active" role="tabpanel">
+                    <h4 class="sim-step-title">Onde será a cerimônia?</h4>
+                    <p class="sim-step-text">Informe o endereço da igreja para calcular o deslocamento. Condições especiais para Angélica e Ivinhema (MS).</p>
+                    <div class="modal-input-group">
+                        <label for="modal-destination-address">Endereço completo</label>
+                        <div class="sim-input-row">
+                            <div class="sim-input-icon"><i class="fas fa-church"></i><input type="text" id="modal-destination-address" placeholder="Ex: Paróquia São José, Rua Brasil, 123, Ivinhema, MS" autocomplete="street-address"></div>
+                            <button type="button" id="open-map-selection-btn" class="pill ghost"><i class="fas fa-map-marker-alt"></i>Abrir mapa</button>
+                        </div>
+                        <p id="modal-deslocamento-error" class="sim-error hidden">Por favor, digite um endereço válido.</p>
                     </div>
-                    <p id="modal-deslocamento-error" class="text-red-500 mt-2 hidden text-sm">Por favor, digite um endereço válido.</p>
-                </div>
-                <div id="modal-deslocamento-results" class="mt-6 p-4 bg-gray-700 rounded-lg hidden">
-                    <p class="text-gray-200">Distância: <span id="modal-distance-display" class="font-bold"></span></p>
-                    <p class="text-gray-200">Valor do Deslocamento: <span id="modal-calculated-deslocamento-display" class="font-bold text-gold"></span></p>
-                </div>
-                <div class="modal-footer-buttons">
-                    <button id="next-to-event-details-btn" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 w-full">Próximo</button>
-                </div>
-            </div>
-
-            <!-- ABA 2: DETALHES DO EVENTO -->
-            <div id="event-details-tab" class="tab-content" role="tabpanel" aria-labelledby="event-details-tab">
-                <h4 class="text-xl font-bold text-white mb-4">Detalhes da Cerimônia</h4>
-                <p class="text-gray-300 mb-6 text-sm">Por favor, preencha a data e o horário da sua cerimônia.</p>
-                
-                <div class="modal-input-group mb-4">
-                    <label for="ceremony-date" class="block text-gray-300 text-sm font-bold mb-2">Data da Cerimônia:</label>
-                    <input type="date" id="ceremony-date" class="w-full">
-                </div>
-                
-                <div class="modal-input-group mb-4">
-                    <label for="ceremony-time" class="block text-gray-300 text-sm font-bold mb-2">Horário da Cerimônia:</label>
-                    <input type="time" id="ceremony-time" class="w-full">
+                    <div id="modal-deslocamento-results" class="sim-receipt hidden">
+                        <div class="sim-row"><span>Distância</span><span id="modal-distance-display"></span></div>
+                        <div class="sim-row total"><span>Valor do deslocamento</span><span id="modal-calculated-deslocamento-display"></span></div>
+                    </div>
+                    <div class="modal-footer-buttons">
+                        <button id="next-to-event-details-btn" class="btn-primary pill lg">Próximo <i class="fas fa-arrow-right"></i></button>
+                    </div>
                 </div>
 
-                <!-- Novo campo para Local de Referência -->
-                <div class="modal-input-group mb-4">
-                    <label for="reference-location" class="block text-gray-300 text-sm font-bold mb-2">Local de Referência (Opcional):</label>
-                    <input type="text" id="reference-location" placeholder="Ex: Próximo à praça central" class="w-full">
+                <!-- ABA 2: DETALHES DO EVENTO -->
+                <div id="event-details-tab" class="tab-content" role="tabpanel">
+                    <h4 class="sim-step-title">Quando será o grande dia?</h4>
+                    <p class="sim-step-text">Preencha a data e o horário da cerimônia.</p>
+                    <div class="sim-grid-2">
+                        <div class="modal-input-group">
+                            <label for="ceremony-date">Data da cerimônia</label>
+                            <input type="date" id="ceremony-date">
+                        </div>
+                        <div class="modal-input-group">
+                            <label for="ceremony-time">Horário</label>
+                            <input type="time" id="ceremony-time">
+                        </div>
+                    </div>
+                    <div class="modal-input-group">
+                        <label for="reference-location">Local de referência <em>(opcional)</em></label>
+                        <input type="text" id="reference-location" placeholder="Ex: Próximo à praça central">
+                    </div>
+                    <div class="sim-note"><i class="fas fa-map-pin"></i><p><strong>Endereço confirmado:</strong> <span id="confirmed-address-display"></span></p></div>
+                    <p id="modal-event-details-error" class="sim-error hidden">Por favor, preencha a data e o horário.</p>
+                    <div class="modal-footer-buttons">
+                        <button class="btn-secondary pill ghost lg" data-navigate-tab="deslocamento-tab"><i class="fas fa-arrow-left"></i> Voltar</button>
+                        <button id="next-to-payment-method-btn" class="btn-primary pill lg">Próximo <i class="fas fa-arrow-right"></i></button>
+                    </div>
                 </div>
 
-                <div class="mt-4 p-3 bg-gray-700 rounded-lg">
-                    <p class="text-gray-200 text-sm"><strong>Endereço Confirmado:</strong> <span id="confirmed-address-display"></span></p>
-                </div>
-                <p id="modal-event-details-error" class="text-red-500 mt-2 hidden text-sm">Por favor, preencha a data e o horário.</p>
-
-                <div class="modal-footer-buttons">
-                    <button class="btn-secondary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 w-full" data-navigate-tab="deslocamento-tab">Voltar</button>
-                    <button id="next-to-payment-method-btn" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 w-full">Próximo</button>
-                </div>
-            </div>
-
-            <!-- ABA 3: FORMA DE PAGAMENTO -->
-            <div id="payment-method-tab" class="tab-content" role="tabpanel" aria-labelledby="payment-method-tab">
-                <h4 class="text-xl font-bold text-white mb-4">Forma de Pagamento</h4>
-                <div class="mb-4 text-gray-200 text-sm">
-                    <p>Valor do Plano: <span id="modal-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p>Valor do Deslocamento: <span id="modal-freight-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p>Valor Total (Plano + Deslocamento): <span id="modal-total-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="mt-2 text-base font-bold">Valor Total a Pagar<span id="fees-suffix" class="text-xs font-normal text-gray-400"> (com taxas)</span>: <span id="modal-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
-                </div>
-                <div class="mb-6 space-y-3">
-                    <label class="flex items-center space-x-3 cursor-pointer modal-radio-label">
-                        <input type="radio" name="payment-method" value="pix" class="form-radio h-5 w-5 text-gold" checked>
-                        <span class="text-sm">Pix</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer modal-radio-label">
-                        <input type="radio" name="payment-method" value="dinheiro" class="form-radio h-5 w-5 text-gold">
-                        <span class="text-sm">Dinheiro (a verificar com o contratado)</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer modal-radio-label">
-                        <input type="radio" name="payment-method" value="boleto" class="form-radio h-5 w-5 text-gold">
-                        <span class="text-sm">Boleto (parcelamento em até 5x)</span>
-                    </label>
-                    <label class="flex items-center space-x-3 cursor-pointer modal-radio-label">
-                        <input type="radio" name="payment-method" value="cartao" class="form-radio h-5 w-5 text-gold">
-                        <span class="text-sm">Cartão de Crédito (parcelamento em até 12x)</span>
-                    </label>
-                </div>
-
-                <div id="installment-options" class="mb-6 hidden modal-input-group">
-                    <label for="installments" class="block text-gray-300 text-sm font-bold mb-2">Número de Parcelas:</label>
-                    <select id="installments" class="w-full"></select>
-                    <p class="mt-2 text-gray-200 text-sm">Valor por parcela: <span id="installment-value" class="font-bold text-gold">R$ 0,00</span></p>
-                </div>
-
-                <div id="boleto-due-date-options" class="mb-6 hidden modal-input-group">
-                    <label for="boleto-due-date" class="block text-gray-300 text-sm font-bold mb-2">Melhor dia para vencimento do boleto:</label>
-                    <select id="boleto-due-date" class="w-full">
-                        <option value="5">Dia 5</option>
-                        <option value="10">Dia 10</option>
-                        <option value="15">Dia 15</option>
-                        <option value="20">Dia 20</option>
-                        <option value="25">Dia 25</option>
-                    </select>
-                    <!-- Esta mensagem de erro inline agora será ocultada e substituída por um modal -->
-                    <p id="modal-boleto-date-error" class="text-red-500 mt-2 hidden text-sm">A data da última parcela não pode ser posterior à data da cerimônia. Por favor, ajuste as parcelas ou a data de vencimento.</p>
+                <!-- ABA 3: FORMA DE PAGAMENTO -->
+                <div id="payment-method-tab" class="tab-content" role="tabpanel">
+                    <h4 class="sim-step-title">Como prefere pagar?</h4>
+                    <div class="sim-receipt">
+                        <div class="sim-row"><span>Valor do plano</span><span id="modal-plan-price">R$ 0,00</span></div>
+                        <div class="sim-row"><span>Deslocamento</span><span id="modal-freight-price">R$ 0,00</span></div>
+                        <div class="sim-row"><span>Total (plano + deslocamento)</span><span id="modal-total-price">R$ 0,00</span></div>
+                        <div class="sim-row total"><span>Total a pagar<span id="fees-suffix" class="sim-muted"> (com taxas)</span></span><span id="modal-total-price-with-fees">R$ 0,00</span></div>
+                    </div>
+                    <div class="sim-pay-grid">
+                        <label class="modal-radio-label pay-option">
+                            <input type="radio" name="payment-method" value="pix" checked>
+                            <span><i class="fas fa-bolt"></i><b>Pix</b><small>À vista, sem taxas</small></span>
+                        </label>
+                        <label class="modal-radio-label pay-option">
+                            <input type="radio" name="payment-method" value="dinheiro">
+                            <span><i class="fas fa-money-bill-wave"></i><b>Dinheiro</b><small>A verificar com o contratado</small></span>
+                        </label>
+                        <label class="modal-radio-label pay-option">
+                            <input type="radio" name="payment-method" value="boleto">
+                            <span><i class="fas fa-barcode"></i><b>Boleto</b><small>Parcelado em até 5x</small></span>
+                        </label>
+                        <label class="modal-radio-label pay-option">
+                            <input type="radio" name="payment-method" value="cartao">
+                            <span><i class="fas fa-credit-card"></i><b>Cartão de crédito</b><small>Parcelado em até 12x</small></span>
+                        </label>
+                    </div>
+                    <div id="installment-options" class="hidden modal-input-group">
+                        <label for="installments">Número de parcelas</label>
+                        <select id="installments"></select>
+                        <p class="sim-muted mt-2">Valor por parcela: <span id="installment-value" class="sim-gold">R$ 0,00</span></p>
+                    </div>
+                    <div id="boleto-due-date-options" class="hidden modal-input-group">
+                        <label for="boleto-due-date">Melhor dia para vencimento do boleto</label>
+                        <select id="boleto-due-date">
+                            <option value="5">Dia 5</option>
+                            <option value="10">Dia 10</option>
+                            <option value="15">Dia 15</option>
+                            <option value="20">Dia 20</option>
+                            <option value="25">Dia 25</option>
+                        </select>
+                        <p id="modal-boleto-date-error" class="sim-error hidden">A data da última parcela não pode ser posterior à data da cerimônia. Por favor, ajuste as parcelas ou a data de vencimento.</p>
+                    </div>
+                    <div class="modal-footer-buttons">
+                        <button class="btn-secondary pill ghost lg" data-navigate-tab="event-details-tab"><i class="fas fa-arrow-left"></i> Voltar</button>
+                        <button id="next-to-summary-btn" class="btn-primary pill lg">Próximo <i class="fas fa-arrow-right"></i></button>
+                    </div>
                 </div>
 
-                <div class="modal-footer-buttons">
-                    <button class="btn-secondary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 w-full" data-navigate-tab="event-details-tab">Voltar</button>
-                    <button id="next-to-summary-btn" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 w-full">Próximo</button>
-                </div>
-            </div>
-
-            <!-- ABA 4: RESUMO E SIMULAR -->
-            <div id="summary-tab" class="tab-content" role="tabpanel" aria-labelledby="summary-tab">
-                <h4 class="text-xl font-bold text-white mb-4">Resumo do Orçamento</h4>
-                <div class="modal-summary-box space-y-2">
-                    <p class="modal-summary-item"><strong>Plano:</strong> <span id="summary-plan-name" class="font-bold text-white"></span></p>
-                    <p class="modal-summary-item"><strong>Data do Evento:</strong> <span id="summary-event-date" class="font-bold text-white"></span></p>
-                    <p class="modal-summary-item"><strong>Endereço:</strong> <span id="summary-event-address" class="font-bold text-white"></span></p>
-                    <p class="modal-summary-item" id="summary-reference-location-display"><strong>Ref:</strong> <span id="summary-reference-location" class="font-bold text-white"></span></p>
-                    <hr class="my-2 border-gray-600">
-                    <p class="modal-summary-item">Valor do Plano: <span id="summary-plan-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="modal-summary-item">Valor Desloc.: <span id="summary-deslocamento-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="modal-summary-item">Total (Base): <span id="summary-total-price" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="modal-summary-item" id="summary-total-with-fees-label-container">Total a Pagar<span id="summary-fees-suffix"> (c/ taxas)</span>: <span id="summary-total-price-with-fees" class="font-bold text-gold">R$ 0,00</span></p>
-                    <p class="modal-summary-item">Pagamento: <span id="summary-payment-method" class="font-bold text-gold"></span></p>
-                    <p class="modal-summary-item" id="summary-installment-details">Parcelamento: <span id="summary-installments" class="font-bold text-gold"></span></p>
-                    <p class="modal-summary-item hidden" id="summary-boleto-due-date-details">Venc. Boleto: <span id="summary-boleto-due-date" class="font-bold text-gold"></span></p>
-                </div>
-                
-                <div id="fees-explanation" class="bg-yellow-900 border-l-4 border-yellow-500 text-yellow-200 p-3 rounded-lg text-xs mt-4 hidden">
-                    <p class="font-semibold mb-1">Informações sobre Taxas:</p>
-                    <p>As taxas de Boleto e Cartão são custos das operadoras financeiras. A Harmonia do Altar não retém valor sobre estas taxas. Pix e Dinheiro são isentos.</p>
-                </div>
-
-                <div class="modal-footer-buttons">
-                    <button class="btn-secondary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 w-full" data-navigate-tab="payment-method-tab">Voltar</button>
-                    <button id="confirm-simulation-btn" class="btn-primary text-white font-bold py-3 px-8 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 w-full">Confirmar Simulação</button>
+                <!-- ABA 4: RESUMO E SIMULAR -->
+                <div id="summary-tab" class="tab-content" role="tabpanel">
+                    <h4 class="sim-step-title">Resumo do orçamento</h4>
+                    <div class="modal-summary-box sim-receipt">
+                        <p class="modal-summary-item sim-row"><span>Plano</span><span id="summary-plan-name"></span></p>
+                        <p class="modal-summary-item sim-row"><span>Data do evento</span><span id="summary-event-date"></span></p>
+                        <p class="modal-summary-item sim-row"><span>Endereço</span><span id="summary-event-address"></span></p>
+                        <p class="modal-summary-item sim-row" id="summary-reference-location-display"><span>Referência</span><span id="summary-reference-location"></span></p>
+                        <hr class="sim-divider">
+                        <p class="modal-summary-item sim-row"><span>Valor do plano</span><span id="summary-plan-price">R$ 0,00</span></p>
+                        <p class="modal-summary-item sim-row"><span>Deslocamento</span><span id="summary-deslocamento-price">R$ 0,00</span></p>
+                        <p class="modal-summary-item sim-row"><span>Total (base)</span><span id="summary-total-price">R$ 0,00</span></p>
+                        <p class="modal-summary-item sim-row"><span>Pagamento</span><span id="summary-payment-method"></span></p>
+                        <p class="modal-summary-item sim-row" id="summary-installment-details"><span>Parcelamento</span><span id="summary-installments"></span></p>
+                        <p class="modal-summary-item sim-row hidden" id="summary-boleto-due-date-details"><span>Vencimento do boleto</span><span id="summary-boleto-due-date"></span></p>
+                        <p class="modal-summary-item sim-row total" id="summary-total-with-fees-label-container"><span>Total a pagar<span id="summary-fees-suffix" class="sim-muted"> (c/ taxas)</span></span><span id="summary-total-price-with-fees">R$ 0,00</span></p>
+                    </div>
+                    <div id="fees-explanation" class="sim-note warn hidden">
+                        <i class="fas fa-info-circle"></i>
+                        <p><strong>Sobre as taxas:</strong> as taxas de boleto e cartão são custos das operadoras financeiras. A Harmonia do Altar não retém valor sobre elas. Pix e dinheiro são isentos.</p>
+                    </div>
+                    <div class="modal-footer-buttons">
+                        <button class="btn-secondary pill ghost lg" data-navigate-tab="payment-method-tab"><i class="fas fa-arrow-left"></i> Voltar</button>
+                        <button id="confirm-simulation-btn" class="btn-primary pill lg"><i class="fab fa-whatsapp"></i> Enviar pelo WhatsApp</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal de Seleção de Mapa -->
-    <div id="map-selection-modal" class="modal fixed inset-0 flex items-center justify-center">
-        <div class="notification-modal-content w-full h-3/4 flex flex-col">
-            <span class="close-button modal-close-button" id="close-map-modal-button" aria-label="Close map modal">&times;</span>
-            <h3 class="notification-modal-title">Selecione no Mapa</h3>
-            <div id="map-canvas" class="flex-grow rounded-lg mb-4" style="height: 100%; width: 100%;"></div>
-            <button id="confirm-map-location-btn" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 mt-4 notification-modal-button w-full">Confirmar Localização</button>
+    <div id="map-selection-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" role="dialog" aria-modal="true" aria-label="Selecionar local no mapa">
+        <div class="notification-modal-content sim-dialog sim-map-dialog">
+            <button type="button" class="close-button modal-close-button icon-btn" id="close-map-modal-button" aria-label="Fechar mapa"><i class="fas fa-times"></i></button>
+            <span class="eyebrow">Local da cerimônia</span>
+            <h3 class="notification-modal-title">Selecione no mapa</h3>
+            <div id="map-canvas" class="sim-map-canvas"></div>
+            <button id="confirm-map-location-btn" class="btn-primary pill lg notification-modal-button">Confirmar localização</button>
         </div>
     </div>
 
     <!-- Modal de Notificação de Boleto -->
-    <div id="boleto-notification-modal" class="modal fixed inset-0 flex items-center justify-center">
-        <div class="notification-modal-content w-full">
-            <span class="close-button modal-close-button" id="close-boleto-modal-button" aria-label="Close notification">&times;</span>
+    <div id="boleto-notification-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" role="alertdialog" aria-modal="true">
+        <div class="notification-modal-content sim-dialog">
+            <button type="button" class="close-button modal-close-button icon-btn" id="close-boleto-modal-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
             <h3 class="notification-modal-title info">
-                <i class="fas fa-info-circle icon"></i> Atenção: Pagamento via Boleto!
+                <span class="sim-dialog-icon"><i class="fas fa-info"></i></span> Pagamento via boleto
             </h3>
             <p class="notification-modal-text">
                 Para sua comodidade, o boleto pode ser quitado a qualquer momento antes da data da cerimônia. Lembre-se: o pagamento pontual é essencial! Boletos não pagos podem estar sujeitos a protesto, gerando restrições de crédito.
             </p>
-            <div class="flex justify-end mt-6">
-                <button id="ok-boleto-modal-button" class="btn-primary text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 notification-modal-button w-full">Entendi</button>
-            </div>
+            <button id="ok-boleto-modal-button" class="btn-primary pill lg notification-modal-button">Entendi</button>
         </div>
     </div>
 
-    <!-- Novo: Modal de Notificação de Validação de Data de Boleto -->
-    <div id="boleto-date-warning-modal" class="modal fixed inset-0 flex items-center justify-center">
-        <div class="notification-modal-content w-full">
-            <span class="close-button modal-close-button" id="close-boleto-date-warning-modal-button" aria-label="Close warning">&times;</span>
+    <!-- Modal de Notificação de Validação de Data de Boleto -->
+    <div id="boleto-date-warning-modal" class="modal sim-modal fixed inset-0 flex items-center justify-center" role="alertdialog" aria-modal="true">
+        <div class="notification-modal-content sim-dialog">
+            <button type="button" class="close-button modal-close-button icon-btn" id="close-boleto-date-warning-modal-button" aria-label="Fechar aviso"><i class="fas fa-times"></i></button>
             <h3 class="notification-modal-title warning">
-                <i class="fas fa-exclamation-triangle icon"></i> Ajuste a Data do Boleto!
+                <span class="sim-dialog-icon warn"><i class="fas fa-exclamation"></i></span> Ajuste a data do boleto
             </h3>
             <p class="notification-modal-text">
                 A data da última parcela (dia <span id="warning-due-date"></span>) ultrapassa a data da sua cerimônia (<span id="warning-ceremony-date"></span>). É fundamental que todas as parcelas sejam quitadas antes do evento. Por favor, ajuste as parcelas ou o dia de vencimento.
             </p>
-            <div class="flex justify-end mt-6">
-                <button id="ok-boleto-date-warning-modal-button" class="btn-primary red text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 notification-modal-button w-full">Entendi</button>
-            </div>
+            <button id="ok-boleto-date-warning-modal-button" class="btn-primary pill lg notification-modal-button">Entendi</button>
         </div>
     </div>
 
@@ -1782,7 +1945,22 @@
             const mapBtn = document.getElementById('open-map-selection-btn');
             if (mapBtn) mapBtn.classList.add('hidden');
             const addr = document.getElementById('modal-destination-address');
-            if (addr && addr.value.trim().length > 3) manualDeslocamento(addr.value.trim());
+            if (addr) {
+                // Com a chave recusada, o Autocomplete do Google desativa o campo e troca o placeholder.
+                // No modo manual o campo precisa continuar editável.
+                const placeholder = 'Ex: Paróquia São José, Rua Brasil, 123, Ivinhema, MS';
+                // Só altera o que mudou: cada alteração dispara o observador de novo
+                const restoreInput = () => {
+                    if (addr.disabled) addr.disabled = false;
+                    if (addr.style.backgroundImage) addr.style.backgroundImage = '';
+                    if (addr.classList.contains('gm-err-autocomplete')) addr.classList.remove('gm-err-autocomplete');
+                    if (addr.placeholder !== placeholder) addr.placeholder = placeholder;
+                };
+                if (window.google && google.maps && google.maps.event) google.maps.event.clearInstanceListeners(addr);
+                restoreInput();
+                new MutationObserver(restoreInput).observe(addr, { attributes: true, attributeFilter: ['disabled', 'placeholder', 'class', 'style'] });
+                if (addr.value.trim().length > 3) manualDeslocamento(addr.value.trim());
+            }
         }
 
         function manualDeslocamento(address) {
@@ -2193,6 +2371,8 @@
             });
             tabButtons.forEach(button => {
                 button.classList.toggle('active', button.dataset.tab === tabId);
+                button.classList.toggle('unlocked', Array.isArray(unlockedTabs) && unlockedTabs.includes(button.dataset.tab));
+                button.setAttribute('aria-selected', String(button.dataset.tab === tabId));
             });
             
             if (tabId === 'event-details-tab') {
@@ -2211,7 +2391,25 @@
             showTab(targetTab);
         }
 
+        // Coluna visual do simulador: nome, valor e instrumentos do plano escolhido
+        function renderSimulationPlan(planDetails, planPrice) {
+            const nameEl = document.getElementById('sim-plan-name');
+            const priceEl = document.getElementById('sim-plan-price');
+            const listEl = document.getElementById('sim-plan-instruments');
+            if (nameEl) nameEl.textContent = planDetails.name;
+            if (priceEl) priceEl.textContent = formatCurrency(planPrice);
+            if (listEl) {
+                listEl.innerHTML = '';
+                (planDetails.instruments || []).forEach((name) => {
+                    const li = document.createElement('li');
+                    li.textContent = name;
+                    listEl.appendChild(li);
+                });
+            }
+        }
+
         function showMainSimulationModal(planPrice, planDetails) {
+            renderSimulationPlan(planDetails, planPrice);
             showAnimatedModal(mainSimulationModal);
             currentPlanDetails = planDetails;
             currentPlanOnlyPrice = planPrice;
@@ -2357,7 +2555,7 @@
             
             if (referenceLocationInput.value.trim()) {
                 summaryReferenceLocationEl.textContent = referenceLocationInput.value.trim();
-                summaryReferenceLocationDisplay.style.display = 'block';
+                summaryReferenceLocationDisplay.style.display = '';
             } else {
                 summaryReferenceLocationEl.textContent = '';
                 summaryReferenceLocationDisplay.style.display = 'none';
@@ -2369,9 +2567,9 @@
             summaryTotalWithFeesEl.textContent = formatCurrency(calculatedTotalForSummary);
             summaryPaymentMethodEl.textContent = paymentMethodText;
             if (selectedPaymentMethod === 'pix' || selectedPaymentMethod === 'dinheiro') {
-                summaryInstallmentDetailsDiv.innerHTML = `Pagamento: <span class="font-bold text-gold">À vista</span>`;
+                summaryInstallmentDetailsDiv.innerHTML = `<span>Pagamento</span><span class="sim-gold">À vista</span>`;
             } else {
-                summaryInstallmentDetailsDiv.innerHTML = `Parcelamento: <span class="font-bold text-gold">${selectedInstallments}x de ${formatCurrency(finalInstallmentValueForSummary)}</span>`;
+                summaryInstallmentDetailsDiv.innerHTML = `<span>Parcelamento</span><span class="sim-gold">${selectedInstallments}x de ${formatCurrency(finalInstallmentValueForSummary)}</span>`;
             }
         }
 
@@ -2502,7 +2700,7 @@
                 // --- LISTENERS DE EVENTOS DO MODAL ---
                 tabButtons.forEach(button => {
                     button.addEventListener('click', (e) => {
-                        const targetTab = e.target.dataset.tab;
+                        const targetTab = e.currentTarget.dataset.tab;
                         if (unlockedTabs.includes(targetTab)) {
                             showTab(targetTab);
                         }
