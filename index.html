@@ -873,7 +873,7 @@
         .story-hero .story-head { position: absolute; left: 0; right: 0; bottom: 1.25rem; z-index: 1; padding: 0 clamp(1.25rem, 5vw, 4rem); }
         .story-hero h3 { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 5vw, 4rem); line-height: .95; }
         .story-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 1.5rem clamp(1.25rem, 5vw, 4rem) 3rem; }
-        .story-body > p { max-width: 760px; color: var(--muted); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; }
+        .story-body > p { max-width: 760px; margin-inline: auto; text-align: center; color: var(--muted); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; }
         .story-embeds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; max-width: 1100px; }
         .story-close { position: absolute; top: 1rem; right: 1rem; z-index: 3; }
         .story-content > * { opacity: 0; }
@@ -1008,7 +1008,7 @@
         .h-native .plan-slide { scroll-snap-align: center; flex-basis: min(84vw, 380px); height: auto; min-height: 560px; }
         .h-native .h-progress { display: none; }
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+            *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
             .about .lede .w { opacity: 1; }
         }
         /* ---------- Logo (arco do altar + colunas do H + pauta em onda) ---------- */
@@ -1066,7 +1066,6 @@
         .switch:focus-visible { outline: 2px solid var(--champagne); outline-offset: 3px; }
         .menu-motion { margin-top: 2.25rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.1); max-width: 520px; }
         .menu-motion p { margin-top: .6rem; color: var(--muted); font-size: .8rem; letter-spacing: normal; text-transform: none; font-weight: 400; }
-        .footer-motion { margin: 2rem auto 0; justify-content: center; }
 
         /* ---------- Modo simples (lofi): sem pin, sem máscaras, tudo visível ---------- */
         html[data-experience="lofi"] .about .lede .w { opacity: 1; }
@@ -1198,7 +1197,6 @@
         .sim-modal .modal-footer-buttons .pill { flex: 1; justify-content: center; max-width: 280px; }
         .sim-modal .modal-footer-buttons .btn-secondary { max-width: 180px; }
         .sim-modal .btn-primary.pill, .sim-modal .btn-secondary.pill { width: auto; margin: 0; }
-        .sim-modal .btn-primary.pill:hover { background: linear-gradient(90deg, var(--champagne), var(--rose)); }
         .sim-modal .pill:disabled { opacity: .45; cursor: not-allowed; transform: none; }
         .sim-modal .tab-content { display: none; }
         .sim-modal .tab-content.active { display: flex; flex-direction: column; flex: 1; }
@@ -1332,6 +1330,117 @@
             .custom-plan-checkbox-label span { font-size: .92rem; }
             .contact-pill p { font-size: .9rem; }
             .h-native .plan-slide { flex-basis: 86vw; }
+        }
+        /* --- Galeria do Instagram: vídeos no formato natural, sem zoom nem corte --- */
+        .story-hero { height: 32%; min-height: 190px; }
+        .story-embeds { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 380px)); justify-content: center; align-items: start; gap: 1.5rem; max-width: none; }
+        .ig-card {
+            position: relative; border-radius: 20px; overflow: hidden; background: #fff;
+            box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .85), 0 0 0 1px rgba(241, 214, 164, .18);
+            min-height: 420px; display: flex; flex-direction: column;
+        }
+        .ig-card .instagram-media, .ig-card iframe {
+            margin: 0 !important; min-width: 0 !important; width: 100% !important; max-width: none !important;
+            border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+        }
+        .ig-card .instagram-media:not(iframe) { flex: 1; display: flex; background: var(--night) !important; padding: 0 !important; }
+        .ig-fallback {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .6rem; padding: 2rem 1rem;
+            color: var(--ink); text-align: center; background: radial-gradient(80% 60% at 50% 40%, rgba(229, 143, 132, .18), transparent 70%), var(--night-2);
+        }
+        .ig-fallback i { font-size: 2.4rem; color: var(--champagne); animation: ig-pulse 1.6s ease-in-out infinite; }
+        .ig-fallback span { font-weight: 600; }
+        .ig-fallback small { color: var(--muted); font-size: .8rem; }
+        @keyframes ig-pulse { 50% { opacity: .45; transform: scale(.94); } }
+        .ig-more { margin: 2rem auto 0; display: flex; width: fit-content; }
+        @media (max-width: 860px) {
+            .story-panel { inset: 0; border-radius: 0; }
+            .story-hero { height: 26vh; min-height: 170px; }
+            .story-hero h3 { font-size: 2rem; }
+            .story-body { padding: 1.25rem 1rem 2.5rem; }
+            .story-body > p { font-size: 1rem; margin-bottom: 1.5rem; }
+            .story-embeds { grid-template-columns: 1fr; justify-items: center; }
+            .ig-card { width: 100%; max-width: 400px; }
+            .ig-more { width: 100%; justify-content: center; }
+        }
+        /* --- Transições suaves entre as seções (degradê em vez de corte seco) --- */
+        .reveal-media::after {
+            background: linear-gradient(180deg, var(--night) 0%, rgba(42, 27, 61, .45) 14%, rgba(109, 47, 87, .12) 45%, rgba(17, 13, 28, .55) 78%, var(--night) 100%);
+        }
+        .panel-shade {
+            background: linear-gradient(180deg, var(--night) 0%, rgba(17, 13, 28, .35) 16%, rgba(17, 13, 28, 0) 38%, rgba(17, 13, 28, .65) 78%, var(--night) 100%);
+        }
+        .pano-media::after {
+            background: linear-gradient(180deg, var(--night) 0%, rgba(17, 13, 28, 0) 22%, rgba(17, 13, 28, 0) 50%, var(--night) 100%);
+        }
+        .moments { background: linear-gradient(180deg, transparent 0, var(--night) 24vh); }
+        /* Brilho do rodapé: surge aos poucos, sem a linha no topo */
+        #contato::before {
+            top: 0; height: 100%; width: 140vw;
+            background: radial-gradient(45% 55% at 50% 42%, rgba(229, 143, 132, .16), rgba(109, 47, 87, .08) 45%, transparent 75%);
+            -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+        }
+        .builder-wrap { background: linear-gradient(180deg, var(--night) 0%, #140f22 55%, var(--night) 100%); }
+        /* --- Botões com cor em movimento --- */
+        @keyframes pill-flow { to { background-position: 200% 50%; } }
+        @keyframes pill-flow-ghost { to { background-position: 0 0, 200% 50%; } }
+        @keyframes pill-shine {
+            0%, 70% { transform: translateX(-130%) skewX(-20deg); }
+            100% { transform: translateX(330%) skewX(-20deg); }
+        }
+        .pill {
+            position: relative; overflow: hidden; isolation: isolate;
+            background-image: linear-gradient(90deg, var(--champagne) 0%, var(--rose) 25%, #f3b98a 50%, var(--rose) 75%, var(--champagne) 100%);
+            background-size: 200% 100%;
+            animation: pill-flow 7s linear infinite;
+        }
+        /* Brilho que atravessa o botão de tempos em tempos */
+        .pill::after {
+            content: ""; position: absolute; top: -2px; bottom: -2px; left: 0; width: 35%; z-index: -1; pointer-events: none;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent);
+            transform: translateX(-130%) skewX(-20deg);
+            animation: pill-shine 5s ease-in-out infinite;
+        }
+        .pill:nth-of-type(2n)::after { animation-delay: 1.6s; }
+        .pill:nth-of-type(3n)::after { animation-delay: 3.1s; }
+        .pill:hover { animation-duration: 2.5s; }
+        .pill:hover::after { animation-duration: 1.4s; animation-delay: 0s; }
+        /* Botões transparentes: a borda é que tem a cor em movimento */
+        .pill.ghost {
+            border: 1px solid transparent;
+            background:
+                linear-gradient(rgba(28, 21, 44, .88), rgba(28, 21, 44, .88)) padding-box,
+                linear-gradient(90deg, rgba(241, 214, 164, .75), rgba(229, 143, 132, .7), rgba(255, 255, 255, .15), rgba(241, 214, 164, .75)) border-box;
+            background-size: 100% 100%, 200% 100%;
+            animation: pill-flow-ghost 6s linear infinite;
+        }
+        .pill.ghost::after { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .14), transparent); }
+        .pill:disabled, .pill:disabled::after { animation-play-state: paused; }
+        /* Movimento desligado: cores paradas */
+        html[data-experience="lofi"] .pill { animation: none; }
+        html[data-experience="lofi"] .pill::after { display: none; }
+        @media (prefers-reduced-motion: reduce) {
+            .pill { animation: none !important; }
+            .pill::after { display: none; }
+        }
+        /* --- Galeria: a janela inteira rola (uma área só) --- */
+        .story-panel { display: block; overflow-y: auto; overscroll-behavior: contain; outline: none; scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent; }
+        .story-panel::-webkit-scrollbar { width: 6px; }
+        .story-panel::-webkit-scrollbar-thumb { background: rgba(241, 214, 164, .35); border-radius: 6px; }
+        .story-hero { height: clamp(170px, 26vh, 250px); min-height: 0; }
+        .story-body { overflow: visible; flex: none; padding-bottom: 4.5rem; }
+        .story-close { position: fixed; z-index: 5; top: calc(clamp(0px, 3vw, 2.5rem) + 1rem); right: calc(clamp(0px, 3vw, 2.5rem) + 1rem); }
+        .story-scroll-hint {
+            position: sticky; bottom: 1.1rem; display: flex; align-items: center; gap: .5rem; margin: -3.5rem auto 1.1rem; width: fit-content;
+            padding: .55rem 1rem; border-radius: 999px; font-size: .78rem; font-weight: 600; color: #2a1325;
+            background: linear-gradient(90deg, var(--champagne), var(--rose)); box-shadow: 0 10px 30px -8px rgba(0, 0, 0, .7);
+            transition: opacity .35s ease, transform .35s ease; z-index: 4;
+        }
+        .story-scroll-hint i { animation: cue 1.6s ease-in-out infinite; }
+        .story-scroll-hint.hidden-hint { opacity: 0; transform: translateY(10px); pointer-events: none; }
+        @media (max-width: 860px) {
+            .story-close { top: 1rem; right: 1rem; }
         }
     </style>
 </head>
@@ -1689,21 +1798,17 @@
             <a href="https://www.facebook.com/share/1CBb9XQqiD/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
             <a href="https://wa.me/5567996884226" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
         </div>
-        <div class="motion-toggle footer-motion">
-            <span>Movimento completo</span>
-            <button type="button" class="switch" role="switch" aria-checked="true" aria-label="Movimento completo" data-motion-toggle><span class="knob"></span></button>
-            <small>Ligado</small>
-        </div>
         <p class="legal">© <span id="year"></span> Harmonia do Altar · Música ao vivo para casamentos · Angélica/Ivinhema – MS</p>
     </footer>
 
     <!-- Diálogo de galeria (abre a partir dos cards "Nosso Som") -->
-    <div class="story-dialog" id="story-dialog" role="dialog" aria-modal="true" aria-labelledby="story-title">
+    <div class="story-dialog" id="story-dialog" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="story-title">
         <div class="story-backdrop" data-story-close></div>
-        <div class="story-panel" id="story-panel">
-            <button class="icon-btn story-close" data-story-close aria-label="Fechar"><i class="fas fa-times"></i></button>
+        <button class="icon-btn story-close" data-story-close aria-label="Fechar galeria"><i class="fas fa-times"></i></button>
+        <div class="story-panel" id="story-panel" tabindex="-1">
             <div class="story-hero"><img id="story-img" src="" alt=""><div class="story-head story-content"><span class="eyebrow">Sinta a nossa harmonia</span><h3 id="story-title"></h3></div></div>
             <div class="story-body story-content" id="story-body"></div>
+            <button type="button" class="story-scroll-hint" id="story-scroll-hint" aria-hidden="true" tabindex="-1">Role para ver os vídeos <i class="fas fa-chevron-down"></i></button>
         </div>
     </div>
 
@@ -1711,23 +1816,50 @@
     <template id="story-emocao">
         <p>A música tem o poder de evocar sentimentos profundos. Imagine a entrada da noiva ao som de um violino emocionante, ou a troca de alianças embalada por um piano suave e vozes que se entrelaçam. É essa atmosfera que criamos.</p>
         <div class="story-embeds">
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YQSOEsv0-/" data-instgrm-version="14"></blockquote></div>
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8V3pPAsYSj/" data-instgrm-version="14"></blockquote></div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YQSOEsv0-/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8YQSOEsv0-/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8V3pPAsYSj/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8V3pPAsYSj/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
         </div>
+        <a class="pill ghost ig-more" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Ver mais no Instagram</a>
     </template>
     <template id="story-elegancia">
         <p>Acreditamos que a beleza está na harmonia, não só musical, mas também visual. Nossos músicos se apresentam com a sofisticação que a sua cerimônia merece, e nossas performances são um reflexo do nosso compromisso com a excelência.</p>
         <div class="story-embeds">
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C8VlkbksuVZ/" data-instgrm-version="14"></blockquote></div>
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CpBIkGaOdrZ/" data-instgrm-version="14"></blockquote></div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C8VlkbksuVZ/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/p/C8VlkbksuVZ/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CpBIkGaOdrZ/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/p/CpBIkGaOdrZ/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
         </div>
+        <a class="pill ghost ig-more" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Ver mais no Instagram</a>
     </template>
     <template id="story-alegria">
         <p>Seu casamento deve refletir sua personalidade. Do clássico ao popular, do sacro ao contemporâneo, nosso repertório é vasto e adaptável. Celebramos o amor em todos os ritmos, garantindo momentos de pura alegria e emoção.</p>
         <div class="story-embeds">
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8VkPNDsAit/" data-instgrm-version="14"></blockquote></div>
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YEx9mse1O/" data-instgrm-version="14"></blockquote></div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8VkPNDsAit/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8VkPNDsAit/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YEx9mse1O/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8YEx9mse1O/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
         </div>
+        <a class="pill ghost ig-more" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Ver mais no Instagram</a>
     </template>
 
     <!-- Modal Principal de Simulação (Unificado com Abas) -->
@@ -3072,6 +3204,8 @@
             body.innerHTML = '';
             body.appendChild(tpl.content.cloneNode(true));
             dialog.classList.add('open');
+            panel.scrollTop = 0;
+            updateStoryHint();
             document.body.style.overflow = 'hidden';
             if (lenis) lenis.stop();
             if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
@@ -3079,7 +3213,8 @@
             if (experience !== 'hifi') {
                 gsap.set(panel, { clearProps: 'clipPath' });
                 gsap.set([backdrop, ...$$('.story-content > *', dialog)], { opacity: 1, y: 0 });
-                $('.story-close', dialog).focus();
+                gsap.set('.story-close', { opacity: 1, y: 0 });
+                panel.focus({ preventScroll: true });
                 return;
             }
             gsap.timeline({ defaults: { ease: 'power3.inOut' } })
@@ -3088,8 +3223,23 @@
                 .to(panel, { clipPath: 'inset(0px 0px 0px 0px round 22px)', duration: 0.8 }, 0)
                 .fromTo('#story-img', { scale: 1.25 }, { scale: 1, duration: 1.1, ease: 'power2.out' }, 0)
                 .fromTo($$('.story-content > *', dialog), { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: 0.08, duration: 0.6, ease: 'power2.out' }, 0.45)
-                .add(() => $('.story-close', dialog).focus());
+                .fromTo('.story-close', { opacity: 0, y: 0 }, { opacity: 1, y: 0, duration: 0.4 }, 0.5)
+                .add(() => { panel.focus({ preventScroll: true }); updateStoryHint(); });
         }
+        // "Role para ver os vídeos": aparece enquanto houver conteúdo abaixo
+        function updateStoryHint() {
+            const hint = $('#story-scroll-hint');
+            if (!hint || !panel) return;
+            const remaining = panel.scrollHeight - panel.clientHeight - panel.scrollTop;
+            hint.classList.toggle('hidden-hint', remaining < 40);
+        }
+        if (panel) {
+            panel.addEventListener('scroll', updateStoryHint, { passive: true });
+            // Os players do Instagram mudam de altura ao carregar
+            if (window.ResizeObserver) new ResizeObserver(updateStoryHint).observe($('#story-body'));
+        }
+        $('#story-scroll-hint')?.addEventListener('click', () => panel.scrollBy({ top: panel.clientHeight * 0.8, behavior: 'smooth' }));
+
         function closeStory() {
             if (!dialog || !dialog.classList.contains('open')) return;
             const done = () => {
@@ -3101,7 +3251,7 @@
             };
             if (experience !== 'hifi' || !activeCard) return done();
             gsap.timeline({ defaults: { ease: 'power3.inOut' }, onComplete: done })
-                .to($$('.story-content > *', dialog), { opacity: 0, y: 20, duration: 0.25 }, 0)
+                .to([...$$('.story-content > *', dialog), '.story-close'], { opacity: 0, y: 20, duration: 0.25 }, 0)
                 .to(panel, { clipPath: cardRectInset(activeCard), duration: 0.7 }, 0.1)
                 .to(backdrop, { opacity: 0, duration: 0.5 }, 0.3);
         }
