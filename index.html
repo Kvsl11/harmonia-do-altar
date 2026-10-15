@@ -873,7 +873,7 @@
         .story-hero .story-head { position: absolute; left: 0; right: 0; bottom: 1.25rem; z-index: 1; padding: 0 clamp(1.25rem, 5vw, 4rem); }
         .story-hero h3 { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 5vw, 4rem); line-height: .95; }
         .story-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 1.5rem clamp(1.25rem, 5vw, 4rem) 3rem; }
-        .story-body > p { max-width: 760px; color: var(--muted); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; }
+        .story-body > p { max-width: 760px; margin-inline: auto; text-align: center; color: var(--muted); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; }
         .story-embeds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; max-width: 1100px; }
         .story-close { position: absolute; top: 1rem; right: 1rem; z-index: 3; }
         .story-content > * { opacity: 0; }
@@ -1332,6 +1332,38 @@
             .contact-pill p { font-size: .9rem; }
             .h-native .plan-slide { flex-basis: 86vw; }
         }
+        /* --- Galeria do Instagram: vídeos no formato natural, sem zoom nem corte --- */
+        .story-hero { height: 32%; min-height: 190px; }
+        .story-embeds { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 380px)); justify-content: center; align-items: start; gap: 1.5rem; max-width: none; }
+        .ig-card {
+            position: relative; border-radius: 20px; overflow: hidden; background: #fff;
+            box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .85), 0 0 0 1px rgba(241, 214, 164, .18);
+            min-height: 420px; display: flex; flex-direction: column;
+        }
+        .ig-card .instagram-media, .ig-card iframe {
+            margin: 0 !important; min-width: 0 !important; width: 100% !important; max-width: none !important;
+            border: 0 !important; border-radius: 0 !important; box-shadow: none !important;
+        }
+        .ig-card .instagram-media:not(iframe) { flex: 1; display: flex; background: var(--night) !important; padding: 0 !important; }
+        .ig-fallback {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .6rem; padding: 2rem 1rem;
+            color: var(--ink); text-align: center; background: radial-gradient(80% 60% at 50% 40%, rgba(229, 143, 132, .18), transparent 70%), var(--night-2);
+        }
+        .ig-fallback i { font-size: 2.4rem; color: var(--champagne); animation: ig-pulse 1.6s ease-in-out infinite; }
+        .ig-fallback span { font-weight: 600; }
+        .ig-fallback small { color: var(--muted); font-size: .8rem; }
+        @keyframes ig-pulse { 50% { opacity: .45; transform: scale(.94); } }
+        .ig-more { margin: 2rem auto 0; display: flex; width: fit-content; }
+        @media (max-width: 860px) {
+            .story-panel { inset: 0; border-radius: 0; }
+            .story-hero { height: 26vh; min-height: 170px; }
+            .story-hero h3 { font-size: 2rem; }
+            .story-body { padding: 1.25rem 1rem 2.5rem; }
+            .story-body > p { font-size: 1rem; margin-bottom: 1.5rem; }
+            .story-embeds { grid-template-columns: 1fr; justify-items: center; }
+            .ig-card { width: 100%; max-width: 400px; }
+            .ig-more { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
 <body class="text-gray-200">
@@ -1692,7 +1724,7 @@
     </footer>
 
     <!-- Diálogo de galeria (abre a partir dos cards "Nosso Som") -->
-    <div class="story-dialog" id="story-dialog" role="dialog" aria-modal="true" aria-labelledby="story-title">
+    <div class="story-dialog" id="story-dialog" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="story-title">
         <div class="story-backdrop" data-story-close></div>
         <div class="story-panel" id="story-panel">
             <button class="icon-btn story-close" data-story-close aria-label="Fechar"><i class="fas fa-times"></i></button>
@@ -1705,23 +1737,50 @@
     <template id="story-emocao">
         <p>A música tem o poder de evocar sentimentos profundos. Imagine a entrada da noiva ao som de um violino emocionante, ou a troca de alianças embalada por um piano suave e vozes que se entrelaçam. É essa atmosfera que criamos.</p>
         <div class="story-embeds">
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YQSOEsv0-/" data-instgrm-version="14"></blockquote></div>
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8V3pPAsYSj/" data-instgrm-version="14"></blockquote></div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YQSOEsv0-/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8YQSOEsv0-/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8V3pPAsYSj/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8V3pPAsYSj/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
         </div>
+        <a class="pill ghost ig-more" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Ver mais no Instagram</a>
     </template>
     <template id="story-elegancia">
         <p>Acreditamos que a beleza está na harmonia, não só musical, mas também visual. Nossos músicos se apresentam com a sofisticação que a sua cerimônia merece, e nossas performances são um reflexo do nosso compromisso com a excelência.</p>
         <div class="story-embeds">
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C8VlkbksuVZ/" data-instgrm-version="14"></blockquote></div>
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CpBIkGaOdrZ/" data-instgrm-version="14"></blockquote></div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/C8VlkbksuVZ/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/p/C8VlkbksuVZ/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/CpBIkGaOdrZ/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/p/CpBIkGaOdrZ/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
         </div>
+        <a class="pill ghost ig-more" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Ver mais no Instagram</a>
     </template>
     <template id="story-alegria">
         <p>Seu casamento deve refletir sua personalidade. Do clássico ao popular, do sacro ao contemporâneo, nosso repertório é vasto e adaptável. Celebramos o amor em todos os ritmos, garantindo momentos de pura alegria e emoção.</p>
         <div class="story-embeds">
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8VkPNDsAit/" data-instgrm-version="14"></blockquote></div>
-            <div class="media-cropper"><blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YEx9mse1O/" data-instgrm-version="14"></blockquote></div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8VkPNDsAit/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8VkPNDsAit/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
+            <div class="ig-card">
+                <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/C8YEx9mse1O/" data-instgrm-version="14">
+                    <a class="ig-fallback" href="https://www.instagram.com/reel/C8YEx9mse1O/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i><span>Carregando vídeo…</span><small>Toque para ver no Instagram</small></a>
+                </blockquote>
+            </div>
         </div>
+        <a class="pill ghost ig-more" href="https://www.instagram.com/harmoniadoaltar" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> Ver mais no Instagram</a>
     </template>
 
     <!-- Modal Principal de Simulação (Unificado com Abas) -->
