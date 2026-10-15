@@ -3564,7 +3564,10 @@
         }
         if (brandLogo) {
             setInterval(playBrandLogo, BRAND_LOOP_MS);
-            brandLogo.closest('a')?.addEventListener('mouseenter', playBrandLogo);
+            const brandLink = brandLogo.closest('a');
+            brandLink?.addEventListener('mouseenter', playBrandLogo);
+            // No celular não existe "passar o mouse": roda ao tocar na logo (o toque continua levando ao topo)
+            brandLink?.addEventListener('touchstart', playBrandLogo, { passive: true });
         }
 
         // ---------- Início ----------
