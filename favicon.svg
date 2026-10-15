@@ -1,8 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#1a1229"/>
-  <g fill="none" stroke="#e3bd82" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M17 56V30c0-11 6-18 15-23 9 5 15 12 15 23v26"/>
-    <path d="M25 27v26M39 27v26"/>
-    <path d="M8 41c8-4 15 3 24 0s16-4 24 0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <!-- Ícone da aba: mesmo desenho da logo (arco do altar, cruz, colunas do H, três ondas da pauta e degrau),
+       com traços mais grossos e ondas um pouco mais afastadas para continuar legível em 16-32 px -->
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="70%">
+      <stop offset="0" stop-color="#2a1b3d"/>
+      <stop offset="1" stop-color="#140e22"/>
+    </radialGradient>
+    <linearGradient id="ouro" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="160" y2="160">
+      <stop offset="0" stop-color="#f6e2b8"/>
+      <stop offset=".55" stop-color="#d9b072"/>
+      <stop offset="1" stop-color="#e8958a"/>
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="34" fill="url(#bg)"/>
+  <g transform="translate(80 82) scale(.88) translate(-80 -82)" fill="none" stroke="url(#ouro)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 140V76C44 48 60 29 80 17c20 12 36 31 36 59v64"/>
+    <path d="M80 32v22M71 41h18"/>
+    <path d="M64 64v66M96 64v66"/>
+    <path d="M14 86c22-11 38 9 66 1s44-14 66-1"/>
+    <path d="M14 98c22-11 38 9 66 1s44-14 66-1"/>
+    <path d="M14 110c22-11 38 9 66 1s44-14 66-1"/>
+    <path d="M32 140h96"/>
+    <path d="M48 151h64"/>
   </g>
 </svg>
