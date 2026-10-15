@@ -1016,6 +1016,8 @@
         .logo-svg { fill: none; stroke: url(#logo-gradient); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
         .brand-mark .brand-logo { width: 2.6rem; height: 2.6rem; overflow: visible; }
         .brand-logo path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+        .brand-logo { transform-origin: 50% 60%; }
+        .brand-logo.breathing { animation: logo-breathe 1.2s ease-in-out infinite; }
         .brand-word { display: flex; flex-direction: column; line-height: 1; }
         .brand-word b { font-family: var(--font-display); font-weight: 600; letter-spacing: .32em; font-size: .9rem; color: #fff; }
         .brand-word i { font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: .85rem; color: var(--champagne); margin-top: .2rem; }
@@ -3536,23 +3538,29 @@
         function playBrandLogo() {
             if (!brandLogo || experience !== 'hifi' || document.hidden) return;
             if (brandTl && brandTl.isActive()) return;
-            const part = (name) => $$(`path[data-part="${name}"]`, brandLogo);
-            const all = $$('path', brandLogo);
-            brandTl = gsap.timeline({ defaults: { ease: 'power2.inOut' } })
-                // apaga de cima para baixo...
-                .to(all.slice().reverse(), { strokeDashoffset: 1, duration: 0.35, stagger: 0.03, ease: 'power1.in' })
-                // ...e redesenha na ordem do desenho original
-                .to(part('base'), { strokeDashoffset: 0, duration: 0.35, stagger: 0.08 })
-                .to(part('arch'), { strokeDashoffset: 0, duration: 0.6 }, '-=0.1')
-                .to(part('column'), { strokeDashoffset: 0, duration: 0.35, stagger: 0.08 }, '-=0.3')
-                .to(part('wave'), { strokeDashoffset: 0, duration: 0.45, stagger: 0.07 }, '-=0.2')
-                .to(part('cross'), { strokeDashoffset: 0, duration: 0.3 }, '-=0.1')
-                // as ondas da pauta "vibram" como uma nota
-                .fromTo('.bl-waves', { x: 0 }, { x: 3, duration: 0.12, yoyo: true, repeat: 5, ease: 'sine.inOut' }, '-=0.15')
-                // pulso de luz na logo
-                .fromTo(brandLogo, { filter: 'drop-shadow(0 0 0 rgba(241,214,164,0))' },
-                    { filter: 'drop-shadow(0 0 10px rgba(241,214,164,.85))', duration: 0.4, yoyo: true, repeat: 1, ease: 'sine.inOut' }, '<')
-                .set('.bl-waves', { x: 0 });
+            // Mesmo efeito da tela de carregamento: um traço depois do outro, na ordem do desenho
+            const order = ['base', 'arch', 'column', 'wave', 'cross'];
+            const paths = order.flatMap((name) => $$(`path[data-part="${name}"]`, brandLogo));
+            const progress = { value: 0 };
+            const render = () => {
+                paths.forEach((path, i) => {
+                    const local = Math.min(1, Math.max(0, progress.value * paths.length - i));
+                    path.style.strokeDashoffset = String(1 - local);
+                    path.style.opacity = local > 0 ? '1' : '0';
+                });
+            };
+            brandTl = gsap.timeline()
+                // a logo some suavemente...
+                .to(brandLogo, { opacity: 0, duration: 0.35, ease: 'power1.in' })
+                .add(() => { progress.value = 0; render(); brandLogo.classList.add('breathing'); })
+                .set(brandLogo, { opacity: 1 })
+                // ...e é desenhada traço a traço, "respirando" como no carregamento
+                .to(progress, { value: 1, duration: 2.4, ease: 'none', onUpdate: render })
+                // no fim, cresce de leve e brilha
+                .add(() => brandLogo.classList.remove('breathing'))
+                .fromTo(brandLogo, { scale: 0.92, filter: 'drop-shadow(0 0 0 rgba(241,214,164,0))' },
+                    { scale: 1, filter: 'drop-shadow(0 0 10px rgba(241,214,164,.75))', duration: 0.8, ease: 'power2.out' })
+                .to(brandLogo, { filter: 'drop-shadow(0 0 0 rgba(241,214,164,0))', duration: 0.9, ease: 'power1.inOut' });
         }
         if (brandLogo) {
             setInterval(playBrandLogo, BRAND_LOOP_MS);
