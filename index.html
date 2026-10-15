@@ -187,22 +187,36 @@
             cursor: pointer;
         }
 
-        /* Barras de rolagem personalizadas para navegadores Webkit (Chrome, Safari) */
-        ::-webkit-scrollbar {
-            width: 8px; /* Torna-o ligeiramente mais fino */
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent; /* Alterado para transparente para remover a trilha visível */
-        }
-
+        /* Barras de rolagem com a mesma cor dos botões: degradê champanhe → rosé que corre e um brilho que passa */
+        /* Só as áreas com rolagem animam o valor; o resto da página fica fixo e não é recalculado a cada quadro */
+        @property --sb-flow { syntax: '<percentage>'; inherits: true; initial-value: 0%; }
+        @keyframes sb-flow { to { --sb-flow: 200%; } }
+        * { --sb-flow: 0%; }
+        html, body, .tab-header, .modal-content, .story-body, .story-panel, .sim-main, .sim-suggestions, .h-track { animation: sb-flow 7s linear infinite; }
+        html[data-experience="lofi"], html[data-experience="lofi"] body, html[data-experience="lofi"] .tab-header, html[data-experience="lofi"] .modal-content, html[data-experience="lofi"] .story-body, html[data-experience="lofi"] .story-panel, html[data-experience="lofi"] .sim-main, html[data-experience="lofi"] .sim-suggestions, html[data-experience="lofi"] .h-track { animation: none; }
+        @media (prefers-reduced-motion: reduce) { html, body, .tab-header, .modal-content, .story-body, .story-panel, .sim-main, .sim-suggestions, .h-track { animation: none; } }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
         ::-webkit-scrollbar-thumb {
-            background: #b69260; /* Cor dourada atualizada para o polegar da barra de rolagem */
-            border-radius: 10px; /* Mantém cantos arredondados para o polegar */
+            border-radius: 10px;
+            background-image:
+                linear-gradient(180deg, transparent 0%, transparent 40%, rgba(255, 255, 255, .55) 50%, transparent 60%, transparent 100%),
+                linear-gradient(180deg, #f1d6a4 0%, #e8958a 25%, #f3b98a 50%, #e8958a 75%, #f1d6a4 100%);
+            background-size: 100% 300%, 100% 200%;
+            background-position: 50% calc(var(--sb-flow) * 1.5), 50% var(--sb-flow);
         }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a08154; /* Dourado mais escuro no hover */
+        ::-webkit-scrollbar-thumb:horizontal {
+            background-image:
+                linear-gradient(90deg, transparent 0%, transparent 40%, rgba(255, 255, 255, .55) 50%, transparent 60%, transparent 100%),
+                linear-gradient(90deg, #f1d6a4 0%, #e8958a 25%, #f3b98a 50%, #e8958a 75%, #f1d6a4 100%);
+            background-size: 300% 100%, 200% 100%;
+            background-position: calc(var(--sb-flow) * 1.5) 50%, var(--sb-flow) 50%;
+        }
+        ::-webkit-scrollbar-thumb:hover { box-shadow: inset 0 0 0 20px rgba(255, 255, 255, .15); }
+        /* Firefox não aceita degradê na barra: usa o rosé dos botões */
+        @supports not selector(::-webkit-scrollbar) {
+            * { scrollbar-color: #e8958a transparent; }
+            .sim-main, .story-panel { scrollbar-width: thin; }
         }
 
         /* Estilos de aba para navegação modal */
@@ -1270,9 +1284,8 @@
         html.modal-open, html.modal-open body { overflow: hidden !important; }
         .modal.sim-modal { overflow: hidden; padding: clamp(.75rem, 2.5vw, 2rem); }
         .sim-modal .modal-content.sim-panel { max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); }
-        .sim-main { max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent; }
+        .sim-main { max-height: calc(100vh - 2rem); max-height: calc(100dvh - 2rem); }
         .sim-main::-webkit-scrollbar { width: 6px; }
-        .sim-main::-webkit-scrollbar-thumb { background: rgba(241, 214, 164, .35); border-radius: 6px; }
         .sim-aside-img { background: var(--plum); }
         .sim-row > span:first-child { min-width: 0; }
         .sim-row > span:last-child { overflow-wrap: anywhere; }
@@ -1423,9 +1436,8 @@
             .pill::after { display: none; }
         }
         /* --- Galeria: a janela inteira rola (uma área só) --- */
-        .story-panel { display: block; overflow-y: auto; overscroll-behavior: contain; outline: none; scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent; }
+        .story-panel { display: block; overflow-y: auto; overscroll-behavior: contain; outline: none; }
         .story-panel::-webkit-scrollbar { width: 6px; }
-        .story-panel::-webkit-scrollbar-thumb { background: rgba(241, 214, 164, .35); border-radius: 6px; }
         .story-hero { height: clamp(170px, 26vh, 250px); min-height: 0; }
         .story-body { overflow: visible; flex: none; padding-bottom: 4.5rem; }
         .story-close { position: fixed; z-index: 5; top: calc(clamp(0px, 3vw, 2.5rem) + 1rem); right: calc(clamp(0px, 3vw, 2.5rem) + 1rem); }
