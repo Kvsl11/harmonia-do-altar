@@ -1014,7 +1014,10 @@
         /* ---------- Logo (arco do altar + colunas do H + pauta em onda) ---------- */
         .logo-svg { display: block; overflow: visible; }
         .logo-svg { fill: none; stroke: url(#logo-gradient); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
-        .brand-mark .brand-logo { width: 2.6rem; height: 2.6rem; }
+        .brand-mark .brand-logo { width: 2.6rem; height: 2.6rem; overflow: visible; }
+        .brand-logo path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+        .brand-logo { transform-origin: 50% 60%; }
+        .brand-logo.breathing { animation: logo-breathe 1.2s ease-in-out infinite; }
         .brand-word { display: flex; flex-direction: column; line-height: 1; }
         .brand-word b { font-family: var(--font-display); font-weight: 600; letter-spacing: .32em; font-size: .9rem; color: #fff; }
         .brand-word i { font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: .85rem; color: var(--champagne); margin-top: .2rem; }
@@ -1525,7 +1528,19 @@
     <!-- Barra de Navegação -->
     <nav id="navbar" class="with-strip" aria-label="Principal">
         <a href="#topo" class="brand-mark" data-scroll-to aria-label="Harmonia do Altar — início">
-            <svg class="logo-svg brand-logo" viewBox="0 0 160 160" aria-hidden="true"><use href="#logo-mark"/></svg>
+            <svg class="logo-svg brand-logo" id="brand-logo" viewBox="0 0 160 160" aria-hidden="true">
+                <path pathLength="1" data-part="base" d="M34 140h92"/>
+                <path pathLength="1" data-part="base" d="M48 147h64"/>
+                <path pathLength="1" data-part="arch" d="M44 140V76C44 48 60 29 80 17c20 12 36 31 36 59v64"/>
+                <path pathLength="1" data-part="column" d="M64 66v62"/>
+                <path pathLength="1" data-part="column" d="M96 66v62"/>
+                <g class="bl-waves">
+                    <path pathLength="1" data-part="wave" d="M16 93c22-11 38 9 64 1s42-14 64-1"/>
+                    <path pathLength="1" data-part="wave" d="M16 100c22-11 38 9 64 1s42-14 64-1"/>
+                    <path pathLength="1" data-part="wave" d="M16 107c22-11 38 9 64 1s42-14 64-1"/>
+                </g>
+                <path pathLength="1" data-part="cross" d="M80 33v21M72.5 40.5h15"/>
+            </svg>
             <span class="brand-word"><b>HARMONIA</b><i>do Altar</i></span>
         </a>
         <div class="nav-actions">
@@ -3514,6 +3529,45 @@
                 const wait = Math.max(0, (seen ? PRELOAD_MIN_MS / 2 : PRELOAD_MIN_MS) - (performance.now() - started));
                 setTimeout(reveal, wait);
             });
+        }
+
+        // ---------- Logo do topo: se redesenha a cada 1 minuto (e ao passar o mouse) ----------
+        const BRAND_LOOP_MS = 60000;
+        const brandLogo = $('#brand-logo');
+        let brandTl = null;
+        function playBrandLogo() {
+            if (!brandLogo || experience !== 'hifi' || document.hidden) return;
+            if (brandTl && brandTl.isActive()) return;
+            // Mesmo efeito da tela de carregamento: um traço depois do outro, na ordem do desenho
+            const order = ['base', 'arch', 'column', 'wave', 'cross'];
+            const paths = order.flatMap((name) => $$(`path[data-part="${name}"]`, brandLogo));
+            const progress = { value: 0 };
+            const render = () => {
+                paths.forEach((path, i) => {
+                    const local = Math.min(1, Math.max(0, progress.value * paths.length - i));
+                    path.style.strokeDashoffset = String(1 - local);
+                    path.style.opacity = local > 0 ? '1' : '0';
+                });
+            };
+            brandTl = gsap.timeline()
+                // a logo some suavemente...
+                .to(brandLogo, { opacity: 0, duration: 0.35, ease: 'power1.in' })
+                .add(() => { progress.value = 0; render(); brandLogo.classList.add('breathing'); })
+                .set(brandLogo, { opacity: 1 })
+                // ...e é desenhada traço a traço, "respirando" como no carregamento
+                .to(progress, { value: 1, duration: 2.4, ease: 'none', onUpdate: render })
+                // no fim, cresce de leve e brilha
+                .add(() => brandLogo.classList.remove('breathing'))
+                .fromTo(brandLogo, { scale: 0.92, filter: 'drop-shadow(0 0 0 rgba(241,214,164,0))' },
+                    { scale: 1, filter: 'drop-shadow(0 0 10px rgba(241,214,164,.75))', duration: 0.8, ease: 'power2.out' })
+                .to(brandLogo, { filter: 'drop-shadow(0 0 0 rgba(241,214,164,0))', duration: 0.9, ease: 'power1.inOut' });
+        }
+        if (brandLogo) {
+            setInterval(playBrandLogo, BRAND_LOOP_MS);
+            const brandLink = brandLogo.closest('a');
+            brandLink?.addEventListener('mouseenter', playBrandLogo);
+            // No celular não existe "passar o mouse": roda ao tocar na logo (o toque continua levando ao topo)
+            brandLink?.addEventListener('touchstart', playBrandLogo, { passive: true });
         }
 
         // ---------- Início ----------
