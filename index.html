@@ -1442,16 +1442,12 @@
         @media (max-width: 860px) {
             .story-close { top: 1rem; right: 1rem; }
         }
-        /* --- Tela de carregamento (motion ligado) --- */
-        .intro-inner { position: relative; }
-        .intro-loader { position: absolute; left: 50%; top: calc(100% + 1.25rem); translate: -50% 0; width: min(300px, 80vw); text-align: center; }
-        .il-bar { position: relative; height: 2px; border-radius: 2px; background: rgba(255, 255, 255, .12); overflow: hidden; }
-        /* brilho correndo na barra: mostra que está carregando mesmo antes do script começar */
-        .il-bar::before { content: ""; position: absolute; inset: 0; width: 35%; background: linear-gradient(90deg, transparent, rgba(241, 214, 164, .55), transparent); animation: il-shimmer 1.4s ease-in-out infinite; }
-        @keyframes il-shimmer { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
-        .il-bar span { display: block; height: 100%; width: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, var(--champagne), var(--rose)); }
-        .il-pct { margin-top: .9rem; font-family: var(--font-display); font-size: 1.1rem; letter-spacing: .2em; color: var(--champagne); }
-        .il-label { margin-top: .35rem; font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+        /* --- Tela de carregamento (motion ligado): só a logo, que se desenha e "respira" --- */
+        .intro.loading .intro-logo { animation: logo-breathe 2.4s ease-in-out infinite; }
+        @keyframes logo-breathe {
+            0%, 100% { opacity: .78; filter: drop-shadow(0 0 0 rgba(241, 214, 164, 0)); }
+            50% { opacity: 1; filter: drop-shadow(0 0 18px rgba(241, 214, 164, .35)); }
+        }
     </style>
 </head>
 <body class="text-gray-200">
@@ -1491,7 +1487,7 @@
     </svg>
 
     <!-- Apresentação -->
-    <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro" id="intro" role="status" aria-label="Carregando o site">
         <div class="intro-inner">
             <svg class="logo-svg intro-logo" viewBox="0 0 160 160">
                 <path pathLength="1" data-part="arch" d="M44 140V76C44 48 60 29 80 17c20 12 36 31 36 59v64"/>
@@ -1506,11 +1502,6 @@
             </svg>
             <div class="intro-word"><span class="iw-main">HARMONIA</span><span class="iw-sub">do Altar</span></div>
             <div class="intro-line"></div>
-            <div class="intro-loader" role="progressbar" aria-label="Carregando o site" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                <div class="il-bar"><span id="il-fill"></span></div>
-                <div class="il-pct"><span id="il-pct">0</span>%</div>
-                <div class="il-label">Preparando a sua experiência</div>
-            </div>
         </div>
         <button class="intro-skip" type="button">Pular apresentação</button>
     </div>
@@ -3466,10 +3457,8 @@
             gsap.set(paths, { strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 });
             const letters = $('.iw-main', intro);
             letters.innerHTML = letters.textContent.split('').map((c) => `<span>${c}</span>`).join('');
-            const fill = $('#il-fill');
-            const pct = $('#il-pct');
-            const loader = $('.intro-loader', intro);
             const progress = { value: 0 };
+            intro.classList.add('loading');
             const render = () => {
                 const v = progress.value;
                 paths.forEach((path, i) => {
@@ -3477,10 +3466,6 @@
                     path.style.strokeDashoffset = String(1 - local);
                     path.style.opacity = local > 0 ? '1' : '0';
                 });
-                gsap.set(fill, { scaleX: v });
-                const shown = Math.round(v * 100);
-                pct.textContent = shown;
-                loader.setAttribute('aria-valuenow', String(shown));
             };
             const setProgress = (v) => gsap.to(progress, { value: Math.max(progress.value, v), duration: 0.6, ease: 'power2.out', onUpdate: render, overwrite: true });
 
@@ -3499,7 +3484,7 @@
                 const atTop = window.scrollY < window.innerHeight * 0.5;
                 tl = gsap.timeline({ defaults: { ease: 'power2.inOut' }, onComplete: finish });
                 tl.to(progress, { value: 1, duration: 0.35, onUpdate: render })
-                  .to(loader, { opacity: 0, y: 10, duration: 0.4 }, 0.3)
+                  .add(() => intro.classList.remove('loading'), 0.3)
                   .fromTo('.intro-logo', { scale: 0.92, filter: 'drop-shadow(0 0 0 rgba(241,214,164,0))' },
                       { scale: 1, filter: 'drop-shadow(0 0 28px rgba(241,214,164,.45))', duration: 1, ease: 'power2.out' }, 0.3);
                 let t = seen ? 0.45 : 0.8;
