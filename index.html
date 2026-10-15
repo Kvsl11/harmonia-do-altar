@@ -1424,6 +1424,24 @@
             .pill { animation: none !important; }
             .pill::after { display: none; }
         }
+        /* --- Galeria: a janela inteira rola (uma área só) --- */
+        .story-panel { display: block; overflow-y: auto; overscroll-behavior: contain; outline: none; scrollbar-width: thin; scrollbar-color: rgba(241, 214, 164, .35) transparent; }
+        .story-panel::-webkit-scrollbar { width: 6px; }
+        .story-panel::-webkit-scrollbar-thumb { background: rgba(241, 214, 164, .35); border-radius: 6px; }
+        .story-hero { height: clamp(170px, 26vh, 250px); min-height: 0; }
+        .story-body { overflow: visible; flex: none; padding-bottom: 4.5rem; }
+        .story-close { position: fixed; z-index: 5; top: calc(clamp(0px, 3vw, 2.5rem) + 1rem); right: calc(clamp(0px, 3vw, 2.5rem) + 1rem); }
+        .story-scroll-hint {
+            position: sticky; bottom: 1.1rem; display: flex; align-items: center; gap: .5rem; margin: -3.5rem auto 1.1rem; width: fit-content;
+            padding: .55rem 1rem; border-radius: 999px; font-size: .78rem; font-weight: 600; color: #2a1325;
+            background: linear-gradient(90deg, var(--champagne), var(--rose)); box-shadow: 0 10px 30px -8px rgba(0, 0, 0, .7);
+            transition: opacity .35s ease, transform .35s ease; z-index: 4;
+        }
+        .story-scroll-hint i { animation: cue 1.6s ease-in-out infinite; }
+        .story-scroll-hint.hidden-hint { opacity: 0; transform: translateY(10px); pointer-events: none; }
+        @media (max-width: 860px) {
+            .story-close { top: 1rem; right: 1rem; }
+        }
     </style>
 </head>
 <body class="text-gray-200">
@@ -1786,10 +1804,11 @@
     <!-- Diálogo de galeria (abre a partir dos cards "Nosso Som") -->
     <div class="story-dialog" id="story-dialog" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="story-title">
         <div class="story-backdrop" data-story-close></div>
-        <div class="story-panel" id="story-panel">
-            <button class="icon-btn story-close" data-story-close aria-label="Fechar"><i class="fas fa-times"></i></button>
+        <button class="icon-btn story-close" data-story-close aria-label="Fechar galeria"><i class="fas fa-times"></i></button>
+        <div class="story-panel" id="story-panel" tabindex="-1">
             <div class="story-hero"><img id="story-img" src="" alt=""><div class="story-head story-content"><span class="eyebrow">Sinta a nossa harmonia</span><h3 id="story-title"></h3></div></div>
             <div class="story-body story-content" id="story-body"></div>
+            <button type="button" class="story-scroll-hint" id="story-scroll-hint" aria-hidden="true" tabindex="-1">Role para ver os vídeos <i class="fas fa-chevron-down"></i></button>
         </div>
     </div>
 
@@ -3185,6 +3204,8 @@
             body.innerHTML = '';
             body.appendChild(tpl.content.cloneNode(true));
             dialog.classList.add('open');
+            panel.scrollTop = 0;
+            updateStoryHint();
             document.body.style.overflow = 'hidden';
             if (lenis) lenis.stop();
             if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
@@ -3192,7 +3213,8 @@
             if (experience !== 'hifi') {
                 gsap.set(panel, { clearProps: 'clipPath' });
                 gsap.set([backdrop, ...$$('.story-content > *', dialog)], { opacity: 1, y: 0 });
-                $('.story-close', dialog).focus();
+                gsap.set('.story-close', { opacity: 1, y: 0 });
+                panel.focus({ preventScroll: true });
                 return;
             }
             gsap.timeline({ defaults: { ease: 'power3.inOut' } })
@@ -3201,8 +3223,23 @@
                 .to(panel, { clipPath: 'inset(0px 0px 0px 0px round 22px)', duration: 0.8 }, 0)
                 .fromTo('#story-img', { scale: 1.25 }, { scale: 1, duration: 1.1, ease: 'power2.out' }, 0)
                 .fromTo($$('.story-content > *', dialog), { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: 0.08, duration: 0.6, ease: 'power2.out' }, 0.45)
-                .add(() => $('.story-close', dialog).focus());
+                .fromTo('.story-close', { opacity: 0, y: 0 }, { opacity: 1, y: 0, duration: 0.4 }, 0.5)
+                .add(() => { panel.focus({ preventScroll: true }); updateStoryHint(); });
         }
+        // "Role para ver os vídeos": aparece enquanto houver conteúdo abaixo
+        function updateStoryHint() {
+            const hint = $('#story-scroll-hint');
+            if (!hint || !panel) return;
+            const remaining = panel.scrollHeight - panel.clientHeight - panel.scrollTop;
+            hint.classList.toggle('hidden-hint', remaining < 40);
+        }
+        if (panel) {
+            panel.addEventListener('scroll', updateStoryHint, { passive: true });
+            // Os players do Instagram mudam de altura ao carregar
+            if (window.ResizeObserver) new ResizeObserver(updateStoryHint).observe($('#story-body'));
+        }
+        $('#story-scroll-hint')?.addEventListener('click', () => panel.scrollBy({ top: panel.clientHeight * 0.8, behavior: 'smooth' }));
+
         function closeStory() {
             if (!dialog || !dialog.classList.contains('open')) return;
             const done = () => {
@@ -3214,7 +3251,7 @@
             };
             if (experience !== 'hifi' || !activeCard) return done();
             gsap.timeline({ defaults: { ease: 'power3.inOut' }, onComplete: done })
-                .to($$('.story-content > *', dialog), { opacity: 0, y: 20, duration: 0.25 }, 0)
+                .to([...$$('.story-content > *', dialog), '.story-close'], { opacity: 0, y: 20, duration: 0.25 }, 0)
                 .to(panel, { clipPath: cardRectInset(activeCard), duration: 0.7 }, 0.1)
                 .to(backdrop, { opacity: 0, duration: 0.5 }, 0.3);
         }
