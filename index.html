@@ -1540,11 +1540,18 @@
     </div>
 
     <!-- Script de Incorporação do Instagram -->
-    <script async src="//www.instagram.com/embed.js"></script>
+    <script async src="https://www.instagram.com/embed.js"></script>
     
     <!-- Google Maps API com biblioteca Places para preenchimento automático e matriz de distância -->
     <!-- O script abaixo foi atualizado para incluir todas as bibliotecas e a versão beta, conforme solicitado. -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBks326M90m-Ud9AzFJBrigRbzTfcMNP34&callback=initMap&libraries=geometry,places,maps,marker&v=beta"></script>
+    <script>
+        // Chamado pelo Google quando a chave da API é recusada (inválida, sem faturamento ou domínio não autorizado)
+        window.gm_authFailure = function () {
+            console.warn('Google Maps: chave recusada. Usando cálculo manual de deslocamento.');
+            if (typeof enableManualDeslocamento === 'function') enableManualDeslocamento();
+        };
+    </script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBks326M90m-Ud9AzFJBrigRbzTfcMNP34&loading=async&callback=initMap&libraries=geometry,places,marker&v=weekly&language=pt-BR&region=BR" onerror="window.gm_authFailure()"></script>
 
     <script>
         // --- VARIÁVEIS GLOBAIS E CONSTANTES ---
@@ -1634,7 +1641,48 @@
          * @param {number|null} [destinationLng=null] - A longitude, se a latitude for fornecida.
          * @param {function} [callback] - Função de callback opcional para executar após o cálculo.
          */
+        // --- MODO MANUAL (quando o Google Maps não está disponível) ---
+        let mapsUnavailable = false;
+        let deslocamentoPendente = false;
+
+        function enableManualDeslocamento() {
+            if (mapsUnavailable) return;
+            mapsUnavailable = true;
+            mapsInitialized = false;
+            const mapBtn = document.getElementById('open-map-selection-btn');
+            if (mapBtn) mapBtn.classList.add('hidden');
+            const addr = document.getElementById('modal-destination-address');
+            if (addr && addr.value.trim().length > 3) manualDeslocamento(addr.value.trim());
+        }
+
+        function manualDeslocamento(address) {
+            const normalized = address.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            const isFixedCity = normalized.includes('angelica') || normalized.includes('ivinhema');
+            selectedPlaceDetails = { address: address, lat: null, lng: null, googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}` };
+            if (isFixedCity) {
+                deslocamentoPendente = false;
+                currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT;
+                modalDistanceDisplay.textContent = 'Taxa Fixa';
+                modalCalculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
+            } else {
+                deslocamentoPendente = true;
+                currentDeslocamentoCost = 0;
+                modalDistanceDisplay.textContent = 'a confirmar';
+                modalCalculatedDeslocamentoDisplay.textContent = 'A combinar pelo WhatsApp';
+            }
+            currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost;
+            modalDeslocamentoResultsDiv.classList.remove('hidden');
+            modalDeslocamentoError.classList.add('hidden');
+        }
+
         function calculateDeslocamentoInModal(destinationOrLat, destinationLng = null, callback) {
+            if (mapsUnavailable) {
+                const typed = destinationLng === null ? String(destinationOrLat) : (modalDestinationAddressInput.value.trim() || `${destinationOrLat}, ${destinationLng}`);
+                manualDeslocamento(typed);
+                if (callback) callback();
+                return;
+            }
+            deslocamentoPendente = false;
             if (!mapsInitialized) {
                 console.error("Google Maps API ainda não carregada.");
                 if(modalDeslocamentoError) {
@@ -1700,6 +1748,10 @@
                         }
                     });
 
+                } else if (status === 'REQUEST_DENIED' || status === 'OVER_QUERY_LIMIT' || status === 'UNKNOWN_ERROR') {
+                    // Serviço recusado pelo Google: segue no modo manual em vez de travar o simulador
+                    enableManualDeslocamento();
+                    manualDeslocamento(destinationLng === null ? String(destinationOrLat) : modalDestinationAddressInput.value.trim());
                 } else {
                     modalDeslocamentoError.textContent = "Não foi possível calcular o deslocamento para o endereço fornecido.";
                     modalDeslocamentoError.classList.remove('hidden');
@@ -1915,6 +1967,8 @@
             message += `• *Valor do Contrato (Plano):* ${formatCurrency(plan.price)}\n`;
             if (currentDeslocamentoCost > 0) {
                 message += `• *Valor do Deslocamento:* ${formatCurrency(currentDeslocamentoCost)} (Distância: ${distanceText})\n`;
+            } else if (deslocamentoPendente) {
+                message += `• *Valor do Deslocamento:* a combinar (não incluso no total abaixo)\n`;
             }
             if (paymentMethod === 'pix' || paymentMethod === 'dinheiro') {
                 message += `• *Valor Total a Pagar:* ${formatCurrency(totalAmountWithFees)}\n`;
@@ -2032,6 +2086,7 @@
             currentPlanDetails = planDetails;
             currentPlanOnlyPrice = planPrice;
             currentDeslocamentoCost = 0;
+            deslocamentoPendente = false;
             currentFinalTotalPrice = currentPlanOnlyPrice;
 
             modalDestinationAddressInput.value = '';
@@ -2090,7 +2145,7 @@
             finalInstallmentValue = calculatedTotalForPayment / selectedInstallments;
             
             modalPlanPriceEl.textContent = formatCurrency(currentPlanOnlyPrice);
-            modalFreightPriceEl.textContent = formatCurrency(currentDeslocamentoCost);
+            modalFreightPriceEl.textContent = deslocamentoPendente ? 'A combinar' : formatCurrency(currentDeslocamentoCost);
             modalTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice);
             modalTotalPriceWithFeesEl.textContent = formatCurrency(calculatedTotalForPayment);
             installmentValueEl.textContent = formatCurrency(finalInstallmentValue);
@@ -2179,7 +2234,7 @@
             }
 
             summaryPlanPriceEl.textContent = formatCurrency(currentPlanOnlyPrice);
-            summaryDeslocamentoPriceEl.textContent = formatCurrency(currentDeslocamentoCost);
+            summaryDeslocamentoPriceEl.textContent = deslocamentoPendente ? 'A combinar' : formatCurrency(currentDeslocamentoCost);
             summaryTotalPriceEl.textContent = formatCurrency(currentFinalTotalPrice);
             summaryTotalWithFeesEl.textContent = formatCurrency(calculatedTotalForSummary);
             summaryPaymentMethodEl.textContent = paymentMethodText;
@@ -2432,7 +2487,7 @@
                     if (address.length > 3) {
                         debounceTimer = setTimeout(() => {
                             calculateDeslocamentoInModal(address);
-                            if (geocoder) {
+                            if (geocoder && !mapsUnavailable) {
                                 geocoder.geocode({ 'address': address }, (results, status) => {
                                     if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
                                         selectedPlaceDetails.address = results[0].formatted_address;
