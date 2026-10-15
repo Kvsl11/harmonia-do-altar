@@ -1030,7 +1030,7 @@
         .intro {
             position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
             background: radial-gradient(70% 60% at 50% 45%, #22172f 0%, var(--night) 70%);
-            animation: intro-failsafe .6s ease 9s forwards; /* se o script falhar, a intro some sozinha */
+            animation: intro-failsafe .6s ease 16s forwards; /* se o script falhar, a intro some sozinha */
         }
         html.no-intro .intro { display: none; }
         @keyframes intro-failsafe { to { opacity: 0; visibility: hidden; } }
@@ -1442,6 +1442,16 @@
         @media (max-width: 860px) {
             .story-close { top: 1rem; right: 1rem; }
         }
+        /* --- Tela de carregamento (motion ligado) --- */
+        .intro-inner { position: relative; }
+        .intro-loader { position: absolute; left: 50%; top: calc(100% + 1.25rem); translate: -50% 0; width: min(300px, 80vw); text-align: center; }
+        .il-bar { position: relative; height: 2px; border-radius: 2px; background: rgba(255, 255, 255, .12); overflow: hidden; }
+        /* brilho correndo na barra: mostra que está carregando mesmo antes do script começar */
+        .il-bar::before { content: ""; position: absolute; inset: 0; width: 35%; background: linear-gradient(90deg, transparent, rgba(241, 214, 164, .55), transparent); animation: il-shimmer 1.4s ease-in-out infinite; }
+        @keyframes il-shimmer { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
+        .il-bar span { display: block; height: 100%; width: 100%; transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, var(--champagne), var(--rose)); }
+        .il-pct { margin-top: .9rem; font-family: var(--font-display); font-size: 1.1rem; letter-spacing: .2em; color: var(--champagne); }
+        .il-label { margin-top: .35rem; font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
     </style>
 </head>
 <body class="text-gray-200">
@@ -1452,7 +1462,9 @@
             try { seen = sessionStorage.getItem('hda-intro-vista'); } catch (e) {}
             try { pref = localStorage.getItem('hda-experiencia'); } catch (e) {}
             var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (seen || pref === 'lofi' || (!pref && reduce)) h.classList.add('no-intro'); else h.classList.add('js-intro');
+            // Com o movimento ligado, a tela de carregamento sempre aparece; a abertura completa só na 1ª vez da visita
+            if (pref === 'lofi' || (!pref && reduce)) h.classList.add('no-intro');
+            else { h.classList.add('js-intro'); if (seen) h.classList.add('intro-seen'); }
         })();
     </script>
 
@@ -1494,6 +1506,11 @@
             </svg>
             <div class="intro-word"><span class="iw-main">HARMONIA</span><span class="iw-sub">do Altar</span></div>
             <div class="intro-line"></div>
+            <div class="intro-loader" role="progressbar" aria-label="Carregando o site" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="il-bar"><span id="il-fill"></span></div>
+                <div class="il-pct"><span id="il-pct">0</span>%</div>
+                <div class="il-label">Preparando a sua experiência</div>
+            </div>
         </div>
         <button class="intro-skip" type="button">Pular apresentação</button>
     </div>
@@ -3407,10 +3424,33 @@
         }
 
         // ---------- Apresentação: a logo se desenha e a cortina sobe ----------
+        // ---------- Carregamento: espera imagens, fontes e a página antes de abrir ----------
+        const PRELOAD_MIN_MS = 1200;   // tempo mínimo na tela, para a animação não "piscar"
+        const PRELOAD_MAX_MS = 12000;  // limite de segurança em conexões muito lentas
+
+        function preloadSite(onProgress) {
+            const urls = new Set();
+            $$('img').forEach((img) => {
+                const src = img.currentSrc || img.src;
+                if (src && !src.startsWith('data:') && src !== window.location.href) urls.add(src);
+            });
+            const tasks = [...urls].map((src) => new Promise((resolve) => {
+                const probe = new Image();
+                probe.onload = probe.onerror = () => resolve();
+                probe.src = src;
+                if (probe.complete) resolve();
+            }));
+            // Fontes também: sem elas os títulos aparecem numa letra provisória e depois "pulam"
+            if (document.fonts && document.fonts.ready) tasks.push(document.fonts.ready.catch(() => {}));
+            let done = 0;
+            tasks.forEach((task) => task.then(() => onProgress(++done / tasks.length)));
+            return Promise.race([Promise.all(tasks), new Promise((resolve) => setTimeout(resolve, PRELOAD_MAX_MS))]);
+        }
+
         function playIntro() {
             const intro = $('#intro');
-            const skipIntro = !intro || experience !== 'hifi' || session.get(INTRO_KEY) || window.scrollY > window.innerHeight * 0.5;
-            if (skipIntro) {
+            const seen = !!session.get(INTRO_KEY);
+            if (!intro || experience !== 'hifi') {
                 intro?.remove();
                 heroEntrance();
                 return;
@@ -3420,37 +3460,75 @@
             if (lenis) lenis.stop();
             document.body.style.overflow = 'hidden';
 
-            const paths = $$('.intro-logo path', intro);
+            // A logo se desenha conforme o site carrega (traço a traço, na ordem do desenho)
+            const order = ['base', 'arch', 'column', 'wave', 'cross'];
+            const paths = order.flatMap((part) => $$(`.intro-logo path[data-part="${part}"]`, intro));
             gsap.set(paths, { strokeDasharray: 1, strokeDashoffset: 1, opacity: 0 });
             const letters = $('.iw-main', intro);
             letters.innerHTML = letters.textContent.split('').map((c) => `<span>${c}</span>`).join('');
+            const fill = $('#il-fill');
+            const pct = $('#il-pct');
+            const loader = $('.intro-loader', intro);
+            const progress = { value: 0 };
+            const render = () => {
+                const v = progress.value;
+                paths.forEach((path, i) => {
+                    const local = Math.min(1, Math.max(0, v * paths.length - i));
+                    path.style.strokeDashoffset = String(1 - local);
+                    path.style.opacity = local > 0 ? '1' : '0';
+                });
+                gsap.set(fill, { scaleX: v });
+                const shown = Math.round(v * 100);
+                pct.textContent = shown;
+                loader.setAttribute('aria-valuenow', String(shown));
+            };
+            const setProgress = (v) => gsap.to(progress, { value: Math.max(progress.value, v), duration: 0.6, ease: 'power2.out', onUpdate: render, overwrite: true });
 
+            let finished = false;
+            let tl = null;
             const finish = () => {
+                if (finished) return;
+                finished = true;
                 intro.remove();
                 document.body.style.overflow = '';
                 if (lenis) lenis.start();
                 ScrollTrigger.refresh();
             };
-            const byPart = (part) => paths.filter((p) => p.dataset.part === part);
-            const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' }, onComplete: finish });
-            tl.to(byPart('base'), { strokeDashoffset: 0, opacity: 1, duration: 0.6, stagger: 0.12 }, 0.2)
-              .to(byPart('arch'), { strokeDashoffset: 0, opacity: 1, duration: 1.1 }, 0.45)
-              .to(byPart('column'), { strokeDashoffset: 0, opacity: 1, duration: 0.7, stagger: 0.12 }, 0.9)
-              .to(byPart('wave'), { strokeDashoffset: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'power1.inOut' }, 1.25)
-              .to(byPart('cross'), { strokeDashoffset: 0, opacity: 1, duration: 0.5 }, 1.9)
-              .fromTo('.intro-logo', { scale: 0.9, filter: 'drop-shadow(0 0 0 rgba(241,214,164,0))' },
-                  { scale: 1, filter: 'drop-shadow(0 0 28px rgba(241,214,164,.45))', duration: 1.2, ease: 'power2.out' }, 1.6)
-              .to('.intro-word', { opacity: 1, duration: 0.01 }, 2.0)
-              .from('.iw-main span', { y: 26, opacity: 0, filter: 'blur(6px)', duration: 0.6, stagger: 0.05, ease: 'power3.out' }, 2.0)
-              .from('.iw-sub', { y: 14, opacity: 0, duration: 0.6, ease: 'power3.out' }, 2.45)
-              .fromTo('.intro-line', { opacity: 1, scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: 'power3.out' }, 2.5)
-              .to('.intro-inner', { scale: 0.92, opacity: 0, filter: 'blur(8px)', duration: 0.6, ease: 'power2.in' }, 3.5)
-              .to('.intro-skip', { opacity: 0, duration: 0.3 }, 3.5)
-              .to(intro, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.1, ease: 'power4.inOut' }, 3.8)
-              .add(() => heroEntrance(0), 3.95)
-              .from('.keyart-grid figure', { scale: 1.35, opacity: 0, duration: 1.3, stagger: { each: 0.08, from: 'center' }, ease: 'power3.out' }, 4.0);
+            const reveal = () => {
+                if (finished) return;
+                const atTop = window.scrollY < window.innerHeight * 0.5;
+                tl = gsap.timeline({ defaults: { ease: 'power2.inOut' }, onComplete: finish });
+                tl.to(progress, { value: 1, duration: 0.35, onUpdate: render })
+                  .to(loader, { opacity: 0, y: 10, duration: 0.4 }, 0.3)
+                  .fromTo('.intro-logo', { scale: 0.92, filter: 'drop-shadow(0 0 0 rgba(241,214,164,0))' },
+                      { scale: 1, filter: 'drop-shadow(0 0 28px rgba(241,214,164,.45))', duration: 1, ease: 'power2.out' }, 0.3);
+                let t = seen ? 0.45 : 0.8;
+                if (!seen) {
+                    tl.to('.intro-word', { opacity: 1, duration: 0.01 }, t)
+                      .from('.iw-main span', { y: 26, opacity: 0, filter: 'blur(6px)', duration: 0.6, stagger: 0.05, ease: 'power3.out' }, t)
+                      .from('.iw-sub', { y: 14, opacity: 0, duration: 0.6, ease: 'power3.out' }, t + 0.45)
+                      .fromTo('.intro-line', { opacity: 1, scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: 'power3.out' }, t + 0.5);
+                    t += 1.5;
+                }
+                tl.to('.intro-inner', { scale: 0.92, opacity: 0, filter: 'blur(8px)', duration: 0.6, ease: 'power2.in' }, t)
+                  .to('.intro-skip', { opacity: 0, duration: 0.3 }, t)
+                  .to(intro, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.1, ease: 'power4.inOut' }, t + 0.3);
+                if (atTop) {
+                    tl.add(() => heroEntrance(0), t + 0.45)
+                      .from('.keyart-grid figure', { scale: 1.35, opacity: 0, duration: 1.3, stagger: { each: 0.08, from: 'center' }, ease: 'power3.out' }, t + 0.5);
+                }
+            };
 
-            $('.intro-skip', intro).addEventListener('click', () => tl.progress(1));
+            $('.intro-skip', intro).addEventListener('click', () => {
+                if (tl) tl.progress(1);
+                else { finish(); heroEntrance(); }
+            });
+
+            const started = performance.now();
+            preloadSite(setProgress).then(() => {
+                const wait = Math.max(0, (seen ? PRELOAD_MIN_MS / 2 : PRELOAD_MIN_MS) - (performance.now() - started));
+                setTimeout(reveal, wait);
+            });
         }
 
         // ---------- Início ----------
