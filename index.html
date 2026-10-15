@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,700;1,500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
     <style>
         /* Smooth scrolling para links de âncora */
         html {
@@ -1241,6 +1242,34 @@
         @media (max-width: 380px) {
             .sim-grid-2 { grid-template-columns: 1fr; }
         }
+        /* --- Busca de endereço e mapa (OpenStreetMap) --- */
+        .sim-input-icon { z-index: 5; }
+        .sim-suggestions {
+            position: absolute; left: 0; right: 0; top: calc(100% + .4rem); z-index: 20; max-height: 280px; overflow-y: auto;
+            padding: .35rem; border-radius: 16px; background: #221836; border: 1px solid rgba(241, 214, 164, .22);
+            box-shadow: 0 24px 50px -16px rgba(0, 0, 0, .8);
+        }
+        .sim-suggestions li { display: flex; gap: .7rem; align-items: flex-start; padding: .7rem .8rem; border-radius: 12px; font-size: .88rem; line-height: 1.35; color: var(--ink); cursor: pointer; }
+        .sim-suggestions li i { position: static; translate: none; margin-top: .15rem; color: var(--champagne); }
+        .sim-suggestions li:hover, .sim-suggestions li.active { background: rgba(241, 214, 164, .1); }
+        .sim-input-actions { display: flex; gap: .5rem; flex-shrink: 0; }
+        .sim-input-actions .pill { justify-content: center; }
+        @media (max-width: 860px) { .sim-input-actions .pill { flex: 1; } }
+        .sim-hint { margin-top: .55rem; font-size: .78rem; color: var(--muted); }
+        .sim-status { display: flex; align-items: center; gap: .55rem; margin-top: .6rem; font-size: .85rem; color: var(--champagne); }
+        .sim-spinner { width: 1rem; height: 1rem; border-radius: 999px; border: 2px solid rgba(241, 214, 164, .25); border-top-color: var(--champagne); animation: sim-spin .8s linear infinite; }
+        @keyframes sim-spin { to { transform: rotate(360deg); } }
+        .sim-route-link { display: inline-flex; align-items: center; gap: .5rem; margin: .2rem 0 .8rem; font-size: .85rem; font-weight: 600; color: var(--champagne); }
+        .sim-route-link:hover { text-decoration: underline; }
+        .sim-map-canvas.leaflet-container { background: #e9e4dc; font-family: 'Montserrat', sans-serif; }
+        .sim-map-canvas .leaflet-control-attribution { font-size: .62rem; background: rgba(255, 255, 255, .85); }
+        .sim-map-canvas .leaflet-bar a { color: #2a1325; }
+        .sim-pin { background: none; border: 0; }
+        .sim-pin span {
+            display: block; width: 28px; height: 28px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+            background: linear-gradient(135deg, var(--champagne), var(--rose)); border: 2px solid #fff; box-shadow: 0 6px 14px rgba(0, 0, 0, .35);
+        }
+        .sim-pin.origin span { width: 20px; height: 20px; margin: 8px 0 0 4px; background: var(--plum); border-color: var(--champagne); }
     </style>
 </head>
 <body class="text-gray-200">
@@ -1673,14 +1702,25 @@
                     <div class="modal-input-group">
                         <label for="modal-destination-address">Endereço completo</label>
                         <div class="sim-input-row">
-                            <div class="sim-input-icon"><i class="fas fa-church"></i><input type="text" id="modal-destination-address" placeholder="Ex: Paróquia São José, Rua Brasil, 123, Ivinhema, MS" autocomplete="street-address"></div>
-                            <button type="button" id="open-map-selection-btn" class="pill ghost"><i class="fas fa-map-marker-alt"></i>Abrir mapa</button>
+                            <div class="sim-input-icon">
+                                <i class="fas fa-church"></i>
+                                <input type="text" id="modal-destination-address" placeholder="Ex: Igreja Matriz, Ivinhema" autocomplete="off" enterkeyhint="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="address-suggestions">
+                                <ul id="address-suggestions" class="sim-suggestions hidden" role="listbox" aria-label="Sugestões de endereço"></ul>
+                            </div>
+                            <div class="sim-input-actions">
+                                <button type="button" id="address-search-btn" class="pill"><i class="fas fa-search"></i>Buscar</button>
+                                <button type="button" id="open-map-selection-btn" class="pill ghost"><i class="fas fa-map-marker-alt"></i>Mapa</button>
+                            </div>
                         </div>
+                        <p class="sim-hint">Digite o nome da igreja ou o endereço com a cidade e toque em <strong>Buscar</strong>. Depois escolha o local certo na lista, ou marque no mapa.</p>
+                        <p id="address-search-state" class="sim-status hidden" role="status"></p>
+                        <p id="deslocamento-status" class="sim-status hidden"><span class="sim-spinner"></span> Calculando a rota a partir de Angélica…</p>
                         <p id="modal-deslocamento-error" class="sim-error hidden">Por favor, digite um endereço válido.</p>
                     </div>
                     <div id="modal-deslocamento-results" class="sim-receipt hidden">
                         <div class="sim-row"><span>Distância</span><span id="modal-distance-display"></span></div>
                         <div class="sim-row total"><span>Valor do deslocamento</span><span id="modal-calculated-deslocamento-display"></span></div>
+                        <a id="route-link" class="sim-route-link hidden" href="#" target="_blank" rel="noopener noreferrer"><i class="fas fa-route"></i> Ver rota no Google Maps</a>
                     </div>
                     <div class="modal-footer-buttons">
                         <button id="next-to-event-details-btn" class="btn-primary pill lg">Próximo <i class="fas fa-arrow-right"></i></button>
@@ -1798,6 +1838,7 @@
             <button type="button" class="close-button modal-close-button icon-btn" id="close-map-modal-button" aria-label="Fechar mapa"><i class="fas fa-times"></i></button>
             <span class="eyebrow">Local da cerimônia</span>
             <h3 class="notification-modal-title">Selecione no mapa</h3>
+            <p class="sim-hint">Toque no mapa ou arraste o alfinete até a igreja.</p>
             <div id="map-canvas" class="sim-map-canvas"></div>
             <button id="confirm-map-location-btn" class="btn-primary pill lg notification-modal-button">Confirmar localização</button>
         </div>
@@ -1834,21 +1875,11 @@
     <!-- Script de Incorporação do Instagram -->
     <script async src="https://www.instagram.com/embed.js"></script>
     
-    <!-- Google Maps API com biblioteca Places para preenchimento automático e matriz de distância -->
-    <!-- O script abaixo foi atualizado para incluir todas as bibliotecas e a versão beta, conforme solicitado. -->
-    <script>
-        // Chamado pelo Google quando a chave da API é recusada (inválida, sem faturamento ou domínio não autorizado)
-        window.gm_authFailure = function () {
-            console.warn('Google Maps: chave recusada. Usando cálculo manual de deslocamento.');
-            if (typeof enableManualDeslocamento === 'function') enableManualDeslocamento();
-        };
-    </script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBks326M90m-Ud9AzFJBrigRbzTfcMNP34&loading=async&callback=initMap&libraries=geometry,places,marker&v=weekly&language=pt-BR&region=BR" onerror="window.gm_authFailure()"></script>
+    <!-- Mapa gratuito: Leaflet + OpenStreetMap (sem chave de API) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
     <script>
         // --- VARIÁVEIS GLOBAIS E CONSTANTES ---
-        let mapsInitialized = false;
-        let autocomplete;
         let currentPlanDetails = null;
         let currentFinalTotalPrice = 0;
         let currentPlanOnlyPrice = 0;
@@ -1864,10 +1895,6 @@
         let selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' };
         let map = null;
         let marker = null;
-        let geocoder = null;
-        let directionsService = null; // NOVO: Serviço de Direções
-        let directionsRenderer = null; // NOVO: Renderizador de Direções
-        let streetViewService = null; // NOVO: Serviço de Street View
 
         // Variáveis de Elementos DOM - declaradas globalmente, atribuídas em DOMContentLoaded
         let modalDestinationAddressInput, modalDeslocamentoError, modalDeslocamentoResultsDiv, modalDistanceDisplay, modalCalculatedDeslocamentoDisplay, referenceLocationInput, nextToSummaryBtn, boletoDateWarningModal, warningDueDateSpan, warningCeremonyDateSpan, ceremonyDateInput, ceremonyTimeInput, confirmedAddressDisplay, modalEventDetailsError, paymentMethodRadios, installmentOptionsDiv, installmentsSelect, installmentValueEl, boletoDueDateOptionsDiv, boletoDueDateSelect, modalBoletoDateError, feesSuffixSpan, modalPlanPriceEl, modalFreightPriceEl, modalTotalPriceEl, modalTotalPriceWithFeesEl, summaryPlanNameEl, summaryEventDateEl, summaryEventAddressEl, summaryReferenceLocationDisplay, summaryReferenceLocationEl, summaryPlanPriceEl, summaryDeslocamentoPriceEl, summaryTotalPriceEl, summaryTotalWithFeesEl, summaryPaymentMethodEl, summaryInstallmentDetailsDiv, summaryInstallmentsEl, summaryBoletoDueDateDetailsDiv, summaryBoletoDueDateEl, feesExplanationDiv, summaryFeesSuffixSpan, mainSimulationModal, closeMainModalButton, tabButtons, tabContents, simulateBtnCustom, bandOptionsContainer, guestOptionsContainer, boletoNotificationModal, closeBoletoModalButton, okBoletoModalButton, unlockedTabs;
@@ -1876,8 +1903,6 @@
         const BOLETO_PER_INSTALLMENT_FEE = 18;
         const FIXED_DESLOCAMENTO_AMOUNT = 70;
         const PER_KM_DESLOCAMENTO_RATE = 1.80 * 2;
-        const originAddress = "Angélica, MS, Brazil";
-        const originLatLng = { lat: -22.6517, lng: -53.7744 }; // Coordenadas de Angélica, MS para rota
 
         const INSTRUMENT_PRICES = {
             'Violão': 200, 'Contrabaixo': 200, 'Guitarra': 200,
@@ -1927,49 +1952,92 @@
             }, 400); // Corresponde à duração da transição
         }
 
-        /**
-         * Calcula o custo de deslocamento com base no destino e exibe a rota no mapa.
-         * @param {string|number} destinationOrLat - A string do endereço de destino ou latitude.
-         * @param {number|null} [destinationLng=null] - A longitude, se a latitude for fornecida.
-         * @param {function} [callback] - Função de callback opcional para executar após o cálculo.
-         */
-        // --- MODO MANUAL (quando o Google Maps não está disponível) ---
-        let mapsUnavailable = false;
-        let deslocamentoPendente = false;
+        // --- LOCALIZAÇÃO GRATUITA (OpenStreetMap) ---
+        // Busca de endereços: Nominatim · Rotas: OSRM · Mapa: Leaflet + OpenStreetMap.
+        // Nenhum desses serviços exige chave ou cartão. Se algum falhar, o simulador usa o modo manual.
+        // Regra de uso do Nominatim: no máximo 1 busca por segundo e nada de busca automática a cada
+        // letra digitada; por isso a busca só acontece quando a pessoa toca em "Buscar" ou aperta Enter.
+        const ORIGIN = { lat: -22.1588, lng: -53.7729, label: 'Angélica, MS' };
+        const REGION_CENTER = { lat: -22.24, lng: -53.80 };
+        const NOMINATIM_URL = 'https://nominatim.openstreetmap.org';
+        const OSRM_URL = 'https://router.project-osrm.org/route/v1/driving';
+        const GEO_TIMEOUT_MS = 10000;
+        const FIXED_CITIES = ['angelica', 'ivinhema'];
 
-        function enableManualDeslocamento() {
-            if (mapsUnavailable) return;
-            mapsUnavailable = true;
-            mapsInitialized = false;
-            const mapBtn = document.getElementById('open-map-selection-btn');
-            if (mapBtn) mapBtn.classList.add('hidden');
-            const addr = document.getElementById('modal-destination-address');
-            if (addr) {
-                // Com a chave recusada, o Autocomplete do Google desativa o campo e troca o placeholder.
-                // No modo manual o campo precisa continuar editável.
-                const placeholder = 'Ex: Paróquia São José, Rua Brasil, 123, Ivinhema, MS';
-                // Só altera o que mudou: cada alteração dispara o observador de novo
-                const restoreInput = () => {
-                    if (addr.disabled) addr.disabled = false;
-                    if (addr.style.backgroundImage) addr.style.backgroundImage = '';
-                    if (addr.classList.contains('gm-err-autocomplete')) addr.classList.remove('gm-err-autocomplete');
-                    if (addr.placeholder !== placeholder) addr.placeholder = placeholder;
-                };
-                if (window.google && google.maps && google.maps.event) google.maps.event.clearInstanceListeners(addr);
-                restoreInput();
-                new MutationObserver(restoreInput).observe(addr, { attributes: true, attributeFilter: ['disabled', 'placeholder', 'class', 'style'] });
-                if (addr.value.trim().length > 3) manualDeslocamento(addr.value.trim());
+        let deslocamentoPendente = false;
+        let routeLayer = null;
+        let originMarker = null;
+        let suggestionResults = [];
+        let activeSuggestion = -1;
+        let searchSeq = 0;
+        let calcSeq = 0;
+
+        const normalizeText = (text) => String(text || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+        async function fetchJSON(url) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), GEO_TIMEOUT_MS);
+            try {
+                const response = await fetch(url, { signal: controller.signal });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } finally {
+                clearTimeout(timer);
             }
         }
 
+        // Converte um resultado do Nominatim em { address, city, state, lat, lng }
+        function placeFromResult(item) {
+            const a = item.address || {};
+            const city = a.city || a.town || a.village || a.municipality || a.county || '';
+            const road = [a.road || a.pedestrian, a.house_number].filter(Boolean).join(', ');
+            const parts = [];
+            if (item.name && item.name !== a.road && item.name !== city) parts.push(item.name);
+            if (road) parts.push(road);
+            if (a.suburb || a.neighbourhood) parts.push(a.suburb || a.neighbourhood);
+            if (city) parts.push(city);
+            if (a.state) parts.push(a.state);
+            return {
+                address: [...new Set(parts)].join(', ') || item.display_name,
+                city, state: a.state || '',
+                lat: parseFloat(item.lat), lng: parseFloat(item.lon)
+            };
+        }
+
+        function isFixedCity(place) {
+            const city = normalizeText(place.city);
+            const state = normalizeText(place.state);
+            return FIXED_CITIES.includes(city) && (state.includes('mato grosso do sul') || state === 'ms');
+        }
+
+        function mapsSearchUrl(lat, lng) {
+            return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+        }
+        function mapsRouteUrl(lat, lng) {
+            return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(ORIGIN.label)}&destination=${lat},${lng}&travelmode=driving`;
+        }
+
+        function setRouteLink(url) {
+            const link = document.getElementById('route-link');
+            if (!link) return;
+            link.classList.toggle('hidden', !url);
+            if (url) link.href = url;
+        }
+
+        function setCalculating(isCalculating) {
+            const status = document.getElementById('deslocamento-status');
+            if (status) status.classList.toggle('hidden', !isCalculating);
+        }
+
+        // Modo manual: taxa fixa para Angélica/Ivinhema; demais cidades "a combinar"
         function manualDeslocamento(address) {
-            const normalized = address.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            const isFixedCity = normalized.includes('angelica') || normalized.includes('ivinhema');
+            const normalized = normalizeText(address);
+            const fixed = FIXED_CITIES.some((city) => normalized.includes(city));
             selectedPlaceDetails = { address: address, lat: null, lng: null, googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}` };
-            if (isFixedCity) {
+            if (fixed) {
                 deslocamentoPendente = false;
                 currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT;
-                modalDistanceDisplay.textContent = 'Taxa Fixa';
+                modalDistanceDisplay.textContent = 'Taxa fixa';
                 modalCalculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
             } else {
                 deslocamentoPendente = true;
@@ -1978,260 +2046,226 @@
                 modalCalculatedDeslocamentoDisplay.textContent = 'A combinar pelo WhatsApp';
             }
             currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost;
+            setRouteLink(null);
             modalDeslocamentoResultsDiv.classList.remove('hidden');
             modalDeslocamentoError.classList.add('hidden');
         }
 
-        function calculateDeslocamentoInModal(destinationOrLat, destinationLng = null, callback) {
-            if (mapsUnavailable) {
-                const typed = destinationLng === null ? String(destinationOrLat) : (modalDestinationAddressInput.value.trim() || `${destinationOrLat}, ${destinationLng}`);
-                manualDeslocamento(typed);
-                if (callback) callback();
-                return;
-            }
+        function resetDeslocamento() {
+            calcSeq++;
             deslocamentoPendente = false;
-            if (!mapsInitialized) {
-                console.error("Google Maps API ainda não carregada.");
-                if(modalDeslocamentoError) {
-                    modalDeslocamentoError.textContent = "Erro ao carregar o serviço de mapas. Tente novamente.";
-                    modalDeslocamentoError.classList.remove('hidden');
+            currentDeslocamentoCost = 0;
+            currentFinalTotalPrice = currentPlanOnlyPrice;
+            selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' };
+            modalDeslocamentoResultsDiv.classList.add('hidden');
+            modalDeslocamentoError.classList.add('hidden');
+            setCalculating(false);
+            setRouteLink(null);
+            clearRoute();
+        }
+
+        /**
+         * Calcula o deslocamento até um local escolhido (sugestão ou ponto no mapa).
+         * A distância é a rota de carro a partir de Angélica, MS.
+         * @param {{address: string, city: string, state: string, lat: number, lng: number}} place
+         */
+        async function calculateDeslocamentoInModal(place) {
+            const seq = ++calcSeq;
+            selectedPlaceDetails = { address: place.address, lat: place.lat, lng: place.lng, googleMapsUrl: mapsSearchUrl(place.lat, place.lng) };
+            modalDeslocamentoError.classList.add('hidden');
+            setCalculating(true);
+            try {
+                const data = await fetchJSON(`${OSRM_URL}/${ORIGIN.lng},${ORIGIN.lat};${place.lng},${place.lat}?overview=full&geometries=geojson`);
+                if (seq !== calcSeq) return;
+                const route = data && data.code === 'Ok' && data.routes && data.routes[0];
+                if (!route) throw new Error('rota indisponível');
+                const distanceInKm = route.distance / 1000;
+                deslocamentoPendente = false;
+                if (isFixedCity(place)) {
+                    currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT;
+                    modalDistanceDisplay.textContent = 'Taxa fixa';
+                } else {
+                    currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT + (distanceInKm * PER_KM_DESLOCAMENTO_RATE);
+                    modalDistanceDisplay.textContent = `${distanceInKm.toFixed(1).replace('.', ',')} km`;
                 }
-                currentDeslocamentoCost = 0;
-                currentFinalTotalPrice = currentPlanOnlyPrice;
-                if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota anterior
-                if (callback) callback();
+                currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost;
+                modalCalculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
+                setRouteLink(mapsRouteUrl(place.lat, place.lng));
+                modalDeslocamentoResultsDiv.classList.remove('hidden');
+                drawRoute(route.geometry);
+            } catch (error) {
+                if (seq !== calcSeq) return;
+                console.warn('Rota indisponível; usando o modo manual.', error);
+                manualDeslocamento(place.address);
+                selectedPlaceDetails.lat = place.lat;
+                selectedPlaceDetails.lng = place.lng;
+                selectedPlaceDetails.googleMapsUrl = mapsSearchUrl(place.lat, place.lng);
+                setRouteLink(mapsRouteUrl(place.lat, place.lng));
+            } finally {
+                if (seq === calcSeq) setCalculating(false);
+            }
+        }
+
+        // --- Busca de endereço (quando a pessoa toca em "Buscar" ou aperta Enter) ---
+        let lastSearchAt = 0;
+        async function searchAddress() {
+            const query = modalDestinationAddressInput.value.trim();
+            if (query.length < 3) {
+                modalDeslocamentoError.textContent = 'Digite o nome da igreja ou o endereço com a cidade.';
+                modalDeslocamentoError.classList.remove('hidden');
                 return;
             }
-
-            const service = new google.maps.DistanceMatrixService();
-            let destinationsArray;
-            let destinationLatLng = null;
-
-            if (destinationLng !== null) {
-                destinationLatLng = new google.maps.LatLng(destinationOrLat, destinationLng);
-                destinationsArray = [destinationLatLng];
-            } else {
-                destinationsArray = [destinationOrLat];
+            const wait = Math.max(0, 1100 - (Date.now() - lastSearchAt));
+            const seq = ++searchSeq;
+            if (wait) await new Promise((resolve) => setTimeout(resolve, wait));
+            if (seq !== searchSeq) return;
+            lastSearchAt = Date.now();
+            resetDeslocamento();
+            setSearchState('loading');
+            const params = new URLSearchParams({ q: query, format: 'jsonv2', addressdetails: '1', limit: '6', countrycodes: 'br', 'accept-language': 'pt-BR', viewbox: '-55.2,-21.4,-52.6,-23.2', bounded: '0' });
+            try {
+                const data = await fetchJSON(`${NOMINATIM_URL}/search?${params}`);
+                if (seq !== searchSeq) return;
+                const places = (Array.isArray(data) ? data : []).map(placeFromResult);
+                renderSuggestions(places);
+                setSearchState(places.length ? null : 'empty');
+            } catch (error) {
+                if (seq !== searchSeq) return;
+                renderSuggestions([]);
+                setSearchState('error');
             }
+        }
 
-            service.getDistanceMatrix({
-                origins: [originAddress],
-                destinations: destinationsArray,
-                travelMode: google.maps.TravelMode.DRIVING,
-                unitSystem: google.maps.UnitSystem.METRIC,
-            }, (response, status) => {
-                if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
-                    const element = response.rows[0].elements[0];
-                    const distanceInMeters = element.distance.value;
-                    const destinationFormattedAddress = response.destinationAddresses[0];
-                    const normalizedDestination = destinationFormattedAddress.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                    
-                    let isFixedCity = (normalizedDestination.includes('angelica') && normalizedDestination.includes('ms')) || (normalizedDestination.includes('ivinhema') && normalizedDestination.includes('ms'));
+        function setSearchState(state) {
+            const el = document.getElementById('address-search-state');
+            if (!el) return;
+            const messages = {
+                loading: '<span class="sim-spinner"></span> Buscando endereços…',
+                empty: 'Nenhum endereço encontrado. Tente o nome da igreja com a cidade, ou marque no mapa.',
+                error: 'A busca não respondeu agora. Você pode marcar no mapa ou seguir: o deslocamento será combinado pelo WhatsApp.'
+            };
+            el.innerHTML = state ? messages[state] : '';
+            el.classList.toggle('hidden', !state);
+        }
 
-                    if (isFixedCity) {
-                        currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT;
-                        modalDistanceDisplay.textContent = `Taxa Fixa`;
-                    } else {
-                        const distanceInKm = distanceInMeters / 1000;
-                        currentDeslocamentoCost = FIXED_DESLOCAMENTO_AMOUNT + (distanceInKm * PER_KM_DESLOCAMENTO_RATE);
-                        modalDistanceDisplay.textContent = `${distanceInKm.toFixed(2)} km`;
-                    }
-                    currentFinalTotalPrice = currentPlanOnlyPrice + currentDeslocamentoCost;
-                    modalCalculatedDeslocamentoDisplay.textContent = formatCurrency(currentDeslocamentoCost);
-                    modalDeslocamentoResultsDiv.classList.remove('hidden');
-                    modalDeslocamentoError.classList.add('hidden');
-
-                    // NOVO: Calcular e exibir rota
-                    directionsService.route({
-                        origin: originLatLng, // Origem fixa para a rota
-                        destination: destinationFormattedAddress, // Destino do endereço formatado
-                        travelMode: google.maps.TravelMode.DRIVING
-                    }, (directionsResponse, directionsStatus) => {
-                        if (directionsStatus === 'OK') {
-                            directionsRenderer.setDirections(directionsResponse);
-                        } else {
-                            console.error('Erro ao calcular a rota:', directionsStatus);
-                            if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota em caso de erro
-                        }
-                    });
-
-                } else if (status === 'REQUEST_DENIED' || status === 'OVER_QUERY_LIMIT' || status === 'UNKNOWN_ERROR') {
-                    // Serviço recusado pelo Google: segue no modo manual em vez de travar o simulador
-                    enableManualDeslocamento();
-                    manualDeslocamento(destinationLng === null ? String(destinationOrLat) : modalDestinationAddressInput.value.trim());
-                } else {
-                    modalDeslocamentoError.textContent = "Não foi possível calcular o deslocamento para o endereço fornecido.";
-                    modalDeslocamentoError.classList.remove('hidden');
-                    modalDeslocamentoResultsDiv.classList.add('hidden');
-                    currentDeslocamentoCost = 0;
-                    currentFinalTotalPrice = currentPlanOnlyPrice;
-                    if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota anterior
-                }
-                if (callback) callback();
+        function renderSuggestions(places) {
+            const list = document.getElementById('address-suggestions');
+            if (!list) return;
+            suggestionResults = places;
+            activeSuggestion = -1;
+            list.innerHTML = '';
+            places.forEach((place, index) => {
+                const li = document.createElement('li');
+                li.id = `address-option-${index}`;
+                li.setAttribute('role', 'option');
+                li.innerHTML = '<i class="fas fa-map-marker-alt"></i><span></span>';
+                li.querySelector('span').textContent = place.address;
+                li.addEventListener('mousedown', (event) => { event.preventDefault(); selectSuggestion(index); });
+                list.appendChild(li);
             });
+            const open = places.length > 0;
+            list.classList.toggle('hidden', !open);
+            modalDestinationAddressInput.setAttribute('aria-expanded', String(open));
+            modalDestinationAddressInput.removeAttribute('aria-activedescendant');
         }
 
-        /**
-         * Inicializa a API do Google Maps e o Places Autocomplete.
-         * Esta função é chamada como um callback pelo script do Google Maps.
-         */
-        function initMap() {
-            mapsInitialized = true;
-            console.log("Google Maps API carregada.");
-            geocoder = new google.maps.Geocoder();
-            directionsService = new google.maps.DirectionsService(); // Inicializa DirectionsService
-            directionsRenderer = new google.maps.DirectionsRenderer(); // Inicializa DirectionsRenderer
-            streetViewService = new google.maps.StreetViewService(); // Inicializa StreetViewService
-
-            const input = document.getElementById('modal-destination-address');
-            if (input) {
-                autocomplete = new google.maps.places.Autocomplete(input, { types: ['address'], componentRestrictions: { country: 'br' } });
-                autocomplete.addListener('place_changed', () => {
-                    const place = autocomplete.getPlace();
-                    if (place.formatted_address && place.geometry && place.geometry.location) {
-                        selectedPlaceDetails.address = place.formatted_address;
-                        selectedPlaceDetails.lat = place.geometry.location.lat();
-                        selectedPlaceDetails.lng = place.geometry.location.lng();
-                        selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
-                        calculateDeslocamentoInModal(selectedPlaceDetails.lat, selectedPlaceDetails.lng);
-                    } else {
-                        selectedPlaceDetails.address = input.value;
-                        selectedPlaceDetails.lat = null;
-                        selectedPlaceDetails.lng = null;
-                        selectedPlaceDetails.googleMapsUrl = '';
-                        calculateDeslocamentoInModal(input.value);
-                    }
-                });
-            }
+        function closeSuggestions() {
+            renderSuggestions([]);
         }
 
-        /**
-         * Abre o modal de seleção de mapa e inicializa/atualiza o mapa.
-         */
+        function highlightSuggestion(index) {
+            const items = document.querySelectorAll('#address-suggestions li');
+            if (!items.length) return;
+            activeSuggestion = (index + items.length) % items.length;
+            items.forEach((item, i) => item.classList.toggle('active', i === activeSuggestion));
+            modalDestinationAddressInput.setAttribute('aria-activedescendant', items[activeSuggestion].id);
+        }
+
+        function selectSuggestion(index) {
+            const place = suggestionResults[index];
+            if (!place) return;
+            modalDestinationAddressInput.value = place.address;
+            closeSuggestions();
+            calculateDeslocamentoInModal(place);
+        }
+
+        // --- Mapa (Leaflet) ---
+        function goldPin(className) {
+            return L.divIcon({ className: `sim-pin ${className || ''}`, html: '<span></span>', iconSize: [28, 28], iconAnchor: [14, 28] });
+        }
+
+        function clearRoute() {
+            if (routeLayer && map) map.removeLayer(routeLayer);
+            routeLayer = null;
+        }
+
+        function drawRoute(geometry) {
+            if (!map || !geometry || typeof L === 'undefined') return;
+            clearRoute();
+            routeLayer = L.geoJSON(geometry, { style: { color: '#f1d6a4', weight: 4, opacity: 0.9 } }).addTo(map);
+        }
+
         function openMapSelectionModal() {
             const mapSelectionModal = document.getElementById('map-selection-modal');
+            if (typeof L === 'undefined') {
+                modalDeslocamentoError.textContent = 'O mapa não carregou. Digite o endereço e escolha uma sugestão.';
+                modalDeslocamentoError.classList.remove('hidden');
+                return;
+            }
             showAnimatedModal(mapSelectionModal);
 
             if (!map) {
-                const mapCanvas = document.getElementById('map-canvas');
-                map = new google.maps.Map(mapCanvas, {
-                    center: { lat: -14.235, lng: -51.925 },
-                    zoom: 4,
-                    fullscreenControl: false,  
-                    mapTypeControl: true,
-                    mapTypeControlOptions: {
-                        style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-                        position: google.maps.ControlPosition.TOP_RIGHT,
-                    },
-                    streetViewControl: true, // Habilita o Street View (Pegman)
-                    zoomControl: true,  
-                });
-
-                marker = new google.maps.Marker({
-                    map: map,
-                    draggable: true,
-                    animation: google.maps.Animation.DROP,
-                });
-
-                // Associa o DirectionsRenderer ao mapa
-                directionsRenderer.setMap(map);
-
-                map.addListener('click', (e) => {
-                    placeMarkerAndPanTo(e.latLng, map);
-                });
-
-                marker.addListener('dragend', () => {
-                    placeMarkerAndPanTo(marker.getPosition(), map);
-                });
-
-                // NOVO: Listener para o clique no marcador para abrir Street View
-                marker.addListener('click', () => {
-                    if (marker.getPosition()) {
-                        streetViewService.getPanorama({ location: marker.getPosition(), radius: 50 }, (data, status) => {
-                            if (status === 'OK' && data.location) {
-                                const panorama = new google.maps.StreetViewPanorama(
-                                    mapCanvas, {
-                                        pano: data.pano,
-                                        pov: {
-                                            heading: 270,
-                                            pitch: 0
-                                        },
-                                        zoom: 1
-                                    }
-                                );
-                                map.setStreetView(panorama);
-                            } else {
-                                console.warn('Street View não disponível para esta localização.');
-                                // Opcional: mostrar uma notificação ao usuário
-                            }
-                        });
-                    }
-                });
-
+                map = L.map('map-canvas', { zoomControl: true, attributionControl: true }).setView([REGION_CENTER.lat, REGION_CENTER.lng], 10);
+                // Mapa oficial do OpenStreetMap: gratuito para uso leve, exige o crédito visível
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+                }).addTo(map);
+                originMarker = L.marker([ORIGIN.lat, ORIGIN.lng], { icon: goldPin('origin'), title: 'Angélica, MS (saída)', keyboard: false }).addTo(map);
+                marker = L.marker([REGION_CENTER.lat, REGION_CENTER.lng], { icon: goldPin(), draggable: true, title: 'Local da cerimônia' });
+                map.on('click', (event) => placeMarkerAndPanTo(event.latlng));
+                marker.on('dragend', () => placeMarkerAndPanTo(marker.getLatLng()));
             }
 
-            const currentAddress = modalDestinationAddressInput.value.trim();
-            if (currentAddress && geocoder) {
-                geocoder.geocode({ 'address': currentAddress }, (results, status) => {
-                    if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
-                        map.setCenter(results[0].geometry.location);
-                        map.setZoom(15);
-                        placeMarkerAndPanTo(results[0].geometry.location, map);
-                    } else {
-                        map.setCenter({ lat: -14.235, lng: -51.925 });
-                        map.setZoom(4);
-                        marker.setMap(null);
-                        if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota
-                    }
-                });
-            } else if (selectedPlaceDetails.lat && selectedPlaceDetails.lng) {
-                map.setCenter({ lat: selectedPlaceDetails.lat, lng: selectedPlaceDetails.lng });
-                map.setZoom(15);
-                placeMarkerAndPanTo(new google.maps.LatLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng), map);
-            } else {
-                map.setCenter({ lat: -14.235, lng: -51.925 });
-                map.setZoom(4);
-                marker.setMap(null);
-                if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota
-            }
-            google.maps.event.trigger(map, 'resize');
-        }
-
-        /**
-         * Coloca um marcador no mapa e move a visualização para sua localização, então geocodifica o endereço.
-         * @param {google.maps.LatLng} latLng - A latitude e longitude para colocar o marcador.
-         * @param {google.maps.Map} mapInstance - A instância do mapa.
-         */
-        function placeMarkerAndPanTo(latLng, mapInstance) {
-            marker.setPosition(latLng);
-            marker.setMap(mapInstance);
-            mapInstance.panTo(latLng);
-
-            geocoder.geocode({ 'location': latLng }, (results, status) => {
-                if (status === 'OK' && results[0]) {
-                    selectedPlaceDetails.address = results[0].formatted_address;
-                    selectedPlaceDetails.lat = latLng.lat();
-                    selectedPlaceDetails.lng = latLng.lng();
-                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
+            // O mapa só mede o tamanho certo depois que a janela termina de abrir
+            setTimeout(() => {
+                map.invalidateSize();
+                if (selectedPlaceDetails.lat !== null && selectedPlaceDetails.lng !== null) {
+                    const point = L.latLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng);
+                    marker.setLatLng(point).addTo(map);
+                    map.setView(point, 15);
                 } else {
-                    selectedPlaceDetails.address = `Coordenadas: ${latLng.lat().toFixed(4)}, ${latLng.lng().toFixed(4)}`;
-                    selectedPlaceDetails.lat = latLng.lat();
-                    selectedPlaceDetails.lng = latLng.lng();
-                    selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${latLng.lng()}`;
-                    console.warn('Nenhum endereço encontrado para as coordenadas selecionadas, usando lat/lng.');
+                    map.setView([REGION_CENTER.lat, REGION_CENTER.lng], 10);
                 }
-            });
+            }, 350);
         }
 
-        /**
-         * Confirma a localização selecionada no mapa e atualiza o campo de endereço do modal principal.
-         */
-        function confirmMapLocation() {
-            if (selectedPlaceDetails.lat !== null && selectedPlaceDetails.lng !== null) {
-                modalDestinationAddressInput.value = selectedPlaceDetails.address;
-                calculateDeslocamentoInModal(selectedPlaceDetails.lat, selectedPlaceDetails.lng);
-            }
+        let pendingMapPoint = null;
+        function placeMarkerAndPanTo(latLng) {
+            marker.setLatLng(latLng).addTo(map);
+            map.panTo(latLng);
+            pendingMapPoint = latLng;
+        }
+
+        async function confirmMapLocation() {
+            const point = pendingMapPoint;
             hideAnimatedModal(document.getElementById('map-selection-modal'));
+            if (!point) return;
+            closeSuggestions();
+            setSearchState(null);
+            let place = { address: `Local marcado no mapa (${point.lat.toFixed(5)}, ${point.lng.toFixed(5)})`, city: '', state: '', lat: point.lat, lng: point.lng };
+            modalDestinationAddressInput.value = place.address;
+            setCalculating(true);
+            try {
+                const params = new URLSearchParams({ lat: String(point.lat), lon: String(point.lng), format: 'jsonv2', addressdetails: '1', zoom: '18', 'accept-language': 'pt-BR' });
+                const item = await fetchJSON(`${NOMINATIM_URL}/reverse?${params}`);
+                if (item && item.address) place = { ...placeFromResult(item), lat: point.lat, lng: point.lng };
+            } catch (error) {
+                console.warn('Endereço não encontrado para o ponto escolhido; usando as coordenadas.', error);
+            }
+            if (pendingMapPoint !== point) return;
+            modalDestinationAddressInput.value = place.address;
+            calculateDeslocamentoInModal(place);
         }
 
         /**
@@ -2420,16 +2454,12 @@
             ceremonyDateInput.value = '';
             ceremonyTimeInput.value = '';
             referenceLocationInput.value = '';
-            selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' };
             const today = new Date().toISOString().split('T')[0];
             ceremonyDateInput.setAttribute('min', today);
-            modalDeslocamentoResultsDiv.classList.add('hidden');
-            modalDeslocamentoError.classList.add('hidden');
-            
-            // Limpa a rota anterior ao abrir o modal
-            if (directionsRenderer) {
-                directionsRenderer.setDirections({routes: []});
-            }
+            closeSuggestions();
+            setSearchState(null);
+            pendingMapPoint = null;
+            resetDeslocamento();
 
             unlockedTabs = ['deslocamento-tab'];
             showTab('deslocamento-tab');
@@ -2710,10 +2740,15 @@
                 });
                 document.getElementById('next-to-event-details-btn').addEventListener('click', () => {
                     const address = modalDestinationAddressInput.value.trim();
-                    if (!address || modalDeslocamentoResultsDiv.classList.contains('hidden')) {
-                        modalDeslocamentoError.textContent = "Por favor, digite um endereço válido e aguarde o cálculo, ou selecione no mapa.";
+                    if (address.length < 5) {
+                        modalDeslocamentoError.textContent = "Digite o endereço da cerimônia ou marque o local no mapa.";
                         modalDeslocamentoError.classList.remove('hidden');
                         return;
+                    }
+                    // Endereço digitado sem escolher uma sugestão: segue com a estimativa manual
+                    if (modalDeslocamentoResultsDiv.classList.contains('hidden')) {
+                        closeSuggestions();
+                        manualDeslocamento(address);
                     }
                     navigateToTab('event-details-tab');
                 });
@@ -2809,36 +2844,20 @@
                     hideAnimatedModal(mainSimulationModal);
                 });
                 modalDestinationAddressInput.addEventListener('input', () => {
-                    clearTimeout(debounceTimer);
-                    const address = modalDestinationAddressInput.value.trim();
-                    if (address.length > 3) {
-                        debounceTimer = setTimeout(() => {
-                            calculateDeslocamentoInModal(address);
-                            if (geocoder && !mapsUnavailable) {
-                                geocoder.geocode({ 'address': address }, (results, status) => {
-                                    if (status === 'OK' && results[0] && results[0].geometry && results[0].geometry.location) {
-                                        selectedPlaceDetails.address = results[0].formatted_address;
-                                        selectedPlaceDetails.lat = results[0].geometry.location.lat();
-                                        selectedPlaceDetails.lng = results[0].geometry.location.lng();
-                                        selectedPlaceDetails.googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${selectedPlaceDetails.lat},${selectedPlaceDetails.lng}`;
-                                    } else {
-                                        selectedPlaceDetails.lat = null;
-                                        selectedPlaceDetails.lng = null;
-                                        selectedPlaceDetails.googleMapsUrl = '';
-                                    }
-                                });
-                            }
-                        }, 500);
-                    } else {
-                        modalDeslocamentoResultsDiv.classList.add('hidden');
-                        modalDeslocamentoError.classList.add('hidden');
-                        currentDeslocamentoCost = 0;
-                        currentFinalTotalPrice = currentPlanOnlyPrice;
-                        selectedPlaceDetails = { address: '', lat: null, lng: null, googleMapsUrl: '' };
-                        if (directionsRenderer) directionsRenderer.setDirections({routes: []}); // Limpa rota
-                    }
+                    searchSeq++;
+                    resetDeslocamento();
+                    closeSuggestions();
+                    setSearchState(null);
                 });
-                
+                modalDestinationAddressInput.addEventListener('keydown', (event) => {
+                    const open = suggestionResults.length > 0;
+                    if (event.key === 'ArrowDown' && open) { event.preventDefault(); highlightSuggestion(activeSuggestion + 1); }
+                    else if (event.key === 'ArrowUp' && open) { event.preventDefault(); highlightSuggestion(activeSuggestion - 1); }
+                    else if (event.key === 'Enter') { event.preventDefault(); open ? selectSuggestion(Math.max(activeSuggestion, 0)) : searchAddress(); }
+                    else if (event.key === 'Escape' && open) { event.stopPropagation(); closeSuggestions(); }
+                });
+                document.getElementById('address-search-btn').addEventListener('click', searchAddress);
+
                 // --- MEDIDAS DE SEGURANÇA ---
                 document.addEventListener('contextmenu', event => event.preventDefault());
                 document.addEventListener('keydown', event => {
