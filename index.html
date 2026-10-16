@@ -2736,10 +2736,26 @@
         }
 
         let pendingMapPoint = null;
+        let previewSeq = 0;
         function placeMarkerAndPanTo(latLng) {
             marker.setLatLng(latLng).addTo(map);
-            map.panTo(latLng);
             pendingMapPoint = latLng;
+            previewRoute(latLng);
+        }
+
+        // Ao tocar no mapa, a rota até o ponto já aparece (e se desenha) ali mesmo, antes de confirmar
+        async function previewRoute(latLng) {
+            const seq = ++previewSeq;
+            try {
+                const data = await fetchJSON(`${OSRM_URL}/${ORIGIN.lng},${ORIGIN.lat};${latLng.lng},${latLng.lat}?overview=full&geometries=geojson`);
+                const route = data && data.routes && data.routes[0];
+                if (seq !== previewSeq || !route || !route.geometry) return;
+                drawRoute(route.geometry);
+                map.fitBounds(L.featureGroup(routeLayer.getLayers()).getBounds().extend(originMarker.getLatLng()), { padding: [40, 40], animate: false });
+                setTimeout(animateRoute, 60);
+            } catch (error) {
+                if (seq === previewSeq) map.panTo(latLng);  // sem rota: só centraliza no ponto escolhido
+            }
         }
 
         async function confirmMapLocation() {
