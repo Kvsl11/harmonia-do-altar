@@ -1093,11 +1093,12 @@
         /* Sem pin horizontal em telas pequenas: rolagem lateral nativa com snap */
         /* Celular com movimento: um card por vez, do tamanho da tela, preso à rolagem como no computador */
         @media (max-width: 860px) {
-            .h-scroller:not(.h-native) .h-pin { padding-top: 4.25rem; }
+            /* Altura da área visível de verdade (sem as barras do navegador do celular), para a barra de progresso aparecer */
+            .h-scroller:not(.h-native) .h-pin { height: 100vh; height: 100svh; padding-top: 4.25rem; padding-bottom: 2.5rem; }
             .h-scroller:not(.h-native) .h-track { padding: 0 9vw; gap: 1rem; }
-            .h-scroller:not(.h-native) .plan-slide { flex-basis: min(82vw, 360px); height: min(calc(100svh - 150px), 600px); }
+            .h-scroller:not(.h-native) .plan-slide { flex-basis: min(82vw, 360px); height: min(calc(100svh - 175px), 600px); }
             .h-scroller:not(.h-native) .plan-slide:hover { transform: none; }
-            .h-scroller:not(.h-native) .h-progress { bottom: 1.4rem; width: 55vw; height: 3px; }
+            .h-scroller:not(.h-native) .h-progress { bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)); width: 55vw; height: 3px; }
             .h-scroller:not(.h-native) .h-mask { -webkit-mask-image: none; mask-image: none; }
             .h-scroller:not(.h-native) .plan-slide .ps-img { height: 27%; min-height: 96px; }
             .h-scroller:not(.h-native) .plan-slide .ps-body { padding: .9rem 1.25rem .5rem; }
