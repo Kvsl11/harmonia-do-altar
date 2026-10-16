@@ -1364,7 +1364,24 @@
         .sim-dialog .notification-modal-text { color: var(--muted); font-size: .95rem; line-height: 1.65; margin-bottom: 1.5rem; text-align: left; }
         .sim-dialog .notification-modal-button { width: 100%; justify-content: center; }
         .sim-map-dialog { max-width: 920px !important; height: min(84vh, 760px); display: flex; flex-direction: column; }
-        .sim-map-canvas { flex: 1; min-height: 280px; border-radius: 16px; overflow: hidden; margin-bottom: 1.25rem; border: 1px solid rgba(255, 255, 255, .1); }
+        .sim-map-wrap { position: relative; flex: 1; min-height: 280px; display: flex; margin-bottom: 1.25rem; }
+        .sim-map-canvas { flex: 1; min-height: 280px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, .1); }
+        /* Botão para abrir o mapa em tela cheia (fica mais fácil achar a igreja) */
+        .sim-map-expand {
+            position: absolute; top: .7rem; right: .7rem; z-index: 500; display: inline-flex; align-items: center; gap: .5rem;
+            padding: .55rem .9rem; border-radius: 999px; font-size: .78rem; font-weight: 700; letter-spacing: .04em; color: #2a1325;
+            background: rgba(255, 255, 255, .92); box-shadow: 0 8px 20px -8px rgba(0, 0, 0, .5); transition: transform .2s ease, background .2s ease;
+        }
+        .sim-map-expand:hover { transform: translateY(-1px); background: #fff; }
+        .sim-map-expand i { color: #b5615a; }
+        .sim-map-dialog.map-full {
+            position: fixed !important; inset: 0; max-width: none !important; width: 100vw; height: 100vh !important; height: 100dvh !important;
+            margin: 0; border-radius: 0 !important; padding: max(.9rem, env(safe-area-inset-top)) .9rem max(.9rem, env(safe-area-inset-bottom)) !important; z-index: 10;
+        }
+        .sim-map-dialog.map-full > .eyebrow, .sim-map-dialog.map-full > .notification-modal-title, .sim-map-dialog.map-full > .sim-hint { display: none; }
+        .sim-map-dialog.map-full .sim-map-wrap { margin-bottom: .8rem; }
+        .sim-map-dialog.map-full .sim-map-expand { right: 4.4rem; top: 1rem; }
+        .sim-map-dialog.map-full > .modal-close-button { z-index: 1000; top: max(1.55rem, calc(env(safe-area-inset-top) + .65rem)); right: 1.55rem; background: rgba(255, 255, 255, .92); color: #2a1325; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, .5); }
 
         @media (max-width: 860px) {
             .modal.sim-modal { padding: 0; align-items: flex-end; }
@@ -2226,7 +2243,10 @@
             <span class="eyebrow">Local da cerimônia</span>
             <h3 class="notification-modal-title">Selecione no mapa</h3>
             <p class="sim-hint">Toque no mapa ou arraste o alfinete até a igreja.</p>
-            <div id="map-canvas" class="sim-map-canvas"></div>
+            <div class="sim-map-wrap">
+                <div id="map-canvas" class="sim-map-canvas"></div>
+                <button type="button" class="sim-map-expand" id="map-expand-btn" aria-pressed="false" aria-label="Ver mapa em tela cheia"><i class="fas fa-expand"></i><span>Tela cheia</span></button>
+            </div>
             <button id="confirm-map-location-btn" class="btn-primary pill lg notification-modal-button">Confirmar localização</button>
         </div>
     </div>
@@ -2638,6 +2658,21 @@
             }, 350);
         }
 
+        // Tela cheia do mapa: amplia a janela inteira e avisa o Leaflet do novo tamanho
+        function setMapFull(on) {
+            const dialog = document.querySelector('.sim-map-dialog');
+            const btn = document.getElementById('map-expand-btn');
+            if (!dialog || !btn) return;
+            dialog.classList.toggle('map-full', on);
+            btn.setAttribute('aria-pressed', String(on));
+            btn.setAttribute('aria-label', on ? 'Reduzir mapa' : 'Ver mapa em tela cheia');
+            btn.innerHTML = on ? '<i class="fas fa-compress"></i><span>Reduzir</span>' : '<i class="fas fa-expand"></i><span>Tela cheia</span>';
+            if (map) {
+                const center = map.getCenter();
+                [60, 380].forEach((ms) => setTimeout(() => { map.invalidateSize(); map.setView(center, map.getZoom(), { animate: false }); }, ms));
+            }
+        }
+
         let pendingMapPoint = null;
         function placeMarkerAndPanTo(latLng) {
             marker.setLatLng(latLng).addTo(map);
@@ -2646,6 +2681,7 @@
         }
 
         async function confirmMapLocation() {
+            setMapFull(false);
             const point = pendingMapPoint;
             hideAnimatedModal(document.getElementById('map-selection-modal'));
             if (!point) return;
@@ -3345,7 +3381,11 @@
                     }
                 });
                 document.getElementById('open-map-selection-btn').addEventListener('click', openMapSelectionModal);
-                document.getElementById('close-map-modal-button').addEventListener('click', () => hideAnimatedModal(document.getElementById('map-selection-modal')));
+                document.getElementById('close-map-modal-button').addEventListener('click', () => { setMapFull(false); hideAnimatedModal(document.getElementById('map-selection-modal')); });
+                document.getElementById('map-expand-btn').addEventListener('click', () => setMapFull(!document.querySelector('.sim-map-dialog').classList.contains('map-full')));
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape' && document.querySelector('.sim-map-dialog.map-full')) { event.stopPropagation(); setMapFull(false); }
+                }, true);
                 document.getElementById('confirm-map-location-btn').addEventListener('click', confirmMapLocation);
                 window.addEventListener('click', (event) => {
                     if (event.target == document.getElementById('map-selection-modal')) {
