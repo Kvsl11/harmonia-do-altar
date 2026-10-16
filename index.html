@@ -1073,7 +1073,10 @@
         .custom-total { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; padding: 1.1rem 1.25rem; border-radius: 18px; background: rgba(241, 214, 164, .06); border: 1px solid rgba(241, 214, 164, .22); }
         .custom-total small { display: block; color: var(--muted); font-size: .85rem; margin-top: .15rem; }
         .custom-total strong { font-family: 'Oswald', sans-serif; font-size: 1.7rem; letter-spacing: .02em; background: linear-gradient(90deg, var(--champagne), var(--rose)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .custom-total.bump strong { animation: ic-pop .4s cubic-bezier(.3, 1.6, .5, 1); }
+        /* Ao mudar o valor, só um leve pulso (o número não some nem encolhe) */
+        .custom-total strong { display: inline-block; transform-origin: right center; }
+        @keyframes total-pulse { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.06); } }
+        .custom-total.bump strong { animation: total-pulse .45s ease-out; }
         html[data-experience="lofi"] .custom-total.bump strong { animation: none; }
 
         /* ---------- Rodapé ---------- */
@@ -2733,10 +2736,26 @@
         }
 
         let pendingMapPoint = null;
+        let previewSeq = 0;
         function placeMarkerAndPanTo(latLng) {
             marker.setLatLng(latLng).addTo(map);
-            map.panTo(latLng);
             pendingMapPoint = latLng;
+            previewRoute(latLng);
+        }
+
+        // Ao tocar no mapa, a rota até o ponto já aparece (e se desenha) ali mesmo, antes de confirmar
+        async function previewRoute(latLng) {
+            const seq = ++previewSeq;
+            try {
+                const data = await fetchJSON(`${OSRM_URL}/${ORIGIN.lng},${ORIGIN.lat};${latLng.lng},${latLng.lat}?overview=full&geometries=geojson`);
+                const route = data && data.routes && data.routes[0];
+                if (seq !== previewSeq || !route || !route.geometry) return;
+                drawRoute(route.geometry);
+                map.fitBounds(L.featureGroup(routeLayer.getLayers()).getBounds().extend(originMarker.getLatLng()), { padding: [40, 40], animate: false });
+                setTimeout(animateRoute, 60);
+            } catch (error) {
+                if (seq === previewSeq) map.panTo(latLng);  // sem rota: só centraliza no ponto escolhido
+            }
         }
 
         async function confirmMapLocation() {
