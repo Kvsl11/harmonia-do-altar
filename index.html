@@ -2618,7 +2618,11 @@
         function drawRoute(geometry) {
             if (!map || !geometry || typeof L === 'undefined') return;
             clearRoute();
-            routeLayer = L.geoJSON(geometry, { style: { color: '#f1d6a4', weight: 4, opacity: 0.9 } }).addTo(map);
+            // Contorno branco + linha rosé: a rota fica bem visível sobre o mapa claro
+            routeLayer = L.layerGroup([
+                L.geoJSON(geometry, { style: { color: '#ffffff', weight: 9, opacity: 0.95, lineCap: 'round', lineJoin: 'round' } }),
+                L.geoJSON(geometry, { style: { color: '#c2575c', weight: 5, opacity: 1, lineCap: 'round', lineJoin: 'round' } })
+            ]).addTo(map);
         }
 
         function openMapSelectionModal() {
@@ -2650,7 +2654,7 @@
                     const point = L.latLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng);
                     marker.setLatLng(point).addTo(map);
                     // Com a rota já calculada, mostra o trajeto inteiro (saída em Angélica até a cerimônia)
-                    if (routeLayer) map.fitBounds(routeLayer.getBounds().extend(originMarker.getLatLng()), { padding: [40, 40] });
+                    if (routeLayer) map.fitBounds(L.featureGroup(routeLayer.getLayers()).getBounds().extend(originMarker.getLatLng()), { padding: [40, 40] });
                     else map.setView(point, 15);
                 } else {
                     map.setView([REGION_CENTER.lat, REGION_CENTER.lng], 10);
