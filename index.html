@@ -1031,6 +1031,27 @@
             .nav-card { min-height: 380px; }
         }
         /* Sem pin horizontal em telas pequenas: rolagem lateral nativa com snap */
+        /* Celular com movimento: um card por vez, do tamanho da tela, preso à rolagem como no computador */
+        @media (max-width: 860px) {
+            .h-scroller:not(.h-native) .h-pin { padding-top: 4.25rem; }
+            .h-scroller:not(.h-native) .h-track { padding: 0 9vw; gap: 1rem; }
+            .h-scroller:not(.h-native) .plan-slide { flex-basis: min(82vw, 360px); height: min(calc(100svh - 150px), 600px); }
+            .h-scroller:not(.h-native) .plan-slide:hover { transform: none; }
+            .h-scroller:not(.h-native) .h-progress { bottom: 1.4rem; width: 55vw; height: 3px; }
+            .h-scroller:not(.h-native) .h-mask { -webkit-mask-image: none; mask-image: none; }
+            .h-scroller:not(.h-native) .plan-slide .ps-img { height: 27%; min-height: 96px; }
+            .h-scroller:not(.h-native) .plan-slide .ps-body { padding: .9rem 1.25rem .5rem; }
+            .h-scroller:not(.h-native) .plan-slide h3 { font-size: 1.45rem; margin: .35rem 0 .6rem; }
+            .h-scroller:not(.h-native) .plan-slide .ps-body > p { font-size: .88rem; line-height: 1.5; }
+            .h-scroller:not(.h-native) .ps-instruments { margin-top: .75rem; gap: .35rem; }
+            .h-scroller:not(.h-native) .plan-slide .ps-foot { padding: .8rem 1.25rem 1.1rem; }
+            .h-scroller:not(.h-native) .ps-price { font-size: 1.7rem; }
+            .h-scroller:not(.h-native) .ps-instruments span { font-size: .7rem; padding: .3rem .6rem; }
+        }
+        @media (max-width: 860px) and (max-height: 720px) {
+            .h-scroller:not(.h-native) .plan-slide .ps-img { height: 21%; min-height: 80px; }
+            .h-scroller:not(.h-native) .plan-slide .ps-body > p { font-size: .84rem; }
+        }
         .h-native .h-pin { height: auto; padding: 1rem 0 4rem; }
         .h-native .h-track { overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 1.5rem; -webkit-overflow-scrolling: touch; }
         .h-native .plan-slide { scroll-snap-align: center; flex-basis: min(84vw, 380px); height: auto; min-height: 560px; }
@@ -3477,8 +3498,8 @@
                 });
             });
 
-            // PLANOS: carrossel horizontal preso à rolagem (desktop); nativo no celular
-            mm.add('(min-width: 861px)', () => {
+            // PLANOS: carrossel horizontal preso à rolagem, no computador e no celular (com o movimento desligado vira lista de arrastar)
+            mm.add('all', () => {
                 const track = $('#h-track');
                 const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
                 const tween = gsap.to(track, {
@@ -3495,10 +3516,6 @@
                         scrollTrigger: { trigger: slide, containerAnimation: tween, start: 'left 85%', end: 'left 45%', scrub: true }
                     });
                 });
-            });
-            mm.add('(max-width: 860px)', () => {
-                $('#h-scroller').classList.add('h-native');
-                return () => $('#h-scroller').classList.remove('h-native');
             });
 
             // SOBRE: panorama revelado por máscara vinda do alto
