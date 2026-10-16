@@ -2625,6 +2625,24 @@
             ]).addTo(map);
         }
 
+        // A rota se desenha de Angélica até a cerimônia (traço revelado aos poucos)
+        function animateRoute() {
+            if (!routeLayer || document.documentElement.dataset.experience === 'lofi' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            routeLayer.eachLayer((group) => group.eachLayer((line) => {
+                const path = line._path;
+                if (!path || !path.getTotalLength) return;
+                const len = path.getTotalLength();
+                path.style.transition = 'none';
+                path.style.strokeDasharray = `${len}`;
+                path.style.strokeDashoffset = `${len}`;
+                path.getBoundingClientRect();
+                path.style.transition = 'stroke-dashoffset 1.9s cubic-bezier(.65, 0, .35, 1)';
+                path.style.strokeDashoffset = '0';
+                // ao terminar, volta ao traço normal (o Leaflet redesenha a linha quando o zoom muda)
+                path.addEventListener('transitionend', () => { path.style.transition = ''; path.style.strokeDasharray = ''; path.style.strokeDashoffset = ''; }, { once: true });
+            }));
+        }
+
         function openMapSelectionModal() {
             const mapSelectionModal = document.getElementById('map-selection-modal');
             if (typeof L === 'undefined') {
@@ -2654,8 +2672,10 @@
                     const point = L.latLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng);
                     marker.setLatLng(point).addTo(map);
                     // Com a rota já calculada, mostra o trajeto inteiro (saída em Angélica até a cerimônia)
-                    if (routeLayer) map.fitBounds(L.featureGroup(routeLayer.getLayers()).getBounds().extend(originMarker.getLatLng()), { padding: [40, 40] });
-                    else map.setView(point, 15);
+                    if (routeLayer) {
+                        map.fitBounds(L.featureGroup(routeLayer.getLayers()).getBounds().extend(originMarker.getLatLng()), { padding: [40, 40], animate: false });
+                        setTimeout(animateRoute, 150);
+                    } else map.setView(point, 15);
                 } else {
                     map.setView([REGION_CENTER.lat, REGION_CENTER.lng], 10);
                 }
