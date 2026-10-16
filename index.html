@@ -931,6 +931,34 @@
         .ps-instruments { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .45rem; }
         .ps-instruments span { font-size: .75rem; font-weight: 600; padding: .35rem .7rem; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); display: inline-flex; gap: .4rem; align-items: center; }
         .ps-instruments i { color: var(--champagne); }
+        /* Miniaturas dos instrumentos nos planos: o mesmo desenho dos cards de "Monte o seu", tocando sozinho */
+        .mini-inst { flex: none; display: inline-grid; place-items: center; width: 22px; height: 24px; margin: -.25rem 0; }
+        .mini-inst svg { width: 100%; height: 100%; overflow: visible; fill: none; stroke: url(#ic-grad); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 2px rgba(241, 214, 164, .5)); }
+        .mini-inst .ia-strings path { stroke-width: 2.6; }
+        .mini-inst .ia-waves path { stroke-width: 4.5; }
+        .mini-inst .ia-note { fill: var(--champagne); stroke: none; font-size: 40px; opacity: 0; }
+        @keyframes mini-strum { 0% { transform: translateX(0); } 3% { transform: translateX(4px); } 6% { transform: translateX(-3.5px); } 9% { transform: translateX(2.5px); } 12% { transform: translateX(-1.5px); } 15% { transform: translateX(.8px); } 18%, 100% { transform: translateX(0); } }
+        @keyframes mini-bow { from { transform: translate(-16px, 3.4px); } to { transform: translate(16px, -3.4px); } }
+        @keyframes mini-buzz { from { transform: translateX(-1.4px); } to { transform: translateX(1.4px); } }
+        @keyframes mini-wave { 0%, 100% { opacity: .25; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.05); } }
+        @keyframes mini-note { 0% { opacity: 0; transform: translate(0, 0) scale(.6); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(20px, -60px) scale(1.1) rotate(18deg); } }
+        .mini-inst .ia-strings path { animation: mini-strum 3.2s linear infinite; }
+        .mini-inst .ia-strings path:nth-child(2) { animation-delay: .05s; }
+        .mini-inst .ia-strings path:nth-child(3) { animation-delay: .1s; }
+        .mini-inst .ia-strings path:nth-child(4) { animation-delay: .15s; }
+        .mini-inst .ia-baixo .ia-strings path { animation-duration: 3.8s; }
+        .mini-inst .ia-guitarra .ia-strings path { animation-duration: 2.6s; }
+        .mini-inst .ia-violin .ia-strings path { animation: mini-buzz .09s linear infinite alternate; }
+        .mini-inst .ia-bow { animation: mini-bow 1.4s ease-in-out infinite alternate; }
+        .mini-inst .ia-sax { transform-box: fill-box; transform-origin: 50% 100%; animation: ic-sway 3s ease-in-out infinite; }
+        .mini-inst .ia-note { animation: mini-note 3s ease-out infinite; }
+        .mini-inst .ia-note:nth-of-type(2) { animation-delay: 1s; }
+        .mini-inst .ia-note:nth-of-type(3) { animation-delay: 2s; }
+        .mini-inst .ia-waves path { transform-box: fill-box; transform-origin: center; animation: mini-wave 1.6s ease-in-out infinite; }
+        .mini-inst .ia-waves path:nth-child(n+3) { animation-delay: .4s; }
+        html[data-experience="lofi"] .mini-inst *, html[data-experience="lofi"] .mini-inst { animation: none !important; }
+        html[data-experience="lofi"] .mini-inst .ia-waves path { opacity: .7; }
+        @media (prefers-reduced-motion: reduce) { .mini-inst * { animation: none !important; } }
         .plan-slide .ps-foot { padding: 1rem 1.5rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-top: 1px solid rgba(255,255,255,.08); }
         .ps-price { font-family: var(--font-display); font-size: 2rem; color: var(--champagne); }
         .ps-price small { display: block; font-family: 'Montserrat'; font-size: .65rem; letter-spacing: .2em; color: var(--muted); }
@@ -1781,7 +1809,7 @@
                                 <span class="eyebrow">Clássico</span>
                                 <h3>Essência Clássica e Sublime</h3>
                                 <p>A nossa formação padrão, com as <strong>3 vozes e o teclado</strong>. Perfeita para quem busca a elegância atemporal e a emoção pura.</p>
-                                <div class="ps-instruments"><span><i class="fas fa-microphone-alt"></i>3 Vozes + Teclado/Piano</span></div>
+                                <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span></div>
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>A partir de</small>R$ 1.400</div>
@@ -1795,7 +1823,7 @@
                                 <span class="eyebrow">Acústico</span>
                                 <h3>Harmonia Delicada e Acústica</h3>
                                 <p>A formação padrão com o acréscimo do <strong>violão</strong>. O som quente e dedilhado cria uma atmosfera romântica e acolhedora.</p>
-                                <div class="ps-instruments"><span><i class="fas fa-microphone-alt"></i>3 Vozes + Teclado/Piano</span><span><i class="fas fa-guitar"></i>Violão</span></div>
+                                <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="violao"></i>Violão</span></div>
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>A partir de</small>R$ 1.600</div>
@@ -1809,7 +1837,7 @@
                                 <span class="eyebrow">Encorpado</span>
                                 <h3>Sofisticação e Envolvimento</h3>
                                 <p>Além da base, o <strong>contrabaixo</strong> adiciona uma sonoridade mais encorpada e um groove sutil, trazendo profundidade e elegância.</p>
-                                <div class="ps-instruments"><span><i class="fas fa-microphone-alt"></i>3 Vozes + Teclado/Piano</span><span><i class="fas fa-volume-down"></i>Contrabaixo</span></div>
+                                <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="baixo"></i>Contrabaixo</span></div>
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>A partir de</small>R$ 1.600</div>
@@ -1823,7 +1851,7 @@
                                 <span class="eyebrow">Completo</span>
                                 <h3>Sonoridade Completa e Marcante</h3>
                                 <p>Com <strong>contrabaixo e violão</strong> somados à base, esta opção traz uma sonoridade grandiosa, preenchida e com uma textura rica.</p>
-                                <div class="ps-instruments"><span><i class="fas fa-microphone-alt"></i>3 Vozes + Teclado/Piano</span><span><i class="fas fa-volume-down"></i>Contrabaixo</span><span><i class="fas fa-guitar"></i>Violão</span></div>
+                                <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="baixo"></i>Contrabaixo</span><span><i class="mini-inst" data-art="violao"></i>Violão</span></div>
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>A partir de</small>R$ 1.800</div>
@@ -1837,7 +1865,7 @@
                                 <span class="eyebrow">Versátil</span>
                                 <h3>Versatilidade e Brilho Acústico</h3>
                                 <p>A formação mais completa, com <strong>violão, guitarra e contrabaixo</strong>. Permite explorar diferentes estilos com arranjos modernos.</p>
-                                <div class="ps-instruments"><span><i class="fas fa-microphone-alt"></i>3 Vozes + Teclado/Piano</span><span><i class="fas fa-guitar"></i>Violão</span><span><i class="fas fa-bolt"></i>Guitarra</span><span><i class="fas fa-volume-down"></i>Contrabaixo</span></div>
+                                <div class="ps-instruments"><span><i class="mini-inst" data-art="vozes"></i>3 Vozes + Teclado/Piano</span><span><i class="mini-inst" data-art="violao"></i>Violão</span><span><i class="mini-inst" data-art="guitarra"></i>Guitarra</span><span><i class="mini-inst" data-art="baixo"></i>Contrabaixo</span></div>
                             </div>
                             <div class="ps-foot">
                                 <div class="ps-price"><small>A partir de</small>R$ 2.000</div>
@@ -2727,6 +2755,12 @@
 
         // Desenhos dos instrumentos (traço fino, mesmo estilo da logo)
         const INSTRUMENT_ART = {
+            vozes: `<g class="ia-mic">
+                <rect class="ia-line" pathLength="1" x="38" y="14" width="24" height="44" rx="12"/>
+                <path class="ia-line" pathLength="1" d="M38 30h8M38 40h8M54 30h8M54 40h8"/>
+                <path class="ia-line" pathLength="1" d="M28 46c0 14 10 24 22 24s22-10 22-24"/>
+                <path class="ia-line" pathLength="1" d="M50 70v22M36 94h28"/>
+                <g class="ia-waves"><path d="M22 24c-6 9-6 21 0 30"/><path d="M78 24c6 9 6 21 0 30"/><path d="M11 16c-10 14-10 32 0 46"/><path d="M89 16c10 14 10 32 0 46"/></g></g>`,
             violao: `<g class="ia-violao">
                 <path class="ia-line" pathLength="1" d="M46 40V12M54 40V12"/>
                 <path class="ia-line" pathLength="1" d="M45 12l-1-8h12l-1 8z"/>
@@ -3155,6 +3189,9 @@
                     { name: 'Violino', price: 500, art: 'violino', desc: 'O som clássico da emoção' }
                 ];
                 if(bandOptionsContainer && guestOptionsContainer){
+                    document.querySelectorAll('.mini-inst[data-art]').forEach(el => {
+                        el.innerHTML = `<svg viewBox="0 0 100 112" aria-hidden="true">${INSTRUMENT_ART[el.dataset.art] || ''}</svg>`;
+                    });
                     bandInstruments.forEach(inst => createCheckbox(inst, bandOptionsContainer));
                     guestInstruments.forEach(inst => createCheckbox(inst, guestOptionsContainer));
                 }
