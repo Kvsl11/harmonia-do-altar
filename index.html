@@ -1280,6 +1280,16 @@
         .sim-modal .modal-input-group { margin-bottom: 1.1rem; }
         .sim-modal .modal-input-group label { display: block; margin-bottom: .5rem; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; color: var(--champagne); }
         .sim-modal .modal-input-group label em { font-style: normal; color: var(--muted); letter-spacing: .1em; text-transform: none; font-weight: 500; }
+        /* Data e horário no formato brasileiro (dd/mm/aaaa e 24 h), seja qual for o idioma do navegador */
+        .br-input { position: relative; }
+        .sim-modal .br-input input[type="text"] { padding-right: 3.2rem; }
+        .br-pick {
+            position: absolute; right: .45rem; top: 50%; translate: 0 -50%; width: 2.4rem; height: 2.4rem; border-radius: 10px;
+            display: grid; place-items: center; color: var(--champagne); background: rgba(241, 214, 164, .08); transition: background .3s ease;
+        }
+        .br-pick:hover { background: rgba(241, 214, 164, .18); }
+        .sim-modal .br-input input.br-invalid { border-color: rgba(229, 143, 132, .8); }
+        .br-native { position: absolute; right: 0; bottom: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; border: 0; padding: 0; }
         .sim-modal input[type="text"], .sim-modal input[type="date"], .sim-modal input[type="time"], .sim-modal select {
             width: 100%; padding: .95rem 1.1rem; border-radius: 14px; font-size: .98rem; color: #fff;
             background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14);
@@ -2102,12 +2112,20 @@
                     <p class="sim-step-text">Preencha a data e o horário da cerimônia.</p>
                     <div class="sim-grid-2">
                         <div class="modal-input-group">
-                            <label for="ceremony-date">Data da cerimônia</label>
-                            <input type="date" id="ceremony-date">
+                            <label for="ceremony-date-br">Data da cerimônia</label>
+                            <div class="br-input">
+                                <input type="text" id="ceremony-date-br" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off">
+                                <button type="button" class="br-pick" data-pick="ceremony-date" aria-label="Abrir calendário"><i class="far fa-calendar-alt"></i></button>
+                                <input type="date" id="ceremony-date" class="br-native" tabindex="-1" aria-hidden="true">
+                            </div>
                         </div>
                         <div class="modal-input-group">
-                            <label for="ceremony-time">Horário</label>
-                            <input type="time" id="ceremony-time">
+                            <label for="ceremony-time-br">Horário</label>
+                            <div class="br-input">
+                                <input type="text" id="ceremony-time-br" inputmode="numeric" placeholder="hh:mm" maxlength="5" autocomplete="off">
+                                <button type="button" class="br-pick" data-pick="ceremony-time" aria-label="Escolher horário"><i class="far fa-clock"></i></button>
+                                <input type="time" id="ceremony-time" class="br-native" tabindex="-1" aria-hidden="true">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-input-group">
@@ -2611,7 +2629,9 @@
                 if (selectedPlaceDetails.lat !== null && selectedPlaceDetails.lng !== null) {
                     const point = L.latLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng);
                     marker.setLatLng(point).addTo(map);
-                    map.setView(point, 15);
+                    // Com a rota já calculada, mostra o trajeto inteiro (saída em Angélica até a cerimônia)
+                    if (routeLayer) map.fitBounds(routeLayer.getBounds().extend(originMarker.getLatLng()), { padding: [40, 40] });
+                    else map.setView(point, 15);
                 } else {
                     map.setView([REGION_CENTER.lat, REGION_CENTER.lng], 10);
                 }
@@ -2901,6 +2921,61 @@
             }
         }
 
+        // Campos de data e horário em português: o texto visível usa dd/mm/aaaa e hh:mm (24 h)
+        // e alimenta os campos nativos escondidos (aaaa-mm-dd e HH:MM), que o resto do simulador já usa.
+        function setupBrDateTime() {
+            const dateBr = document.getElementById('ceremony-date-br');
+            const timeBr = document.getElementById('ceremony-time-br');
+            const pad = (n) => String(n).padStart(2, '0');
+            const todayIso = () => { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; };
+            const mask = (digits, parts, sep) => {
+                let out = '', i = 0;
+                parts.forEach((len, k) => {
+                    const chunk = digits.slice(i, i + len);
+                    if (chunk) out += (k ? sep : '') + chunk;
+                    i += len;
+                });
+                return out;
+            };
+            const syncDate = () => {
+                dateBr.value = mask(dateBr.value.replace(/\D/g, '').slice(0, 8), [2, 2, 4], '/');
+                const m = dateBr.value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                let iso = '';
+                if (m) {
+                    const [, dd, mm, yyyy] = m;
+                    const d = new Date(+yyyy, +mm - 1, +dd);
+                    const real = d.getFullYear() === +yyyy && d.getMonth() === +mm - 1 && d.getDate() === +dd;
+                    const candidate = `${yyyy}-${mm}-${dd}`;
+                    if (real && candidate >= todayIso()) iso = candidate;
+                }
+                ceremonyDateInput.value = iso;
+                dateBr.classList.toggle('br-invalid', dateBr.value.length === 10 && !iso);
+            };
+            const syncTime = () => {
+                timeBr.value = mask(timeBr.value.replace(/\D/g, '').slice(0, 4), [2, 2], ':');
+                const m = timeBr.value.match(/^(\d{2}):(\d{2})$/);
+                const ok = !!m && +m[1] < 24 && +m[2] < 60;
+                ceremonyTimeInput.value = ok ? timeBr.value : '';
+                timeBr.classList.toggle('br-invalid', timeBr.value.length === 5 && !ok);
+            };
+            dateBr.addEventListener('input', syncDate);
+            timeBr.addEventListener('input', syncTime);
+            // O calendário/relógio nativo continua disponível pelo botão e devolve o valor já em português
+            ceremonyDateInput.addEventListener('change', () => {
+                const [y, mo, d] = (ceremonyDateInput.value || '').split('-');
+                dateBr.value = y ? `${d}/${mo}/${y}` : '';
+                syncDate();
+            });
+            ceremonyTimeInput.addEventListener('change', () => { timeBr.value = ceremonyTimeInput.value || ''; syncTime(); });
+            document.querySelectorAll('.br-pick').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const native = document.getElementById(btn.dataset.pick);
+                    if (native.id === 'ceremony-date') native.min = todayIso();
+                    try { native.showPicker(); } catch (e) { native.focus(); native.click(); }
+                });
+            });
+        }
+
         function navigateToTab(targetTab) {
             if (!unlockedTabs.includes(targetTab)) {
                 unlockedTabs.push(targetTab);
@@ -2937,6 +3012,8 @@
             modalDestinationAddressInput.value = '';
             ceremonyDateInput.value = '';
             ceremonyTimeInput.value = '';
+            document.getElementById('ceremony-date-br').value = '';
+            document.getElementById('ceremony-time-br').value = '';
             referenceLocationInput.value = '';
             const today = new Date().toISOString().split('T')[0];
             ceremonyDateInput.setAttribute('min', today);
@@ -3242,11 +3319,12 @@
                     }
                     navigateToTab('event-details-tab');
                 });
+                setupBrDateTime();
                 document.getElementById('next-to-payment-method-btn').addEventListener('click', () => {
                     ceremonyDate = ceremonyDateInput.value;
                     ceremonyTime = ceremonyTimeInput.value;
                     if (!ceremonyDate || !ceremonyTime) {
-                        modalEventDetailsError.textContent = "Por favor, preencha a data e o horário da cerimônia.";
+                        modalEventDetailsError.textContent = "Confira a data (dd/mm/aaaa, a partir de hoje) e o horário (hh:mm) da cerimônia.";
                         modalEventDetailsError.classList.remove('hidden');
                         return;
                     }
