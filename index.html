@@ -2618,7 +2618,64 @@
         function drawRoute(geometry) {
             if (!map || !geometry || typeof L === 'undefined') return;
             clearRoute();
-            routeLayer = L.geoJSON(geometry, { style: { color: '#f1d6a4', weight: 4, opacity: 0.9 } }).addTo(map);
+            // Cores do site: contorno roxo-noite e linha no degradê dos botões (champanhe → rosé → pêssego),
+            // indo da saída em Angélica até a cerimônia
+            const line = L.geoJSON(geometry, { style: { color: '#e58f84', weight: 5, opacity: 1, lineCap: 'round', lineJoin: 'round' } });
+            routeLayer = L.layerGroup([
+                L.geoJSON(geometry, { style: { color: '#2a1b3d', weight: 10, opacity: 0.9, lineCap: 'round', lineJoin: 'round' } }),
+                line
+            ]).addTo(map);
+            line.bringToFront();
+            paintRouteGradient(line, geometry);
+        }
+
+        // Degradê dos botões ao longo da rota (SVG do Leaflet)
+        function paintRouteGradient(group, geometry) {
+            const coords = geometry && geometry.coordinates;
+            if (!coords || coords.length < 2) return;
+            group.eachLayer((layer) => {
+                const path = layer._path;
+                const svg = path && path.ownerSVGElement;
+                if (!svg) return;
+                const ns = 'http://www.w3.org/2000/svg';
+                let defs = svg.querySelector('defs');
+                if (!defs) { defs = document.createElementNS(ns, 'defs'); svg.insertBefore(defs, svg.firstChild); }
+                let grad = svg.querySelector('#hda-route-grad');
+                if (!grad) {
+                    grad = document.createElementNS(ns, 'linearGradient');
+                    grad.id = 'hda-route-grad';
+                    [['0', '#f1d6a4'], ['.5', '#e58f84'], ['1', '#f3b98a']].forEach(([o, c]) => {
+                        const st = document.createElementNS(ns, 'stop'); st.setAttribute('offset', o); st.setAttribute('stop-color', c); grad.appendChild(st);
+                    });
+                    defs.appendChild(grad);
+                }
+                // direção do degradê: do início ao fim da rota, relativa à caixa da linha (não muda com o zoom)
+                const pts = coords.map(([lng, lat]) => map.latLngToLayerPoint([lat, lng]));
+                const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
+                const minX = Math.min(...xs), minY = Math.min(...ys), w = (Math.max(...xs) - minX) || 1, h = (Math.max(...ys) - minY) || 1;
+                const a = pts[0], b = pts[pts.length - 1];
+                grad.setAttribute('x1', ((a.x - minX) / w).toFixed(3)); grad.setAttribute('y1', ((a.y - minY) / h).toFixed(3));
+                grad.setAttribute('x2', ((b.x - minX) / w).toFixed(3)); grad.setAttribute('y2', ((b.y - minY) / h).toFixed(3));
+                path.setAttribute('stroke', 'url(#hda-route-grad)');
+            });
+        }
+
+        // A rota se desenha de Angélica até a cerimônia (traço revelado aos poucos)
+        function animateRoute() {
+            if (!routeLayer || document.documentElement.dataset.experience === 'lofi' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            routeLayer.eachLayer((group) => group.eachLayer((line) => {
+                const path = line._path;
+                if (!path || !path.getTotalLength) return;
+                const len = path.getTotalLength();
+                path.style.transition = 'none';
+                path.style.strokeDasharray = `${len}`;
+                path.style.strokeDashoffset = `${len}`;
+                path.getBoundingClientRect();
+                path.style.transition = 'stroke-dashoffset 1.9s cubic-bezier(.65, 0, .35, 1)';
+                path.style.strokeDashoffset = '0';
+                // ao terminar, volta ao traço normal (o Leaflet redesenha a linha quando o zoom muda)
+                path.addEventListener('transitionend', () => { path.style.transition = ''; path.style.strokeDasharray = ''; path.style.strokeDashoffset = ''; }, { once: true });
+            }));
         }
 
         function openMapSelectionModal() {
@@ -2650,8 +2707,10 @@
                     const point = L.latLng(selectedPlaceDetails.lat, selectedPlaceDetails.lng);
                     marker.setLatLng(point).addTo(map);
                     // Com a rota já calculada, mostra o trajeto inteiro (saída em Angélica até a cerimônia)
-                    if (routeLayer) map.fitBounds(routeLayer.getBounds().extend(originMarker.getLatLng()), { padding: [40, 40] });
-                    else map.setView(point, 15);
+                    if (routeLayer) {
+                        map.fitBounds(L.featureGroup(routeLayer.getLayers()).getBounds().extend(originMarker.getLatLng()), { padding: [40, 40], animate: false });
+                        setTimeout(animateRoute, 150);
+                    } else map.setView(point, 15);
                 } else {
                     map.setView([REGION_CENTER.lat, REGION_CENTER.lng], 10);
                 }
